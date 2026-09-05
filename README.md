@@ -12,19 +12,19 @@ conceptual space.
 
 ## Current status
 
-**Specification stage — v0.1.0. There is no application code in this
-repository yet, and none should be added without reading the two contract
-documents below.**
+**Implemented — v0.1.0.**
+
+The first bounded implementation of the Spatial Intelligence Atlas is complete.
 
 | File | Role | State |
 |------|------|-------|
 | `SPEC.md` | Source of truth for **meaning and behaviour** | Locked |
 | `DESIGN_CONTRACT.md` | Source of truth for **form and limits** | Locked |
 | `data/atlas.json` | Source of truth for **content** | Locked |
-| `README.md` | Orientation (this file) | — |
-| `index.html` | Structure | **Not yet written** |
-| `styles.css` | Presentation | **Not yet written** |
-| `app.js` | Behaviour | **Not yet written** |
+| `README.md` | Orientation (this file) | Current |
+| `index.html` | Structure | Implemented |
+| `styles.css` | Presentation | Implemented |
+| `app.js` | Behaviour | Implemented |
 
 Nothing else may be added. See `DESIGN_CONTRACT.md` §9.
 
@@ -129,7 +129,7 @@ silently discarded.
 
 ---
 
-## Running it (once implemented)
+## Running it locally
 
 The artifact is fully static, but `app.js` fetches `data/atlas.json` at runtime
 and browsers block `fetch` over `file://`. Serve the directory:

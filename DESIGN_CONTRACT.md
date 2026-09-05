@@ -344,7 +344,7 @@ wins; overlap must be avoided by the stored coordinates in the first place.
 ### 5.5 Latency budget
 
 Mode switch, hover highlight, and selection must be perceptually immediate.
-With 32 nodes and ~52 edges rendered as SVG, no virtualisation, throttling, or
+With 31 nodes and ~54 edges rendered as SVG, no virtualisation, throttling, or
 `requestAnimationFrame` loop is required or permitted.
 
 ---

@@ -7,12 +7,12 @@
     "provenance": "Every node label and every edge marked support=\"stated\" is drawn verbatim from the source project descriptions. Edges marked support=\"authored\" are assertions by the atlas author and may only terminate at e-provisional or e-missing.",
     "counts": {
       "project": 5,
-      "territory": 4,
+      "territory": 3,
       "method": 12,
       "evidence": 6,
       "decision": 5,
-      "nodes": 32,
-      "edges": 55
+      "nodes": 31,
+      "edges": 54
     },
     "rules": {
       "R1": "Every method label is a verbatim term from a source description. Terms merged into another node are recorded in that node's folds array.",
@@ -147,21 +147,6 @@
         "territory": { "x": 0.20, "y": 0.22 },
         "evidence": { "x": 0.20, "y": 0.02 },
         "decisions": { "x": 0.20, "y": 0.02 }
-      }
-    },
-    {
-      "id": "t-madrid-interurban",
-      "type": "territory",
-      "label": "Madrid — interurban fringe",
-      "kind": "interurban",
-      "is_null": false,
-      "definition": "The interurban fringe around Madrid, where wildfire and environmental risk are framed.",
-      "basis": "Source: \"Domain: wildfire / interurban environmental risk\" (FIRSTLOOK-MAD).",
-      "weight": 2,
-      "layout": {
-        "territory": { "x": 0.42, "y": 0.22 },
-        "evidence": { "x": 0.42, "y": 0.02 },
-        "decisions": { "x": 0.42, "y": 0.02 }
       }
     },
     {
@@ -434,6 +419,8 @@
       "stroke_width": 1,
       "glyph": "diamond",
       "definition": "Produced by a model under specified conditions.",
+      "unused_in_v0_1": true,
+      "unused_reason": "No yields_evidence edge terminates at SIMULATED in v0.1. The one concept that named it (scenarios) is held at PROVISIONAL because the supplied description names it but does not explicitly establish its evidence class. The class is retained in the vocabulary and must render in the legend with a count of 0.",
       "weight": 2,
       "layout": {
         "territory": { "x": 0.58, "y": 0.97 },
@@ -551,7 +538,6 @@
   "edges": [
     { "id": "op-01", "type": "operates_in", "source": "p-hati", "target": "t-madrid", "support": "stated", "basis": "HATI: \"Territory: Madrid\"", "evidence": null },
     { "id": "op-02", "type": "operates_in", "source": "p-firstlook", "target": "t-madrid", "support": "stated", "basis": "FIRSTLOOK-MAD: \"Territory: Madrid\"", "evidence": null },
-    { "id": "op-03", "type": "operates_in", "source": "p-firstlook", "target": "t-madrid-interurban", "support": "stated", "basis": "FIRSTLOOK-MAD: \"Domain: wildfire / interurban environmental risk\"", "evidence": null },
     { "id": "op-04", "type": "operates_in", "source": "p-snto", "target": "t-guadarrama", "support": "stated", "basis": "SNTO: \"Territory: primarily Guadarrama / protected destination context\"", "evidence": null },
     { "id": "op-05", "type": "operates_in", "source": "p-fieldos", "target": "t-unbound", "support": "stated", "basis": "No territory is declared for FIELDOS in the source description.", "evidence": "e-missing" },
     { "id": "op-06", "type": "operates_in", "source": "p-fab", "target": "t-unbound", "support": "stated", "basis": "No territory is declared for FAB in the source description.", "evidence": "e-missing" },
@@ -572,12 +558,12 @@
     { "id": "ye-01", "type": "yields_evidence", "source": "m-utci", "target": "e-provisional", "support": "authored", "basis": "The source description names UTCI but does not declare its inputs or processing chain, so no substantive class may be asserted.", "evidence": "e-provisional" },
     { "id": "ye-02", "type": "yields_evidence", "source": "m-solweig", "target": "e-provisional", "support": "authored", "basis": "The source description names SOLWEIG but does not declare its configuration or validation, so no substantive class may be asserted.", "evidence": "e-provisional" },
     { "id": "ye-03", "type": "yields_evidence", "source": "m-heat-exposure", "target": "e-provisional", "support": "authored", "basis": "The source description names heat exposure but does not declare how it is computed or measured.", "evidence": "e-provisional" },
-    { "id": "ye-04", "type": "yields_evidence", "source": "m-scenarios", "target": "e-simulated", "support": "stated", "basis": "HATI: \"scenarios\" — a scenario describes modelled rather than observed conditions.", "evidence": "e-simulated" },
+    { "id": "ye-04", "type": "yields_evidence", "source": "m-scenarios", "target": "e-provisional", "support": "authored", "basis": "The source names \"scenarios\" but does not explicitly establish its evidence class, so no substantive class is asserted in v0.1.", "evidence": "e-provisional" },
     { "id": "ye-05", "type": "yields_evidence", "source": "m-decision-engine", "target": "e-provisional", "support": "authored", "basis": "The source description names a decision engine but does not declare its rules or outputs.", "evidence": "e-provisional" },
     { "id": "ye-06", "type": "yields_evidence", "source": "m-environmental-signals", "target": "e-provisional", "support": "authored", "basis": "The source description names environmental signals but does not declare their source or class.", "evidence": "e-provisional" },
     { "id": "ye-07", "type": "yields_evidence", "source": "m-real-data-acquisition", "target": "e-real", "support": "stated", "basis": "FIRSTLOOK-MAD: \"real-data acquisition\" — the source states the data is real.", "evidence": "e-real" },
-    { "id": "ye-08", "type": "yields_evidence", "source": "m-sentinel2", "target": "e-real", "support": "stated", "basis": "SNTO: \"Sentinel-2\" — the source names a concrete operational Earth-observation mission, i.e. acquired data.", "evidence": "e-real" },
-    { "id": "ye-09", "type": "yields_evidence", "source": "m-open-data", "target": "e-real", "support": "stated", "basis": "SNTO: \"open data\" — the source names published datasets, i.e. acquired data.", "evidence": "e-real" },
+    { "id": "ye-08", "type": "yields_evidence", "source": "m-sentinel2", "target": "e-provisional", "support": "authored", "basis": "The source names \"Sentinel-2\" but does not explicitly establish its evidence class, so no substantive class is asserted in v0.1.", "evidence": "e-provisional" },
+    { "id": "ye-09", "type": "yields_evidence", "source": "m-open-data", "target": "e-provisional", "support": "authored", "basis": "The source names \"open data\" but does not explicitly establish its evidence class, so no substantive class is asserted in v0.1.", "evidence": "e-provisional" },
     { "id": "ye-10", "type": "yields_evidence", "source": "m-field-collection", "target": "e-real", "support": "stated", "basis": "FIELDOS: \"field evidence, observations\" — the source names direct observation.", "evidence": "e-real" },
 
     { "id": "sd-01", "type": "supports_decision", "source": "p-hati", "target": "d-eligibility", "support": "stated", "basis": "HATI: \"spatial eligibility\", \"decision engine\"", "evidence": null },

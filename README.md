@@ -57,7 +57,7 @@ full list is in `SPEC.md` §9.
 | System | Territory | Domain |
 |--------|-----------|--------|
 | **HATI** — Heat-Aware Tourism Intelligence | Madrid | Extreme heat and tourism |
-| **FIRSTLOOK-MAD** | Madrid, interurban fringe | Wildfire / interurban environmental risk |
+| **FIRSTLOOK-MAD** | Madrid | Wildfire / interurban environmental risk |
 | **SNTO** — Smart Tourism Observatory | Sierra de Guadarrama | Smart tourism observatory, destination intelligence |
 | **FIELDOS** | *not declared* | Field observation infrastructure |
 | **FAB** | *not declared* | Visual/research interface experimentation |
@@ -77,11 +77,11 @@ Every relationship in the atlas carries an evidence status. Six classes:
 
 | Class | Meaning | v0.1 count |
 |-------|---------|-----------|
-| `REAL` | Directly observed or acquired data | 4 |
+| `REAL` | Directly observed or acquired data | 2 |
 | `DERIVED` | Computed from other evidence via a declared transformation | **0** |
 | `CALIBRATED` | Adjusted or validated against an independent reference | **0** |
-| `SIMULATED` | Produced by a model under specified conditions | 1 |
-| `PROVISIONAL` | Asserted by this atlas but not substantiated by the source | 5 |
+| `SIMULATED` | Produced by a model under specified conditions | **0** |
+| `PROVISIONAL` | Asserted by this atlas but not substantiated by the source | 8 |
 | `MISSING` | Not declared by the source; the absence is itself the finding | 2 |
 
 ### The discipline that produced those numbers
@@ -97,9 +97,12 @@ An edge may terminate at `REAL`, `DERIVED`, `CALIBRATED`, or `SIMULATED` **only*
 when `support == "stated"`. Authored assertions terminate at `PROVISIONAL`.
 
 **`DERIVED` and `CALIBRATED` are unused in v0.1 because no source description
-supports either status.** They still render in the legend, with a count of zero.
-A visibly provisional graph is the correct result, not a defect — and hiding an
-empty class is a specification violation.
+supports either status.** `SIMULATED` is also at zero: the one concept that
+named it (*scenarios*) is held at `PROVISIONAL`, because the supplied
+description names the concept but does not explicitly establish its evidence
+class. All three still render in the legend, with a count of zero. A visibly
+provisional graph is the correct result, not a defect — and hiding an empty
+class is a specification violation.
 
 `PROVISIONAL` means *asserted, not verified*. Resolving a provisional edge to a
 substantive class requires confirmation from the owner of the source system, and
@@ -109,10 +112,10 @@ is deferred to v0.2.
 
 ## Dataset shape
 
-`data/atlas.json` — 32 nodes, 55 edges.
+`data/atlas.json` — 31 nodes, 54 edges.
 
-**Nodes:** 5 project · 4 territory · 12 method · 6 evidence · 5 decision
-**Edges:** `operates_in` (6) · `applies_method` (12) · `yields_evidence` (10) ·
+**Nodes:** 5 project · 3 territory · 12 method · 6 evidence · 5 decision
+**Edges:** `operates_in` (5) · `applies_method` (12) · `yields_evidence` (10) ·
 `supports_decision` (17) · `conceptually_adjacent` (10)
 
 Every node carries normalised `[0, 1]` layout coordinates for **all three

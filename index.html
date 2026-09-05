@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Spatial Intelligence Atlas — Tourism, Risk & Decision Systems</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="rail">
+    <div class="identity">
+      <h1>Spatial Intelligence Atlas</h1>
+      <p id="subtitle">Tourism, Risk & Decision Systems</p>
+      <p class="micro">A conceptual atlas of five separate research and software systems.</p>
+    </div>
+    <div class="controls">
+      <p id="notice">Five separate systems. Related conceptually, not technically integrated.</p>
+      <div id="modes" role="tablist" aria-label="Atlas mode"></div>
+    </div>
+  </header>
+  <main>
+    <section class="atlas" aria-labelledby="question">
+      <div class="question-rail"><h2 id="question">Loading atlas…</h2><span id="mode-count" class="micro"></span></div>
+      <div id="error" hidden role="alert"></div>
+      <div id="canvas">
+        <svg id="graph" role="group" aria-label="Atlas" preserveAspectRatio="xMidYMid meet"></svg>
+        <div id="tooltip" role="tooltip" hidden></div>
+      </div>
+      <div id="outline"></div>
+      <p id="empty-filter" hidden>All evidence classes are off. Toggle a class to restore its emphasis.</p>
+      <div class="legend-rail"><div id="legend" aria-label="Mode key"></div><button id="reset" type="button">Reset view</button></div>
+    </section>
+    <aside id="detail" tabindex="0" aria-label="Node details"><h2>Select a node</h2><p>Inspect its definition, source basis and relationships.</p><p class="micro">Focus or hover to trace direct connections. Enter to select. Esc to deselect.</p></aside>
+  </main>
+  <footer><span id="dataset-counts" class="micro"></span><p>Evidence status is asserted only where the source description supports it. <span class="label">PROVISIONAL</span> means asserted, not verified.</p></footer>
+  <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <noscript><p>Enable JavaScript to load the atlas from its local dataset.</p></noscript>
+</body>
+</html>

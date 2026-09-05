@@ -124,7 +124,7 @@ The five systems being related. Visual weight 3 (heaviest).
 | id | Label | Territory | Notes |
 |----|-------|-----------|-------|
 | `p-hati` | HATI — Heat-Aware Tourism Intelligence | Madrid | Extreme heat and tourism |
-| `p-firstlook` | FIRSTLOOK-MAD | Madrid, Madrid interurban | Wildfire / interurban environmental risk |
+| `p-firstlook` | FIRSTLOOK-MAD | Madrid | Wildfire / interurban environmental risk |
 | `p-snto` | SNTO — Smart Tourism Observatory | Sierra de Guadarrama | Destination intelligence |
 | `p-fieldos` | FIELDOS | *not declared* | Field observation infrastructure |
 | `p-fab` | FAB | *not declared* | Visual/research interface experimentation |
@@ -134,12 +134,11 @@ states FAB is *"not a data source unless explicitly represented as such."* No
 such explicit representation exists in v0.1, therefore FAB has **zero**
 `applies_method` edges and is rendered as a non-evidentiary node.
 
-### 4.2 `territory` — 4 nodes
+### 4.2 `territory` — 3 nodes
 
 | id | Label | Kind |
 |----|-------|------|
 | `t-madrid` | Madrid | urban / municipal |
-| `t-madrid-interurban` | Madrid — interurban fringe | interurban |
 | `t-guadarrama` | Sierra de Guadarrama | protected destination |
 | `t-unbound` | No territory declared | **null territory** (`is_null: true`) |
 
@@ -192,9 +191,11 @@ score the rank-2 classes against each other.
 
 **Unused classes in v0.1.** `e-derived` and `e-calibrated` have **zero**
 incoming edges, because no source description explicitly supports either status.
-This is a correct outcome of §1.2. The legend MUST still render both classes,
-with an explicit count of `0`. Hiding an empty class is a specification
-violation.
+`e-simulated` is **also zero**: the one concept that named it (`m-scenarios`) is
+held at `e-provisional`, because the supplied description names the concept but
+does not explicitly establish its evidence class (§1.2). This is a correct
+outcome of §1.2. The legend MUST still render all three classes, with an
+explicit count of `0`. Hiding an empty class is a specification violation.
 
 ### 4.5 `decision` — 5 nodes
 
@@ -208,7 +209,7 @@ Interrogatives (rule R2). Visual weight 2.
 | `d-monitoring` | Is the destination changing? | SNTO: "destination monitoring" |
 | `d-observed` | What was actually observed on the ground? | FIELDOS: "field evidence, observations" |
 
-**Total: 32 nodes.**
+**Total: 31 nodes.**
 
 ---
 
@@ -257,7 +258,7 @@ combined.
 
 **Question:** Where does this work happen?
 
-- **Anchors:** the 4 `territory` nodes, in a row across the upper third.
+- **Anchors:** the 3 `territory` nodes, in a row across the upper third.
 - **Visible node types:** `territory`, `project`.
 - **Visible edge types:** `operates_in`, `conceptually_adjacent`.
 - **The point of the mode:** two of five projects have no declared territory.
@@ -298,7 +299,7 @@ combined.
     contribute a rank.
   - Expected v0.1 result, which doubles as a correctness check:
     `d-eligibility` PROVISIONAL, `d-scenario` PROVISIONAL, `d-risk`
-    PROVISIONAL, `d-monitoring` SUBSTANTIATED, `d-observed` SUBSTANTIATED.
+    PROVISIONAL, `d-monitoring` PROVISIONAL, `d-observed` SUBSTANTIATED.
 - `p-fab` has no `supports_decision` edges and is parked at the left margin in a
   visibly inert state, labelled as such.
 - **The point of the mode:** every question is reachable, but the floor beneath
@@ -410,8 +411,8 @@ independently verifiable by inspection.
 - **A1** — `data/atlas.json` is loaded at runtime and is the *only* source of
   graph content. No node, edge, label, or coordinate is hard-coded in `app.js`.
 - **A2** — All seven invariants I1–I7 (§5.2) hold against the shipped dataset.
-- **A3** — Node counts render as: 5 project, 4 territory, 12 method, 6 evidence,
-  5 decision = 32.
+- **A3** — Node counts render as: 5 project, 3 territory, 12 method, 6 evidence,
+  5 decision = 31.
 
 ### Modes
 - **A4** — Exactly three modes exist and are reachable by pointer and keyboard.
@@ -449,7 +450,7 @@ independently verifiable by inspection.
 ### Scope
 - **A20** — The repository contains exactly `index.html`, `styles.css`,
   `app.js`, `data/atlas.json`, plus the three markdown documents. No other
-  runtime file, unless DESIGN_CONTRACT §8's narrow exception is invoked and
+  runtime file, unless DESIGN_CONTRACT §9.2's narrow exception is invoked and
   documented in README.
 - **A21** — Opening the artifact from a local static server works with zero
   network requests beyond `index.html`, `styles.css`, `app.js`,

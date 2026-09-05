@@ -1,0 +1,612 @@
+{
+  "schema_version": "0.1.0",
+  "meta": {
+    "title": "Spatial Intelligence Atlas",
+    "subtitle": "Tourism, Risk & Decision Systems",
+    "notice": "Five separate systems. Related conceptually, not technically integrated.",
+    "provenance": "Every node label and every edge marked support=\"stated\" is drawn verbatim from the source project descriptions. Edges marked support=\"authored\" are assertions by the atlas author and may only terminate at e-provisional or e-missing.",
+    "counts": {
+      "project": 5,
+      "territory": 4,
+      "method": 12,
+      "evidence": 6,
+      "decision": 5,
+      "nodes": 32,
+      "edges": 55
+    },
+    "rules": {
+      "R1": "Every method label is a verbatim term from a source description. Terms merged into another node are recorded in that node's folds array.",
+      "R2": "Decision nodes are interrogatives. The atlas claims a system could inform a question; it never claims a system produces a decision.",
+      "R3": "An edge may terminate at a substantive evidence class (e-real, e-derived, e-calibrated, e-simulated) only when support == \"stated\".",
+      "R4": "Edge colour and dash pattern derive solely from edge.evidence. A null value renders as a neutral hairline.",
+      "R5": "Governance methods (m-evidence-provenance, m-evidence-classification) describe how evidence is audited, not produced. They have no yields_evidence edges and are excluded from decision evidence-floor computation.",
+      "R6": "conceptually_adjacent is symmetric and non-directional. It must never be drawn with an arrowhead and never implies technical integration."
+    },
+    "modes": [
+      {
+        "id": "territory",
+        "label": "Territory",
+        "question": "Where does this work happen?",
+        "anchor_type": "territory",
+        "node_types": ["territory", "project"],
+        "edge_types": ["operates_in", "conceptually_adjacent"]
+      },
+      {
+        "id": "evidence",
+        "label": "Evidence",
+        "question": "What is this actually founded on?",
+        "anchor_type": "evidence",
+        "node_types": ["evidence", "method", "project"],
+        "edge_types": ["applies_method", "yields_evidence"]
+      },
+      {
+        "id": "decisions",
+        "label": "Decisions",
+        "question": "What decisions could this inform?",
+        "anchor_type": "decision",
+        "node_types": ["decision", "project", "method"],
+        "edge_types": ["supports_decision", "applies_method"]
+      }
+    ],
+    "evidence_order": ["e-real", "e-derived", "e-calibrated", "e-simulated", "e-provisional", "e-missing"],
+    "evidence_floor_labels": {
+      "0": "MISSING",
+      "1": "PROVISIONAL",
+      "2": "SUBSTANTIATED"
+    }
+  },
+
+  "nodes": [
+    {
+      "id": "p-hati",
+      "type": "project",
+      "label": "HATI",
+      "full_label": "HATI — Heat-Aware Tourism Intelligence",
+      "definition": "Heat-aware tourism intelligence for Madrid, concerned with extreme heat and its effect on tourism.",
+      "basis": "Source: \"HATI — Heat-Aware Tourism Intelligence. Territory: Madrid. Domain: extreme heat and tourism.\"",
+      "weight": 3,
+      "evidence_declaration": null,
+      "layout": {
+        "territory": { "x": 0.14, "y": 0.55 },
+        "evidence": { "x": 0.14, "y": 0.14 },
+        "decisions": { "x": 0.22, "y": 0.48 }
+      }
+    },
+    {
+      "id": "p-firstlook",
+      "type": "project",
+      "label": "FIRSTLOOK-MAD",
+      "full_label": "FIRSTLOOK-MAD",
+      "definition": "Wildfire and interurban environmental risk work situated in Madrid.",
+      "basis": "Source: \"FIRSTLOOK-MAD. Territory: Madrid. Domain: wildfire / interurban environmental risk.\"",
+      "weight": 3,
+      "evidence_declaration": null,
+      "layout": {
+        "territory": { "x": 0.31, "y": 0.55 },
+        "evidence": { "x": 0.33, "y": 0.14 },
+        "decisions": { "x": 0.51, "y": 0.48 }
+      }
+    },
+    {
+      "id": "p-snto",
+      "type": "project",
+      "label": "SNTO",
+      "full_label": "SNTO — Smart Tourism Observatory",
+      "definition": "A smart tourism observatory producing destination intelligence, situated primarily in Guadarrama.",
+      "basis": "Source: \"SNTO — Smart Tourism Observatory. Territory: primarily Guadarrama / protected destination context.\"",
+      "weight": 3,
+      "evidence_declaration": null,
+      "layout": {
+        "territory": { "x": 0.64, "y": 0.55 },
+        "evidence": { "x": 0.52, "y": 0.14 },
+        "decisions": { "x": 0.70, "y": 0.48 }
+      }
+    },
+    {
+      "id": "p-fieldos",
+      "type": "project",
+      "label": "FIELDOS",
+      "full_label": "FIELDOS",
+      "definition": "Field observation infrastructure for collecting spatial field data and observations.",
+      "basis": "Source: \"FIELDOS. Domain: field observation infrastructure.\" No territory is declared.",
+      "weight": 3,
+      "evidence_declaration": null,
+      "layout": {
+        "territory": { "x": 0.80, "y": 0.55 },
+        "evidence": { "x": 0.71, "y": 0.14 },
+        "decisions": { "x": 0.89, "y": 0.48 }
+      }
+    },
+    {
+      "id": "p-fab",
+      "type": "project",
+      "label": "FAB",
+      "full_label": "FAB",
+      "definition": "Related visual research and interface experimentation. Not represented as a data source in v0.1.",
+      "basis": "Source: \"FAB. Domain: visual/research interface. Role in this atlas: related visual research/interface experimentation, not a data source unless explicitly represented as such.\"",
+      "weight": 3,
+      "evidence_declaration": "e-missing",
+      "note": "Has zero applies_method and zero supports_decision edges by design. No explicit representation as a data source exists in v0.1, so no evidence claim is made.",
+      "layout": {
+        "territory": { "x": 0.92, "y": 0.55 },
+        "evidence": { "x": 0.89, "y": 0.14 },
+        "decisions": { "x": 0.05, "y": 0.48 }
+      }
+    },
+
+    {
+      "id": "t-madrid",
+      "type": "territory",
+      "label": "Madrid",
+      "kind": "urban / municipal",
+      "is_null": false,
+      "definition": "The Madrid urban and municipal context.",
+      "basis": "Source: \"Territory: Madrid\" (HATI, FIRSTLOOK-MAD).",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.20, "y": 0.22 },
+        "evidence": { "x": 0.20, "y": 0.02 },
+        "decisions": { "x": 0.20, "y": 0.02 }
+      }
+    },
+    {
+      "id": "t-madrid-interurban",
+      "type": "territory",
+      "label": "Madrid — interurban fringe",
+      "kind": "interurban",
+      "is_null": false,
+      "definition": "The interurban fringe around Madrid, where wildfire and environmental risk are framed.",
+      "basis": "Source: \"Domain: wildfire / interurban environmental risk\" (FIRSTLOOK-MAD).",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.42, "y": 0.22 },
+        "evidence": { "x": 0.42, "y": 0.02 },
+        "decisions": { "x": 0.42, "y": 0.02 }
+      }
+    },
+    {
+      "id": "t-guadarrama",
+      "type": "territory",
+      "label": "Sierra de Guadarrama",
+      "kind": "protected destination",
+      "is_null": false,
+      "definition": "Guadarrama as a protected destination context.",
+      "basis": "Source: \"Territory: primarily Guadarrama / protected destination context\" (SNTO).",
+      "folds": ["protected destination context"],
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.64, "y": 0.22 },
+        "evidence": { "x": 0.64, "y": 0.02 },
+        "decisions": { "x": 0.64, "y": 0.02 }
+      }
+    },
+    {
+      "id": "t-unbound",
+      "type": "territory",
+      "label": "No territory declared",
+      "kind": "null territory",
+      "is_null": true,
+      "definition": "A modelling device, not a place. It makes an undeclared territory visible instead of silently absent.",
+      "basis": "No territory is stated for FIELDOS or FAB in the source descriptions.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.86, "y": 0.22 },
+        "evidence": { "x": 0.86, "y": 0.02 },
+        "decisions": { "x": 0.86, "y": 0.02 }
+      }
+    },
+
+    {
+      "id": "m-utci",
+      "type": "method",
+      "label": "UTCI",
+      "project": "p-hati",
+      "definition": "Universal Thermal Climate Index, named in the HATI method list.",
+      "basis": "Source: HATI \"Methods/concepts: UTCI\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.06, "y": 0.90 },
+        "evidence": { "x": 0.05, "y": 0.44 },
+        "decisions": { "x": 0.05, "y": 0.78 }
+      }
+    },
+    {
+      "id": "m-solweig",
+      "type": "method",
+      "label": "SOLWEIG",
+      "project": "p-hati",
+      "definition": "Named in the HATI method list. Its configuration, inputs and validation are not declared in the source description.",
+      "basis": "Source: HATI \"Methods/concepts: SOLWEIG\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.14, "y": 0.90 },
+        "evidence": { "x": 0.13, "y": 0.56 },
+        "decisions": { "x": 0.12, "y": 0.88 }
+      }
+    },
+    {
+      "id": "m-heat-exposure",
+      "type": "method",
+      "label": "Heat exposure",
+      "project": "p-hati",
+      "definition": "Assessment of exposure to extreme heat, named in the HATI method list.",
+      "basis": "Source: HATI \"Methods/concepts: heat exposure\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.22, "y": 0.90 },
+        "evidence": { "x": 0.21, "y": 0.44 },
+        "decisions": { "x": 0.19, "y": 0.78 }
+      }
+    },
+    {
+      "id": "m-scenarios",
+      "type": "method",
+      "label": "Scenarios",
+      "project": "p-hati",
+      "definition": "Construction and comparison of modelled conditions rather than observed ones.",
+      "basis": "Source: HATI \"Methods/concepts: scenarios\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.30, "y": 0.90 },
+        "evidence": { "x": 0.29, "y": 0.56 },
+        "decisions": { "x": 0.26, "y": 0.88 }
+      }
+    },
+    {
+      "id": "m-decision-engine",
+      "type": "method",
+      "label": "Decision engine",
+      "project": "p-hati",
+      "definition": "The mechanism by which HATI turns spatial analysis into eligibility outcomes. Its rules are not declared in the source description.",
+      "basis": "Source: HATI \"Methods/concepts: decision engine\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.38, "y": 0.90 },
+        "evidence": { "x": 0.37, "y": 0.44 },
+        "decisions": { "x": 0.33, "y": 0.78 }
+      }
+    },
+    {
+      "id": "m-environmental-signals",
+      "type": "method",
+      "label": "Environmental signals",
+      "project": "p-firstlook",
+      "definition": "Environmental signals used in FIRSTLOOK-MAD. Their sources and processing are not declared.",
+      "basis": "Source: FIRSTLOOK-MAD \"Concepts: environmental signals\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.46, "y": 0.90 },
+        "evidence": { "x": 0.45, "y": 0.56 },
+        "decisions": { "x": 0.44, "y": 0.88 }
+      }
+    },
+    {
+      "id": "m-real-data-acquisition",
+      "type": "method",
+      "label": "Real-data acquisition",
+      "project": "p-firstlook",
+      "definition": "Acquisition of real, observed data.",
+      "basis": "Source: FIRSTLOOK-MAD \"Concepts: real-data acquisition\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.54, "y": 0.90 },
+        "evidence": { "x": 0.53, "y": 0.44 },
+        "decisions": { "x": 0.51, "y": 0.78 }
+      }
+    },
+    {
+      "id": "m-evidence-provenance",
+      "type": "method",
+      "label": "Evidence provenance",
+      "project": "p-firstlook",
+      "governance": true,
+      "definition": "Tracking where evidence came from. A governance method: it audits evidence rather than producing it.",
+      "basis": "Source: FIRSTLOOK-MAD \"Concepts: evidence provenance\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.62, "y": 0.90 },
+        "evidence": { "x": 0.61, "y": 0.56 },
+        "decisions": { "x": 0.58, "y": 0.88 }
+      }
+    },
+    {
+      "id": "m-sentinel2",
+      "type": "method",
+      "label": "Sentinel-2",
+      "project": "p-snto",
+      "definition": "Sentinel-2 satellite imagery, used for remote sensing of the destination.",
+      "basis": "Source: SNTO \"Concepts: Sentinel-2, remote sensing\".",
+      "folds": ["remote sensing"],
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.70, "y": 0.90 },
+        "evidence": { "x": 0.69, "y": 0.44 },
+        "decisions": { "x": 0.65, "y": 0.78 }
+      }
+    },
+    {
+      "id": "m-open-data",
+      "type": "method",
+      "label": "Open data",
+      "project": "p-snto",
+      "definition": "Published open datasets used as an input to destination monitoring.",
+      "basis": "Source: SNTO \"Concepts: open data\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.78, "y": 0.90 },
+        "evidence": { "x": 0.77, "y": 0.56 },
+        "decisions": { "x": 0.72, "y": 0.88 }
+      }
+    },
+    {
+      "id": "m-evidence-classification",
+      "type": "method",
+      "label": "Evidence classification",
+      "project": "p-snto",
+      "governance": true,
+      "definition": "Assigning a status to evidence. A governance method: it labels evidence rather than producing it.",
+      "basis": "Source: SNTO \"Concepts: evidence classification\".",
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.86, "y": 0.90 },
+        "evidence": { "x": 0.85, "y": 0.44 },
+        "decisions": { "x": 0.79, "y": 0.78 }
+      }
+    },
+    {
+      "id": "m-field-collection",
+      "type": "method",
+      "label": "Spatial field data collection",
+      "project": "p-fieldos",
+      "definition": "Collection of observations in the field, including voice-to-text notes, as spatial data.",
+      "basis": "Source: FIELDOS \"Concepts: field evidence, observations, voice-to-text notes, spatial field data collection\".",
+      "folds": ["field evidence", "observations", "voice-to-text notes"],
+      "weight": 1,
+      "layout": {
+        "territory": { "x": 0.94, "y": 0.90 },
+        "evidence": { "x": 0.93, "y": 0.56 },
+        "decisions": { "x": 0.90, "y": 0.88 }
+      }
+    },
+
+    {
+      "id": "e-real",
+      "type": "evidence",
+      "label": "REAL",
+      "rank": 2,
+      "color": "#3FA98C",
+      "dash": "none",
+      "stroke_width": 1,
+      "glyph": "filled-circle",
+      "definition": "Directly observed or acquired data.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.10, "y": 0.97 },
+        "evidence": { "x": 0.10, "y": 0.86 },
+        "decisions": { "x": 0.10, "y": 0.98 }
+      }
+    },
+    {
+      "id": "e-derived",
+      "type": "evidence",
+      "label": "DERIVED",
+      "rank": 2,
+      "color": "#5B9BD5",
+      "dash": "6 3",
+      "stroke_width": 1,
+      "glyph": "half-circle",
+      "definition": "Computed from other evidence via a declared transformation.",
+      "unused_in_v0_1": true,
+      "unused_reason": "No source description explicitly supports a DERIVED status. The class is retained in the vocabulary and must render in the legend with a count of 0.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.26, "y": 0.97 },
+        "evidence": { "x": 0.26, "y": 0.86 },
+        "decisions": { "x": 0.26, "y": 0.98 }
+      }
+    },
+    {
+      "id": "e-calibrated",
+      "type": "evidence",
+      "label": "CALIBRATED",
+      "rank": 2,
+      "color": "#C9A227",
+      "dash": "2 3",
+      "stroke_width": 1,
+      "glyph": "ringed-circle",
+      "definition": "Adjusted or validated against an independent reference.",
+      "unused_in_v0_1": true,
+      "unused_reason": "No source description explicitly supports a CALIBRATED status. The class is retained in the vocabulary and must render in the legend with a count of 0.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.42, "y": 0.97 },
+        "evidence": { "x": 0.42, "y": 0.86 },
+        "decisions": { "x": 0.42, "y": 0.98 }
+      }
+    },
+    {
+      "id": "e-simulated",
+      "type": "evidence",
+      "label": "SIMULATED",
+      "rank": 2,
+      "color": "#D98B3A",
+      "dash": "8 3 2 3",
+      "stroke_width": 1,
+      "glyph": "diamond",
+      "definition": "Produced by a model under specified conditions.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.58, "y": 0.97 },
+        "evidence": { "x": 0.58, "y": 0.86 },
+        "decisions": { "x": 0.58, "y": 0.98 }
+      }
+    },
+    {
+      "id": "e-provisional",
+      "type": "evidence",
+      "label": "PROVISIONAL",
+      "rank": 1,
+      "color": "#8B9099",
+      "dash": "1 3",
+      "stroke_width": 1,
+      "glyph": "open-circle",
+      "definition": "Asserted by this atlas but not substantiated by the source description.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.74, "y": 0.97 },
+        "evidence": { "x": 0.74, "y": 0.86 },
+        "decisions": { "x": 0.74, "y": 0.98 }
+      }
+    },
+    {
+      "id": "e-missing",
+      "type": "evidence",
+      "label": "MISSING",
+      "rank": 0,
+      "color": "#C46A78",
+      "dash": "3 3",
+      "stroke_width": 0.5,
+      "glyph": "slashed-circle",
+      "definition": "Not declared by the source description. The absence is itself the finding.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.90, "y": 0.97 },
+        "evidence": { "x": 0.90, "y": 0.86 },
+        "decisions": { "x": 0.90, "y": 0.98 }
+      }
+    },
+
+    {
+      "id": "d-eligibility",
+      "type": "decision",
+      "label": "Where is intervention spatially eligible?",
+      "short_label": "Spatial eligibility",
+      "definition": "Whether a location qualifies for an intervention under the declared spatial criteria.",
+      "basis": "Source: HATI \"Methods/concepts: spatial eligibility ... decision engine\". Promoted from the HATI method list to a decision framing.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.12, "y": 0.06 },
+        "evidence": { "x": 0.12, "y": 0.98 },
+        "decisions": { "x": 0.13, "y": 0.16 }
+      }
+    },
+    {
+      "id": "d-scenario",
+      "type": "decision",
+      "label": "How do outcomes differ across scenarios?",
+      "short_label": "Scenario comparison",
+      "definition": "How modelled conditions change the picture relative to one another.",
+      "basis": "Source: HATI \"Methods/concepts: scenarios\".",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.31, "y": 0.06 },
+        "evidence": { "x": 0.31, "y": 0.98 },
+        "decisions": { "x": 0.32, "y": 0.16 }
+      }
+    },
+    {
+      "id": "d-risk",
+      "type": "decision",
+      "label": "Where is spatial risk concentrated?",
+      "short_label": "Spatial risk",
+      "definition": "Where environmental risk is concentrated across the territory.",
+      "basis": "Source: FIRSTLOOK-MAD \"Concepts: ... spatial risk\". Promoted from the concept list to a decision framing.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.50, "y": 0.06 },
+        "evidence": { "x": 0.50, "y": 0.98 },
+        "decisions": { "x": 0.51, "y": 0.16 }
+      }
+    },
+    {
+      "id": "d-monitoring",
+      "type": "decision",
+      "label": "Is the destination changing?",
+      "short_label": "Destination monitoring",
+      "definition": "Whether observable change is occurring in the monitored destination.",
+      "basis": "Source: SNTO \"Concepts: ... destination monitoring\". Promoted from the concept list to a decision framing.",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.69, "y": 0.06 },
+        "evidence": { "x": 0.69, "y": 0.98 },
+        "decisions": { "x": 0.70, "y": 0.16 }
+      }
+    },
+    {
+      "id": "d-observed",
+      "type": "decision",
+      "label": "What was actually observed on the ground?",
+      "short_label": "Field observation",
+      "definition": "What was recorded in the field, as distinct from what was modelled or inferred.",
+      "basis": "Source: FIELDOS \"Concepts: field evidence, observations\".",
+      "weight": 2,
+      "layout": {
+        "territory": { "x": 0.88, "y": 0.06 },
+        "evidence": { "x": 0.88, "y": 0.98 },
+        "decisions": { "x": 0.89, "y": 0.16 }
+      }
+    }
+  ],
+
+  "edges": [
+    { "id": "op-01", "type": "operates_in", "source": "p-hati", "target": "t-madrid", "support": "stated", "basis": "HATI: \"Territory: Madrid\"", "evidence": null },
+    { "id": "op-02", "type": "operates_in", "source": "p-firstlook", "target": "t-madrid", "support": "stated", "basis": "FIRSTLOOK-MAD: \"Territory: Madrid\"", "evidence": null },
+    { "id": "op-03", "type": "operates_in", "source": "p-firstlook", "target": "t-madrid-interurban", "support": "stated", "basis": "FIRSTLOOK-MAD: \"Domain: wildfire / interurban environmental risk\"", "evidence": null },
+    { "id": "op-04", "type": "operates_in", "source": "p-snto", "target": "t-guadarrama", "support": "stated", "basis": "SNTO: \"Territory: primarily Guadarrama / protected destination context\"", "evidence": null },
+    { "id": "op-05", "type": "operates_in", "source": "p-fieldos", "target": "t-unbound", "support": "stated", "basis": "No territory is declared for FIELDOS in the source description.", "evidence": "e-missing" },
+    { "id": "op-06", "type": "operates_in", "source": "p-fab", "target": "t-unbound", "support": "stated", "basis": "No territory is declared for FAB in the source description.", "evidence": "e-missing" },
+
+    { "id": "am-01", "type": "applies_method", "source": "p-hati", "target": "m-utci", "support": "stated", "basis": "HATI: \"UTCI\"", "evidence": null },
+    { "id": "am-02", "type": "applies_method", "source": "p-hati", "target": "m-solweig", "support": "stated", "basis": "HATI: \"SOLWEIG\"", "evidence": null },
+    { "id": "am-03", "type": "applies_method", "source": "p-hati", "target": "m-heat-exposure", "support": "stated", "basis": "HATI: \"heat exposure\"", "evidence": null },
+    { "id": "am-04", "type": "applies_method", "source": "p-hati", "target": "m-scenarios", "support": "stated", "basis": "HATI: \"scenarios\"", "evidence": null },
+    { "id": "am-05", "type": "applies_method", "source": "p-hati", "target": "m-decision-engine", "support": "stated", "basis": "HATI: \"decision engine\"", "evidence": null },
+    { "id": "am-06", "type": "applies_method", "source": "p-firstlook", "target": "m-environmental-signals", "support": "stated", "basis": "FIRSTLOOK-MAD: \"environmental signals\"", "evidence": null },
+    { "id": "am-07", "type": "applies_method", "source": "p-firstlook", "target": "m-real-data-acquisition", "support": "stated", "basis": "FIRSTLOOK-MAD: \"real-data acquisition\"", "evidence": null },
+    { "id": "am-08", "type": "applies_method", "source": "p-firstlook", "target": "m-evidence-provenance", "support": "stated", "basis": "FIRSTLOOK-MAD: \"evidence provenance\"", "evidence": null },
+    { "id": "am-09", "type": "applies_method", "source": "p-snto", "target": "m-sentinel2", "support": "stated", "basis": "SNTO: \"Sentinel-2, remote sensing\"", "evidence": null },
+    { "id": "am-10", "type": "applies_method", "source": "p-snto", "target": "m-open-data", "support": "stated", "basis": "SNTO: \"open data\"", "evidence": null },
+    { "id": "am-11", "type": "applies_method", "source": "p-snto", "target": "m-evidence-classification", "support": "stated", "basis": "SNTO: \"evidence classification\"", "evidence": null },
+    { "id": "am-12", "type": "applies_method", "source": "p-fieldos", "target": "m-field-collection", "support": "stated", "basis": "FIELDOS: \"spatial field data collection\"", "evidence": null },
+
+    { "id": "ye-01", "type": "yields_evidence", "source": "m-utci", "target": "e-provisional", "support": "authored", "basis": "The source description names UTCI but does not declare its inputs or processing chain, so no substantive class may be asserted.", "evidence": "e-provisional" },
+    { "id": "ye-02", "type": "yields_evidence", "source": "m-solweig", "target": "e-provisional", "support": "authored", "basis": "The source description names SOLWEIG but does not declare its configuration or validation, so no substantive class may be asserted.", "evidence": "e-provisional" },
+    { "id": "ye-03", "type": "yields_evidence", "source": "m-heat-exposure", "target": "e-provisional", "support": "authored", "basis": "The source description names heat exposure but does not declare how it is computed or measured.", "evidence": "e-provisional" },
+    { "id": "ye-04", "type": "yields_evidence", "source": "m-scenarios", "target": "e-simulated", "support": "stated", "basis": "HATI: \"scenarios\" — a scenario describes modelled rather than observed conditions.", "evidence": "e-simulated" },
+    { "id": "ye-05", "type": "yields_evidence", "source": "m-decision-engine", "target": "e-provisional", "support": "authored", "basis": "The source description names a decision engine but does not declare its rules or outputs.", "evidence": "e-provisional" },
+    { "id": "ye-06", "type": "yields_evidence", "source": "m-environmental-signals", "target": "e-provisional", "support": "authored", "basis": "The source description names environmental signals but does not declare their source or class.", "evidence": "e-provisional" },
+    { "id": "ye-07", "type": "yields_evidence", "source": "m-real-data-acquisition", "target": "e-real", "support": "stated", "basis": "FIRSTLOOK-MAD: \"real-data acquisition\" — the source states the data is real.", "evidence": "e-real" },
+    { "id": "ye-08", "type": "yields_evidence", "source": "m-sentinel2", "target": "e-real", "support": "stated", "basis": "SNTO: \"Sentinel-2\" — the source names a concrete operational Earth-observation mission, i.e. acquired data.", "evidence": "e-real" },
+    { "id": "ye-09", "type": "yields_evidence", "source": "m-open-data", "target": "e-real", "support": "stated", "basis": "SNTO: \"open data\" — the source names published datasets, i.e. acquired data.", "evidence": "e-real" },
+    { "id": "ye-10", "type": "yields_evidence", "source": "m-field-collection", "target": "e-real", "support": "stated", "basis": "FIELDOS: \"field evidence, observations\" — the source names direct observation.", "evidence": "e-real" },
+
+    { "id": "sd-01", "type": "supports_decision", "source": "p-hati", "target": "d-eligibility", "support": "stated", "basis": "HATI: \"spatial eligibility\", \"decision engine\"", "evidence": null },
+    { "id": "sd-02", "type": "supports_decision", "source": "m-decision-engine", "target": "d-eligibility", "support": "stated", "basis": "HATI: \"decision engine\"", "evidence": null },
+    { "id": "sd-03", "type": "supports_decision", "source": "m-heat-exposure", "target": "d-eligibility", "support": "authored", "basis": "Authored: exposure is treated here as an input to eligibility. Not stated in the source description.", "evidence": null },
+    { "id": "sd-04", "type": "supports_decision", "source": "p-hati", "target": "d-scenario", "support": "stated", "basis": "HATI: \"scenarios\"", "evidence": null },
+    { "id": "sd-05", "type": "supports_decision", "source": "m-scenarios", "target": "d-scenario", "support": "stated", "basis": "HATI: \"scenarios\"", "evidence": null },
+    { "id": "sd-06", "type": "supports_decision", "source": "m-utci", "target": "d-scenario", "support": "authored", "basis": "Authored: an index is treated here as a scenario comparison variable. Not stated in the source description.", "evidence": null },
+    { "id": "sd-07", "type": "supports_decision", "source": "m-solweig", "target": "d-scenario", "support": "authored", "basis": "Authored: a model is treated here as a scenario producer. Not stated in the source description.", "evidence": null },
+    { "id": "sd-08", "type": "supports_decision", "source": "p-firstlook", "target": "d-risk", "support": "stated", "basis": "FIRSTLOOK-MAD: \"spatial risk\"", "evidence": null },
+    { "id": "sd-09", "type": "supports_decision", "source": "m-environmental-signals", "target": "d-risk", "support": "authored", "basis": "Authored: signals are treated here as risk inputs. Not stated in the source description.", "evidence": null },
+    { "id": "sd-10", "type": "supports_decision", "source": "m-real-data-acquisition", "target": "d-risk", "support": "authored", "basis": "Authored: acquisition is treated here as a risk input. Not stated in the source description.", "evidence": null },
+    { "id": "sd-11", "type": "supports_decision", "source": "m-evidence-provenance", "target": "d-risk", "support": "authored", "basis": "Authored: provenance is treated here as a precondition for trusting a risk claim. Governance method; excluded from evidence-floor computation (rule R5).", "evidence": null },
+    { "id": "sd-12", "type": "supports_decision", "source": "p-snto", "target": "d-monitoring", "support": "stated", "basis": "SNTO: \"destination monitoring\"", "evidence": null },
+    { "id": "sd-13", "type": "supports_decision", "source": "m-sentinel2", "target": "d-monitoring", "support": "authored", "basis": "Authored: imagery is treated here as a monitoring input. Not stated in the source description.", "evidence": null },
+    { "id": "sd-14", "type": "supports_decision", "source": "m-open-data", "target": "d-monitoring", "support": "authored", "basis": "Authored: open data is treated here as a monitoring input. Not stated in the source description.", "evidence": null },
+    { "id": "sd-15", "type": "supports_decision", "source": "m-evidence-classification", "target": "d-monitoring", "support": "authored", "basis": "Authored: classification is treated here as a precondition for interpreting monitoring output. Governance method; excluded from evidence-floor computation (rule R5).", "evidence": null },
+    { "id": "sd-16", "type": "supports_decision", "source": "p-fieldos", "target": "d-observed", "support": "stated", "basis": "FIELDOS: \"field evidence, observations\"", "evidence": null },
+    { "id": "sd-17", "type": "supports_decision", "source": "m-field-collection", "target": "d-observed", "support": "stated", "basis": "FIELDOS: \"spatial field data collection\"", "evidence": null },
+
+    { "id": "ca-01", "type": "conceptually_adjacent", "source": "p-hati", "target": "p-firstlook", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null },
+    { "id": "ca-02", "type": "conceptually_adjacent", "source": "p-hati", "target": "p-snto", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null },
+    { "id": "ca-03", "type": "conceptually_adjacent", "source": "p-hati", "target": "p-fieldos", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null },
+    { "id": "ca-04", "type": "conceptually_adjacent", "source": "p-hati", "target": "p-fab", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null },
+    { "id": "ca-05", "type": "conceptually_adjacent", "source": "p-firstlook", "target": "p-snto", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null },
+    { "id": "ca-06", "type": "conceptually_adjacent", "source": "p-firstlook", "target": "p-fieldos", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null },
+    { "id": "ca-07", "type": "conceptually_adjacent", "source": "p-firstlook", "target": "p-fab", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null },
+    { "id": "ca-08", "type": "conceptually_adjacent", "source": "p-snto", "target": "p-fieldos", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null },
+    { "id": "ca-09", "type": "conceptually_adjacent", "source": "p-snto", "target": "p-fab", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null },
+    { "id": "ca-10", "type": "conceptually_adjacent", "source": "p-fieldos", "target": "p-fab", "support": "authored", "basis": "Authored sibling relationship. Not a technical connection.", "evidence": null }
+  ]
+}

@@ -8,8 +8,10 @@
 
 **RELEASE_LOCKED**
 
-The repository holds one deliberately bounded release, `v0.1.0`, tagged at
-the current tip of `main`. `README.md` states the three source-of-truth
+The repository holds one deliberately bounded release, `v0.1.0`, published
+2026-09-05 at commit `d3f399c`. `main` has since advanced with
+documentation-only commits (see §2); the released artifact itself has not
+changed. `README.md` states the three source-of-truth
 documents (`SPEC.md`, `DESIGN_CONTRACT.md`, `data/atlas.json`) are **Locked**,
 and `DESIGN_CONTRACT.md` §9.1 caps the implementation at three files
 (`index.html`, `styles.css`, `app.js`) plus `data/atlas.json`, whose *schema*
@@ -32,10 +34,15 @@ loosened at will.
 | Tag | `v0.1.0` |
 | Commit | `d3f399cf7317ea3951a5ee4761b4de01f3731fa5` |
 | Published | 2026-09-05 |
-| Default branch | `main` (tag commit = current tip) |
+| `main` tip (this audit) | `1002a1685fab1ed73f02e96eee60f83319910928` (2026-09-14) |
 
-`main` and the `v0.1.0` tag point to the same commit as of this audit — there
-is no drift between the release and the branch.
+`main` has advanced two commits past the `v0.1.0` tag since publication —
+`6651bca` (adding this file) and its merge commit `1002a16`, both
+documentation-only. `v0.1.0` remains the released artifact and the reference
+for everything in this document; `main` may carry documentary corrections
+like this one after the tag without those changes constituting a new
+release. Any future change to the *artifact itself* (`index.html`,
+`styles.css`, `app.js`, `data/atlas.json`) would need its own tag under §6.
 
 ## 3. Demonstrated vs. simulated / derived / provisional / unvalidated
 

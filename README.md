@@ -10,6 +10,12 @@ conceptual space.
 
 ---
 
+**Project status:** see [`PROJECT_STATUS.md`](./PROJECT_STATUS.md) for the
+canonical release lock, evidence ceiling, licensing note, and disposition of
+open issues/PRs as of the last audit.
+
+---
+
 ## Current status
 
 **Implemented — v0.1.0.**

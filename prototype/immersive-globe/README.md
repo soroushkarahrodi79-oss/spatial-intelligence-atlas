@@ -40,6 +40,7 @@ shows a styled instruction panel instead of a blank screen.
 | `styles.css` | Restrained dark cartographic styling |
 | `app.js` | Globe init, perspective switching, reading experience, fallback |
 | `geo.json` | **Prototype-only** representative geographic locators (see below) |
+| `SOURCES_AND_LICENSES.md` | Per-coordinate sources, library licences, scope gates |
 | `vendor/globe.gl.min.js` | Globe.GL 2.46.2 standalone UMD build (MIT), bundles Three.js |
 | `vendor/countries-110m.geojson` | Natural Earth 110m country outlines (public domain) |
 
@@ -52,11 +53,13 @@ on a globe:
 - SNTO → Parque Nacional de la Sierra de Guadarrama
 - CHALUS → Western Mazandaran (Chalus / Nowshahr / Kelardasht)
 
-These are indicative gazetteer coordinates (OpenStreetMap / Wikipedia), rounded,
-for orientation only. They are **not** the bounded study-area geometries,
-administrative boundaries, or route geometry used by the research, and this is
-stated in the UI on every case. **FieldOS has no location** and is deliberately
-absent from the globe — it remains a supporting instrument.
+These are indicative gazetteer coordinates from identifiable sources (GeoNames
+for Madrid, a MITECO bounding-box midpoint for the park, OpenStreetMap for
+Chalus) — see `SOURCES_AND_LICENSES.md` for the per-point citation. They are
+**not** the bounded study-area geometries, administrative boundaries, or route
+geometry used by the research, and this is stated in the UI on every case.
+**FieldOS has no location** and is deliberately absent from the globe — it
+remains a supporting instrument.
 
 No fictional geographic flows, arcs, or connections between projects are drawn.
 

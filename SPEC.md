@@ -4,17 +4,20 @@
 
 **Target version:** 0.2.0
 
-**Document state:** GATE 1 APPROVED — GATE 2 CONTENT FREEZE DRAFT —
-IMPLEMENTATION NOT AUTHORISED
+**Document state:** GATE 1 APPROVED — GATE 2 APPROVED — GATE 3 IMPLEMENTATION
+DRAFTED (this branch) — GATE 4 VERIFICATION/RELEASE UNAUTHORISED
 
 **Gate record:** GitHub issue #5
 
 **Historical baseline:** releases `v0.1.0` and `v0.1.1` remain immutable.
 
-This document is the proposed source of truth for v0.2 meaning and behaviour.
-It does not alter the released v0.1 artifacts and does not authorise changes to
-`index.html`, `styles.css`, `app.js`, or `data/atlas.json`. On approval, this
-document and `DESIGN_CONTRACT.md` become the implementation contract for v0.2.
+This document is the source of truth for v0.2 meaning and behaviour. The
+maintainer approved Gate 2's semantic content freeze on 2026-09-22 and
+authorised Gate 3 implementation. `index.html`, `styles.css`, `app.js`, and
+`data/atlas.json` have been migrated to this contract on a review branch
+(`impl/v0.2-gate3`) and are not yet merged to `main` or released. Merging to
+`main` makes this the live GitHub Pages artifact, so it is treated as
+requiring the same explicit maintainer confirmation as Gate 4.
 
 ---
 
@@ -450,13 +453,17 @@ This design is ready for implementation review only when all are true:
 
 1. **Gate 1 — specification — APPROVED:** `SPEC.md` and
    `DESIGN_CONTRACT.md`, merged through PR #6.
-2. **Gate 2 — content freeze — DRAFT:** verify exact questions, outcomes,
-   claim ceilings, statuses, source URLs, pinned refs, and review dates.
-3. **Gate 3 — implementation — UNAUTHORISED:** change the runtime and migrate
-   `data/atlas.json` only after Gates 1 and 2 pass.
+2. **Gate 2 — content freeze — APPROVED (2026-09-22):** the semantic payload in
+   §12 is frozen; content drafted through PR #7 and approved by the maintainer
+   in issue #5.
+3. **Gate 3 — implementation — DRAFTED, PENDING MERGE:** the runtime and
+   `data/atlas.json` have been migrated to this contract on branch
+   `impl/v0.2-gate3`. Not yet merged to `main`.
 4. **Gate 4 — verification/release — UNAUTHORISED:** test invariants,
    accessibility, responsive behaviour, claim wording, links, and release
-   provenance.
+   provenance; cut a v0.2 release. Because GitHub Pages deploys from `main`,
+   merging the Gate 3 branch is treated as part of this gate and requires
+   explicit maintainer confirmation, not merge-alone.
 
 No later gate is implied by approval of an earlier one.
 
@@ -464,9 +471,9 @@ No later gate is implied by approval of an earlier one.
 
 ## 12. Gate 2 semantic content freeze
 
-**State:** DRAFT FOR MAINTAINER REVIEW. The records below are the complete
-semantic payload proposed for v0.2. They do not authorise edits to the runtime
-or `data/atlas.json`.
+**State:** APPROVED (2026-09-22). The records below are the complete semantic
+payload for v0.2 and have been migrated into `data/atlas.json` on branch
+`impl/v0.2-gate3` under Gate 3.
 
 ### 12.1 Scope clarification
 
@@ -560,14 +567,14 @@ There are zero entity-to-entity relationships.
 
 ### 12.8 Gate 2 acceptance checks
 
-- [ ] Every semantic record above has been reviewed by the maintainer.
-- [ ] Every claim and explicit absence resolves to a declared commit-pinned
+- [x] Every semantic record above has been reviewed by the maintainer.
+- [x] Every claim and explicit absence resolves to a declared commit-pinned
   source.
-- [ ] HATI's original pilot and pedestrian extension remain distinct.
-- [ ] No source supports or implies an entity-to-entity edge.
-- [ ] No evidence record combines incompatible `input_kind` values.
-- [ ] No status, evidence record, or outcome functions as a maturity score.
-- [ ] Layout coordinates remain an implementation concern and carry no semantic
-  meaning; they will be added and visually verified only at Gate 3.
-- [ ] Runtime files and `data/atlas.json` remain unchanged until Gate 3 is
-  separately authorised.
+- [x] HATI's original pilot and pedestrian extension remain distinct.
+- [x] No source supports or implies an entity-to-entity edge.
+- [x] No evidence record combines incompatible `input_kind` values.
+- [x] No status, evidence record, or outcome functions as a maturity score.
+- [x] Layout coordinates were added and visually verified at Gate 3; they carry
+  no semantic meaning.
+- [x] Runtime files and `data/atlas.json` were migrated under Gate 3 on branch
+  `impl/v0.2-gate3`, after Gate 2 approval.

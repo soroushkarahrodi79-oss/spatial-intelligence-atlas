@@ -1,10 +1,10 @@
-/* Stable keyboard order: SPEC §4 type order, then original dataset order. */
+/* Stable keyboard order: SPEC §4 type order (entity, territory, evidence_record, outcome), then dataset order. */
 'use strict';
-const state = { mode: 'territory', selectedNodeId: null, hiddenEvidenceClasses: new Set() };
+const state = { mode: 'territory', selectedNodeId: null };
 const $ = id => document.getElementById(id);
 const ns = 'http://www.w3.org/2000/svg';
-const typeOrder = ['project', 'territory', 'method', 'evidence', 'decision'];
-let atlas, nodes, ordered, classes, nodeElements, edgeElements;
+const typeOrder = ['entity', 'territory', 'evidence_record', 'outcome'];
+let atlas, nodes, ordered, kinds, nodeElements, edgeElements;
 const narrow = matchMedia('(max-width:639px)');
 const el = (tag, text, className) => {
   const element = document.createElement(tag);
@@ -18,81 +18,110 @@ const svg = (tag, attrs = {}) => {
   return element;
 };
 const mode = () => atlas.meta.modes.find(item => item.id === state.mode);
-const connections = id => atlas.edges.filter(e => e.source === id || e.target === id);
-const other = (edge, id) => nodes.get(edge.source === id ? edge.target : edge.source);
-const methodClass = id => atlas.edges.find(e => e.source === id && e.type === 'yields_evidence')?.target;
-const classFor = node => node.type === 'evidence' ? node.id : methodClass(node.id) || node.evidence_declaration;
-const evidenceCount = id => atlas.edges.filter(e => e.evidence === id).length;
-const visibleNode = node => mode().node_types.includes(node.type);
-const visibleEdge = edge => mode().edge_types.includes(edge.type);
+const connections = id => atlas.relationships.filter(r => r.source === id || r.target === id);
+const other = (rel, id) => nodes.get(rel.source === id ? rel.target : rel.source);
+const visibleNode = node => mode().node_types.includes(node.node_type);
+const visibleEdge = rel => mode().edge_types.includes(rel.type);
 const announce = text => { $('live').textContent = text; };
-function floor(node) {
-  const ranks = atlas.edges.filter(e => e.target === node.id && e.type === 'supports_decision')
-    .map(e => nodes.get(e.source)).filter(n => n.type === 'method' && !n.governance)
-    .map(n => nodes.get(methodClass(n.id))?.rank ?? 0);
-  return atlas.meta.evidence_floor_labels[ranks.length ? Math.min(...ranks) : 0];
-}
-function glyph(evidence) {
-  const group = svg('g', { fill:'none', stroke:evidence.color, 'stroke-width':1 });
+const verdictLabel = { abstain: 'ABSTAIN', insufficient_evidence: 'INSUFFICIENT EVIDENCE', no_go: 'NO-GO', functional_test: 'FUNCTIONAL TEST' };
+const substantiationLabel = { source_stated: 'SOURCE-STATED', owner_attested: 'OWNER-ATTESTED', not_established: 'NOT ESTABLISHED' };
+function glyph(kind) {
+  const group = svg('g', { fill: 'none', stroke: kind.color, 'stroke-width': 1 });
   const circle = r => svg('circle', { r });
-  switch (evidence.glyph) {
-    case 'filled-circle': group.append(svg('circle', { r:5, fill:evidence.color })); break;
-    case 'half-circle': group.append(circle(5), svg('path', { d:'M0 -5 A5 5 0 0 0 0 5 Z', fill:evidence.color })); break;
+  switch (kind.glyph) {
+    case 'filled-circle': group.append(svg('circle', { r: 5, fill: kind.color })); break;
+    case 'half-circle': group.append(circle(5), svg('path', { d: 'M0 -5 A5 5 0 0 0 0 5 Z', fill: kind.color })); break;
     case 'ringed-circle': group.append(circle(6), circle(3)); break;
-    case 'diamond': group.append(svg('path', { d:'M0 -6 L6 0 L0 6 L-6 0 Z' })); break;
-    case 'slashed-circle': group.append(circle(5), svg('path', { d:'M-6 6 L6 -6' })); break;
+    case 'diamond': group.append(svg('path', { d: 'M0 -6 L6 0 L0 6 L-6 0 Z' })); break;
+    case 'slashed-circle': group.append(circle(5), svg('path', { d: 'M-6 6 L6 -6' })); break;
     default: group.append(circle(5));
   }
   return group;
 }
-function evidenceTag(id, count = false) {
-  const evidence = nodes.get(id);
+function inputKindTag(id, count = false) {
+  const kind = kinds.get(id);
   const tag = el('span', null, 'evidence-tag');
-  if (!evidence) { tag.textContent = 'Evidence not assigned'; return tag; }
-  const mark = svg('svg', { viewBox:'0 0 48 20', 'aria-hidden':'true', class:'evidence-swatch' });
-  const g = glyph(evidence); g.setAttribute('transform','translate(8 10)');
-  mark.append(g, svg('line', { x1:20, x2:48, y1:10, y2:10, stroke:evidence.color,
-    'stroke-width':evidence.stroke_width, 'stroke-dasharray':evidence.dash }));
-  tag.append(mark, el('span', evidence.label));
+  const mark = svg('svg', { viewBox: '0 0 48 20', 'aria-hidden': 'true', class: 'evidence-swatch' });
+  const g = glyph(kind); g.setAttribute('transform', 'translate(8 10)');
+  mark.append(g, svg('line', { x1: 20, x2: 48, y1: 10, y2: 10, stroke: kind.color, 'stroke-width': kind.stroke_width, 'stroke-dasharray': kind.dash }));
+  tag.append(mark, el('span', kind.label));
   if (count) tag.append(el('span', ` ${evidenceCount(id)}`, 'micro'));
   return tag;
 }
+function evidenceCount(kindId) { return atlas.evidence_records.filter(r => r.input_kind === kindId).length; }
+function sourceLink(id) {
+  const source = atlas.sources.find(s => s.id === id);
+  const a = el('a', source.label);
+  a.href = source.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+  a.setAttribute('aria-label', `${source.label}, opens in a new tab`);
+  a.className = 'source-link';
+  return a;
+}
+function sourceList(ids) {
+  const list = el('ul', null, 'source-list');
+  ids.forEach(id => { const item = el('li'); item.append(sourceLink(id)); list.append(item); });
+  return list;
+}
 function buildGraph() {
-  const defs = svg('defs');
-  [null, ...classes].forEach(evidence => {
-    const marker = svg('marker', { id:`arrow-${evidence?.id || 'neutral'}`, viewBox:'0 0 5 5',
-      markerWidth:5, markerHeight:5, refX:5, refY:2.5, orient:'auto', markerUnits:'userSpaceOnUse' });
-    marker.append(svg('path', { d:'M0 0 L5 2.5 L0 5 Z', fill:evidence?.color || 'var(--edge)' })); defs.append(marker);
-  });
-  const edges = svg('g', { 'aria-hidden':'true' });
+  const edges = svg('g', { 'aria-hidden': 'true' });
   const nodeLayer = svg('g');
-  $('graph').append(defs, edges, nodeLayer);
-  edgeElements = new Map(atlas.edges.map(edge => {
-    const evidence = nodes.get(edge.evidence);
-    const path = svg('path', { class:'edge', fill:'none', stroke:evidence?.color || 'var(--edge)',
-      'stroke-width':evidence?.stroke_width || 1, 'stroke-dasharray':evidence?.dash || 'none', 'data-edge':edge.id });
-    if (['yields_evidence','supports_decision'].includes(edge.type)) path.setAttribute('marker-end',`url(#arrow-${edge.evidence || 'neutral'})`);
-    edges.append(path); return [edge.id,path];
+  $('graph').append(edges, nodeLayer);
+  edgeElements = new Map(atlas.relationships.map(rel => {
+    const target = nodes.get(rel.target);
+    const kind = target.node_type === 'evidence_record' ? kinds.get(target.input_kind) : null;
+    const path = svg('path', {
+      class: 'edge', fill: 'none', stroke: kind?.color || 'var(--edge)',
+      'stroke-width': kind?.stroke_width || 1, 'stroke-dasharray': kind?.dash || 'none', 'data-edge': rel.id
+    });
+    edges.append(path); return [rel.id, path];
   }));
   nodeElements = new Map(ordered.map(node => {
-    const group = svg('g', { class:`node ${node.type}`, role:'button', tabindex:0, 'data-node':node.id });
-    group.append(svg('rect', { x:-22, y:-22, width:44, height:44, fill:'transparent' }),
-      svg('rect', { x:-24, y:-24, width:48, height:48, class:'selection' }));
+    const group = svg('g', { class: `node ${node.node_type}`, role: 'button', tabindex: 0, 'data-node': node.id });
+    group.append(
+      svg('rect', { x: -22, y: -22, width: 44, height: 44, fill: 'transparent' }),
+      svg('rect', { x: -24, y: -24, width: 48, height: 48, class: 'selection' })
+    );
     let shape;
-    if (node.type === 'project') shape = svg('rect', { x:-8, y:-8, width:16, height:16, fill:'var(--ink)' });
-    if (node.type === 'method') shape = svg('circle', { r:4, fill:'var(--ink-2)' });
-    if (node.type === 'territory') shape = svg('rect', { x:-10, y:-6, width:20, height:12, fill:'var(--bg)', stroke:'var(--ink-2)', 'stroke-width':2, 'stroke-dasharray':node.is_null ? '3 3':'none' });
-    if (node.type === 'decision') shape = svg('path', { d:'M0 -8 L8 0 L0 8 L-8 0 Z', fill:'var(--bg)', stroke:'var(--ink-2)', 'stroke-width':2 });
-    if (node.type === 'evidence') {
+    if (node.node_type === 'entity' && node.kind === 'case') {
+      shape = svg('rect', { x: -8, y: -8, width: 16, height: 16, fill: 'var(--ink)' });
+    } else if (node.node_type === 'entity' && node.kind === 'instrument') {
       shape = svg('g');
-      shape.append(svg('circle', { r:9, fill:'var(--bg)', stroke:node.color, 'stroke-width':node.stroke_width, 'stroke-dasharray':node.dash }), glyph(node));
+      shape.append(
+        svg('rect', { x: -8, y: -8, width: 16, height: 16, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2 }),
+        svg('rect', { x: -5, y: -5, width: 10, height: 10, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1 })
+      );
+    } else if (node.node_type === 'territory') {
+      shape = svg('rect', { x: -10, y: -6, width: 20, height: 12, fill: 'var(--bg)', stroke: 'var(--ink-2)', 'stroke-width': 2 });
+    } else if (node.node_type === 'outcome') {
+      shape = svg('path', { d: 'M0 -8 L8 0 L0 8 L-8 0 Z', fill: 'var(--bg)', stroke: 'var(--ink-2)', 'stroke-width': 2 });
+    } else if (node.node_type === 'evidence_record') {
+      const kind = kinds.get(node.input_kind);
+      shape = svg('g');
+      shape.append(svg('circle', { r: 9, fill: 'var(--bg)', stroke: kind.color, 'stroke-width': kind.stroke_width, 'stroke-dasharray': kind.dash }), glyph(kind));
     }
-    group.append(shape, svg('text', { 'text-anchor':'middle', y:26, class:'node-label' }));
-    const territory = connections(node.id).find(e => e.type === 'operates_in');
-    group.setAttribute('aria-label', `${node.label}, ${node.type}${territory ? ', ' + nodes.get(territory.target).label : ''}, ${connections(node.id).length} connections`);
+    group.append(shape, svg('text', { 'text-anchor': 'middle', y: 26, class: 'node-label' }));
+    group.setAttribute('aria-label', ariaLabel(node));
     wireNode(group, node);
-    nodeLayer.append(group); return [node.id,group];
+    nodeLayer.append(group); return [node.id, group];
   }));
+}
+function ariaLabel(node) {
+  const parts = [node.node_type === 'outcome' ? verdictLabel[node.outcome_type] : (node.label || node.id)];
+  if (node.node_type === 'entity') {
+    parts.push(node.kind === 'case' ? 'core case' : 'supporting instrument');
+    const territoryRel = atlas.relationships.find(r => r.type === 'situated_in' && r.source === node.id);
+    if (territoryRel) parts.push(nodes.get(territoryRel.target).label);
+    const outcomeRel = atlas.relationships.find(r => r.type === 'reports' && r.source === node.id);
+    if (outcomeRel) parts.push(`documented outcome: ${nodes.get(outcomeRel.target).outcome_type.replace('_', ' ')}`);
+  } else if (node.node_type === 'evidence_record') {
+    parts.push(`evidence record, ${kinds.get(node.input_kind).label.toLowerCase()}`);
+  } else if (node.node_type === 'territory') {
+    parts.push('territory');
+  } else if (node.node_type === 'outcome') {
+    parts.push('documented outcome');
+  }
+  parts.push(`${connections(node.id).length} connections`);
+  return parts.join(', ');
 }
 function wireNode(element, node) {
   element.addEventListener('mouseenter', () => highlight(node.id, element));
@@ -107,97 +136,166 @@ function wireNode(element, node) {
 function focusedNode() { return document.activeElement?.getAttribute('data-node') || null; }
 function highlight(id, origin) {
   const active = id || state.selectedNodeId;
-  const neighbours = new Set(active ? [active, ...connections(active).filter(visibleEdge).map(e => other(e,active).id)] : []);
+  const neighbours = new Set(active ? [active, ...connections(active).filter(visibleEdge).map(r => other(r, active).id)] : []);
   document.querySelectorAll('[data-node]').forEach(element => {
     const node = nodes.get(element.getAttribute('data-node'));
-    const filtered = state.mode === 'evidence' && state.hiddenEvidenceClasses.has(classFor(node));
-    element.classList.toggle('dimmed', filtered || !!active && !neighbours.has(node.id));
+    element.classList.toggle('dimmed', !!active && !neighbours.has(node.id));
     element.classList.toggle('selected', node.id === state.selectedNodeId);
     element.setAttribute('aria-pressed', String(node.id === state.selectedNodeId));
   });
-  atlas.edges.forEach(edge => {
-    const path = edgeElements.get(edge.id);
-    const filtered = state.mode === 'evidence' && (state.hiddenEvidenceClasses.has(edge.evidence) || state.hiddenEvidenceClasses.has(methodClass(edge.target)));
-    const connected = edge.source === active || edge.target === active;
-    path.classList.toggle('dimmed', filtered || !!active && !connected);
-    path.classList.toggle('highlighted', !!active && connected && !filtered);
+  atlas.relationships.forEach(rel => {
+    const path = edgeElements.get(rel.id);
+    const connected = rel.source === active || rel.target === active;
+    path.classList.toggle('dimmed', !!active && !connected);
+    path.classList.toggle('highlighted', !!active && connected);
   });
   const tip = $('tooltip'); tip.hidden = !id || narrow.matches;
   if (id && !narrow.matches) {
     const node = nodes.get(id);
-    tip.textContent = `${node.full_label || node.label} · ${node.type}${node.type === 'method' ? ' · ' + (nodes.get(methodClass(id))?.label || (node.governance ? 'Governance; no evidence class' : 'Evidence not assigned')) : ''}`;
+    tip.textContent = tooltipText(node);
     const box = (origin || nodeElements.get(id)).getBoundingClientRect();
     const canvas = $('canvas').getBoundingClientRect();
-    tip.style.left = `${Math.max(8,Math.min(canvas.width - tip.offsetWidth - 8, box.left - canvas.left))}px`;
-    tip.style.top = `${Math.max(8,Math.min(canvas.height - tip.offsetHeight - 8,box.top - canvas.top - tip.offsetHeight - 8))}px`;
+    tip.style.left = `${Math.max(8, Math.min(canvas.width - tip.offsetWidth - 8, box.left - canvas.left))}px`;
+    tip.style.top = `${Math.max(8, Math.min(canvas.height - tip.offsetHeight - 8, box.top - canvas.top - tip.offsetHeight - 8))}px`;
   }
+}
+function tooltipText(node) {
+  if (node.node_type === 'outcome') return `${verdictLabel[node.outcome_type]} · documented outcome`;
+  if (node.node_type === 'evidence_record') return `${node.label} · ${kinds.get(node.input_kind).label} · ${substantiationLabel[node.substantiation]}`;
+  if (node.node_type === 'territory') return `${node.label} · territory`;
+  return `${node.label} · ${node.kind === 'case' ? 'core case' : 'supporting instrument'}`;
 }
 function wrapLabel(text, label, width) {
   text.replaceChildren();
   const words = label.split(/\s+/); let line = ''; let row = 0;
-  let span = svg('tspan', { x:0, dy:0 }); text.append(span);
+  let span = svg('tspan', { x: 0, dy: 0 }); text.append(span);
   words.forEach(word => {
     span.textContent = line ? `${line} ${word}` : word;
     if (line && span.getComputedTextLength() > width) {
-      span.textContent = line; span = svg('tspan', { x:0, dy:16 }); text.append(span); line = word; row++;
+      span.textContent = line; span = svg('tspan', { x: 0, dy: 16 }); text.append(span); line = word; row++;
     } else line = span.textContent;
     span.textContent = line;
   });
   return row + 1;
 }
+function nodeLabelText(node) {
+  if (node.node_type === 'outcome') return verdictLabel[node.outcome_type];
+  return node.label;
+}
 function layout() {
   if (!atlas || narrow.matches) return;
   const width = $('canvas').clientWidth, height = $('canvas').clientHeight;
   const inset = innerWidth < 1024 ? 32 : 48;
-  $('graph').setAttribute('viewBox',`0 0 ${width} ${height}`);
-  const position = node => ({ x:inset + node.layout[state.mode].x * (width - 2*inset), y:inset + node.layout[state.mode].y * (height - 2*inset) });
+  $('graph').setAttribute('viewBox', `0 0 ${width} ${height}`);
+  const position = node => ({ x: inset + node.layout[state.mode].x * (width - 2 * inset), y: inset + node.layout[state.mode].y * (height - 2 * inset) });
   ordered.forEach(node => {
-    const group = nodeElements.get(node.id), p = position(node);
-    group.style.transform = `translate(${p.x}px,${p.y}px)`;
+    const group = nodeElements.get(node.id);
+    group.querySelectorAll('.aux-label').forEach(item => item.remove());
     group.style.display = visibleNode(node) ? '' : 'none';
-    group.querySelectorAll('.aux-label,.floor-label').forEach(item => item.remove());
     if (!visibleNode(node)) return;
+    const p = position(node);
+    group.style.transform = `translate(${p.x}px,${p.y}px)`;
     const sameRow = ordered.filter(n => n.id !== node.id && visibleNode(n) && n.layout[state.mode].y === node.layout[state.mode].y);
     const nearest = Math.min(...sameRow.map(n => Math.abs(position(n).x - p.x)), 200);
-    const labelWidth = Math.max(48, Math.min(nearest - 8, 2*(p.x-8), 2*(width-p.x-8), 184));
-    const lines = wrapLabel(group.querySelector('.node-label'), node.label, labelWidth);
-    const aux = node.type === 'decision' ? floor(node) : node.type === 'evidence' ? `${evidenceCount(node.id)} relationships` : node.evidence_declaration ? 'Not an evidence source' : '';
+    const labelWidth = Math.max(48, Math.min(nearest - 8, 2 * (p.x - 8), 2 * (width - p.x - 8), 184));
+    const lines = wrapLabel(group.querySelector('.node-label'), nodeLabelText(node), labelWidth);
+    const aux = node.node_type === 'entity' ? (node.kind === 'case' ? 'CORE CASE' : 'SUPPORTING INSTRUMENT')
+      : node.node_type === 'evidence_record' ? kinds.get(node.input_kind).label
+      : '';
     if (aux) {
-      const text = svg('text', { 'text-anchor':'middle', y:26 + lines*16 + 8, class:node.type === 'decision' ? 'floor-label':'aux-label' });
+      const text = svg('text', { 'text-anchor': 'middle', y: 26 + lines * 16 + 8, class: 'aux-label' });
       group.append(text); wrapLabel(text, aux, labelWidth);
     }
   });
-  atlas.edges.forEach(edge => {
-    const path = edgeElements.get(edge.id); path.style.display = visibleEdge(edge) ? '' : 'none';
-    const a = position(nodes.get(edge.source)), b = position(nodes.get(edge.target));
-    const length = Math.hypot(b.x-a.x,b.y-a.y) || 1;
-    const end = ['yields_evidence','supports_decision'].includes(edge.type) ? 12 : 10;
-    const ax = a.x+(b.x-a.x)*10/length, ay = a.y+(b.y-a.y)*10/length;
-    const bx = b.x-(b.x-a.x)*end/length, by = b.y-(b.y-a.y)*end/length;
-    // Sibling arcs separate overlapping same-band lines without suggesting direction.
-    path.setAttribute('d', edge.type === 'conceptually_adjacent' ? `M${ax} ${ay} Q${(ax+bx)/2} ${ay-length*.12} ${bx} ${by}` : `M${ax} ${ay} L${bx} ${by}`);
+  atlas.relationships.forEach(rel => {
+    const path = edgeElements.get(rel.id);
+    const visible = visibleEdge(rel);
+    path.style.display = visible ? '' : 'none';
+    if (!visible) return;
+    const a = position(nodes.get(rel.source)), b = position(nodes.get(rel.target));
+    const length = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+    const ax = a.x + (b.x - a.x) * 10 / length, ay = a.y + (b.y - a.y) * 10 / length;
+    const bx = b.x - (b.x - a.x) * 12 / length, by = b.y - (b.y - a.y) * 12 / length;
+    path.setAttribute('d', `M${ax} ${ay} L${bx} ${by}`);
   });
+}
+function detailSection(content, heading, text, inline) {
+  content.append(el(inline ? 'h4' : 'h3', heading), el('p', text));
+}
+function caseDetail(content, node, inline) {
+  content.append(el(inline ? 'h4' : 'h2', node.label), el('p', 'CORE CASE', 'label'));
+  detailSection(content, 'Research question', node.research_question, inline);
+  const outcomeRel = atlas.relationships.find(r => r.type === 'reports' && r.source === node.id);
+  const outcome = outcomeRel && nodes.get(outcomeRel.target);
+  if (outcome) {
+    detailSection(content, 'Documented result', `${verdictLabel[outcome.outcome_type]}: ${outcome.statement}`, inline);
+    detailSection(content, 'Claim ceiling', outcome.claim_ceiling, inline);
+  }
+  detailSection(content, 'Research status', `${node.research_status} · reviewed ${node.reviewed_at}`, inline);
+  const territoryRel = atlas.relationships.find(r => r.type === 'situated_in' && r.source === node.id);
+  if (territoryRel) detailSection(content, 'Territory', nodes.get(territoryRel.target).label, inline);
+  appendEvidenceRecords(content, node, inline);
+  content.append(el(inline ? 'h4' : 'h3', 'Primary sources'));
+  content.append(sourceList(node.source_ids));
+}
+function instrumentDetail(content, node, inline) {
+  content.append(el(inline ? 'h4' : 'h2', node.label), el('p', 'SUPPORTING INSTRUMENT', 'label'));
+  detailSection(content, 'Role', node.role, inline);
+  const outcomeRel = atlas.relationships.find(r => r.type === 'reports' && r.source === node.id);
+  const outcome = outcomeRel && nodes.get(outcomeRel.target);
+  if (outcome) {
+    detailSection(content, 'Documented functional result', `${verdictLabel[outcome.outcome_type]}: ${outcome.statement}`, inline);
+    detailSection(content, 'Limitations', outcome.claim_ceiling, inline);
+  }
+  detailSection(content, 'Research status', `${node.research_status} · reviewed ${node.reviewed_at}`, inline);
+  detailSection(content, 'Territory', 'No case-specific territory assigned.', inline);
+  appendEvidenceRecords(content, node, inline);
+  content.append(el(inline ? 'h4' : 'h3', 'Primary sources'));
+  content.append(sourceList(node.source_ids));
+}
+function appendEvidenceRecords(content, node, inline) {
+  const records = atlas.relationships.filter(r => r.type === 'documents' && r.source === node.id).map(r => nodes.get(r.target));
+  content.append(el(inline ? 'h4' : 'h3', 'Evidence records'));
+  if (!records.length) { content.append(el('p', 'No evidence records declared.')); return; }
+  records.forEach(record => {
+    const item = el('div', null, 'connection');
+    item.append(el('p', record.label), inputKindTag(record.input_kind));
+    item.append(el('p', `Substantiation: ${substantiationLabel[record.substantiation]}`, 'micro'));
+    item.append(el('p', record.basis));
+    item.append(el('p', `Limitation: ${record.limitation}`));
+    content.append(item);
+  });
+}
+function genericDetail(content, node, inline) {
+  const kindLabel = node.node_type === 'territory' ? 'TERRITORY' : node.node_type === 'evidence_record' ? 'EVIDENCE RECORD' : 'DOCUMENTED OUTCOME';
+  const title = node.node_type === 'outcome' ? verdictLabel[node.outcome_type] : node.label;
+  content.append(el(inline ? 'h4' : 'h2', title), el('p', kindLabel, 'label'));
+  const parentRel = atlas.relationships.find(r => r.target === node.id);
+  const parent = parentRel && nodes.get(parentRel.source);
+  if (node.node_type === 'territory') {
+    detailSection(content, 'Basis', node.basis, inline);
+  } else if (node.node_type === 'evidence_record') {
+    content.append(inputKindTag(node.input_kind));
+    detailSection(content, 'Substantiation', substantiationLabel[node.substantiation], inline);
+    detailSection(content, 'Basis', node.basis, inline);
+    detailSection(content, 'Limitation', node.limitation, inline);
+  } else if (node.node_type === 'outcome') {
+    detailSection(content, 'Statement', node.statement, inline);
+    detailSection(content, 'Claim ceiling', node.claim_ceiling, inline);
+    detailSection(content, 'Reviewed', node.reviewed_at, inline);
+  }
+  if (parent) {
+    const parentLabel = node.node_type === 'territory' ? 'Situated case' : 'Parent entity';
+    detailSection(content, parentLabel, parent.label, inline);
+  }
+  content.append(el(inline ? 'h4' : 'h3', 'Sources'));
+  content.append(sourceList(node.source_ids));
 }
 function detailContent(node, inline = false) {
   const content = el('div', null, 'detail-content');
-  content.append(el(inline ? 'h4':'h2',node.full_label || node.label), el('p',`${node.type} · ${node.id}`,'micro'), el('p',node.definition));
-  const section = (title, value) => { content.append(el(inline ? 'h4':'h3',title), el('p',value)); };
-  section('Source basis', node.basis || 'No separate source basis is supplied for this evidence vocabulary class. Its definition is declared by the atlas dataset.');
-  if (node.folds?.length) section('Folded terms',node.folds.join(' · '));
-  if (node.note) section('Declaration',node.note);
-  if (node.unused_reason) section('Unused in this version',node.unused_reason);
-  if (node.type === 'decision') section('Input-class floor',`${floor(node)}. Lowest declared evidence-status rank among supporting methods; governance methods and project links are excluded. This is an input-provenance summary, not validation, causal attribution or decision sufficiency.`);
-  const linked = connections(node.id);
-  [...new Set(linked.map(e => e.type))].forEach(type => {
-    content.append(el(inline ? 'h4':'h3',type.replaceAll('_',' ')));
-    linked.filter(e => e.type === type).forEach(edge => {
-      const item = el('div',null,'connection');
-      item.append(el('p',`${nodes.get(edge.source).label} ${type === 'conceptually_adjacent' ? '↔' : '→'} ${nodes.get(edge.target).label}`),
-        el('p',`Support: ${edge.support}`,'micro'), evidenceTag(edge.evidence), el('p',edge.basis));
-      content.append(item);
-    });
-  });
-  if (!linked.length) section('Connections','No relationships declared.');
+  if (node.node_type === 'entity' && node.kind === 'case') caseDetail(content, node, inline);
+  else if (node.node_type === 'entity') instrumentDetail(content, node, inline);
+  else genericDetail(content, node, inline);
   return content;
 }
 function updateDetail(origin) {
@@ -206,75 +304,70 @@ function updateDetail(origin) {
   $('detail').replaceChildren();
   if (!node) {
     $('detail').hidden = false;
-    $('detail').append(el('h2','Select a node'),el('p','Inspect its definition, source basis and relationships.'),el('p','Focus or hover to trace direct connections. Enter to select. Esc to deselect.','micro'));
+    $('detail').append(el('h2', 'Select a node'), el('p', 'Inspect its documented question, result, evidence and sources.'), el('p', 'Focus or hover to trace direct connections. Enter to select. Esc to deselect.', 'micro'));
   } else if (narrow.matches) {
     $('detail').hidden = true;
     const anchor = origin || [...$('outline').querySelectorAll('[data-node]')].find(item => item.getAttribute('data-node') === node.id);
     if (anchor) {
-      const block = el('div',null,'inline-detail'); block.append(detailContent(node,true));
+      const block = el('div', null, 'inline-detail'); block.append(detailContent(node, true));
       (anchor.closest('h3') || anchor).after(block);
     }
   } else {
     $('detail').hidden = false; $('detail').append(detailContent(node)); $('detail').scrollTop = 0;
   }
 }
-function select(id, origin) { state.selectedNodeId = id; updateDetail(origin); highlight(id,origin); announce(`${nodes.get(id).label} selected.`); }
+function select(id, origin) { state.selectedNodeId = id; updateDetail(origin); highlight(id, origin); announce(`${nodeLabelText(nodes.get(id))} selected.`); }
 function renderOutline() {
   $('outline').replaceChildren();
   if (!narrow.matches) return;
   const included = new Set();
-  function row(node, relationshipEvidence) {
+  function row(node, kindId) {
     included.add(node.id);
-    const button = el('button',null,'outline-row'); button.type = 'button'; button.dataset.node = node.id;
-    button.append(el('span',node.label),el('span',node.type,'micro'));
-    const id = relationshipEvidence || classFor(node);
-    button.append(id ? evidenceTag(id) : el('span', node.governance ? 'Governance · no evidence class' : 'Evidence not assigned','micro'));
-    wireNode(button,node); return button;
+    const button = el('button', null, 'outline-row'); button.type = 'button'; button.dataset.node = node.id;
+    button.append(el('span', nodeLabelText(node)), el('span', node.node_type.replace('_', ' '), 'micro'));
+    if (kindId) button.append(inputKindTag(kindId));
+    wireNode(button, node); return button;
   }
-  ordered.filter(n => n.type === mode().anchor_type).forEach(anchor => {
-    const section = el('section',null,'outline-section'), heading = el('h3');
+  ordered.filter(n => n.node_type === mode().anchor_type).forEach(anchor => {
+    const section = el('section', null, 'outline-section'), heading = el('h3');
     const button = row(anchor); button.classList.add('anchor-row'); heading.append(button); section.append(heading);
-    if (anchor.type === 'decision') section.append(el('p',`Input-class floor: ${floor(anchor)}`,'label'));
-    const direct = connections(anchor.id).filter(visibleEdge).map(e => other(e,anchor.id));
-    const expanded = new Map(direct.map(n => [n.id,n]));
-    if (anchor.type === 'evidence') direct.forEach(n => connections(n.id).filter(e => e.type === 'applies_method').forEach(e => expanded.set(e.source,nodes.get(e.source))));
-    ordered.filter(n => expanded.has(n.id)).forEach(n => {
-      const link = connections(anchor.id).find(e => visibleEdge(e) && other(e,anchor.id).id === n.id);
-      section.append(row(n,link?.evidence));
+    const direct = connections(anchor.id).filter(visibleEdge).map(r => other(r, anchor.id));
+    ordered.filter(n => direct.some(d => d.id === n.id)).forEach(n => {
+      section.append(row(n, n.node_type === 'evidence_record' ? n.input_kind : null));
     });
-    if (!expanded.size) section.append(el('p','No connected nodes in this mode.','micro'));
+    if (!direct.length) section.append(el('p', 'No connected nodes in this mode.', 'micro'));
     $('outline').append(section);
   });
   const remaining = ordered.filter(n => visibleNode(n) && !included.has(n.id));
   if (remaining.length) {
-    const section = el('section',null,'outline-section'); section.append(el('h3','Other nodes in this mode'));
-    remaining.forEach(n => section.append(row(n))); $('outline').append(section);
+    const isInstrumentRail = mode().id === 'territory' && remaining.every(n => n.node_type === 'entity' && n.kind === 'instrument');
+    const section = el('section', null, 'outline-section');
+    section.append(el('h3', isInstrumentRail ? 'Supporting instrument' : 'Other nodes in this mode'));
+    remaining.forEach(n => {
+      section.append(row(n, n.node_type === 'evidence_record' ? n.input_kind : null));
+      if (isInstrumentRail) section.append(el('p', 'No case-specific territory assigned.', 'micro'));
+    });
+    $('outline').append(section);
   }
 }
 function renderLegend() {
   $('legend').replaceChildren();
-  if (state.mode === 'evidence') classes.forEach(evidence => {
-    const button = el('button',null,'legend-entry'); button.type = 'button';
-    button.setAttribute('aria-pressed',String(!state.hiddenEvidenceClasses.has(evidence.id)));
-    button.setAttribute('aria-label',`${evidence.label}, ${evidenceCount(evidence.id)} relationships`);
-    button.append(evidenceTag(evidence.id,true));
-    button.addEventListener('click', () => {
-      if (state.hiddenEvidenceClasses.has(evidence.id)) state.hiddenEvidenceClasses.delete(evidence.id); else state.hiddenEvidenceClasses.add(evidence.id);
-      button.setAttribute('aria-pressed',String(!state.hiddenEvidenceClasses.has(evidence.id)));
-      $('empty-filter').hidden = state.hiddenEvidenceClasses.size !== classes.length;
-      highlight(null); announce(`${evidence.label} ${state.hiddenEvidenceClasses.has(evidence.id) ? 'off':'on'}. ${classes.length-state.hiddenEvidenceClasses.size} of ${classes.length} classes shown.`);
-    }); $('legend').append(button);
+  if (state.mode === 'evidence') atlas.meta.input_kinds.forEach(kind => {
+    const entry = el('span', null, 'legend-entry');
+    entry.setAttribute('aria-label', `${kind.label}, ${evidenceCount(kind.id)} evidence records`);
+    entry.append(inputKindTag(kind.id, true));
+    $('legend').append(entry);
   });
-  else $('legend').append(el('p',state.mode === 'territory' ? 'Conceptual anchors, not a map. Dashed territory: not declared. Curved links: conceptual siblings.' : 'Questions, not outputs. Input-class floor: lowest declared evidence status among supporting methods; not validation or decision sufficiency.','label'));
-  $('empty-filter').hidden = state.mode !== 'evidence' || state.hiddenEvidenceClasses.size !== classes.length;
+  else if (state.mode === 'territory') $('legend').append(el('p', 'Territories are conceptual anchors, not map geometry. The supporting instrument has no case-specific territory.', 'label'));
+  else $('legend').append(el('p', 'Documented results, not hypothetical uses. Every outcome carries a claim ceiling in the detail panel.', 'label'));
 }
 function switchMode(id, report = true) {
   state.mode = id;
   if (state.selectedNodeId && !visibleNode(nodes.get(state.selectedNodeId))) state.selectedNodeId = null;
   $('question').textContent = mode().question;
-  $('mode-count').textContent = `${ordered.filter(visibleNode).length} nodes · ${atlas.edges.filter(visibleEdge).length} relationships`;
-  $('graph').setAttribute('aria-label',`${mode().label} mode. ${mode().question}`);
-  [...$('modes').children].forEach(tab => { const selected = tab.dataset.mode === id; tab.setAttribute('aria-selected',String(selected)); tab.tabIndex = selected ? 0:-1; });
+  $('mode-count').textContent = `${ordered.filter(visibleNode).length} nodes · ${atlas.relationships.filter(visibleEdge).length} relationships`;
+  $('graph').setAttribute('aria-label', `${mode().label} mode. ${mode().question}`);
+  [...$('modes').children].forEach(tab => { const selected = tab.dataset.mode === id; tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1; });
   renderOutline(); layout(); renderLegend(); updateDetail(); highlight(null);
   if (report) announce(`${mode().label} mode. ${mode().question}`);
 }
@@ -282,38 +375,45 @@ async function start() {
   try {
     const response = await fetch('data/atlas.json');
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    atlas = await response.json(); nodes = new Map(atlas.nodes.map(n => [n.id,n]));
-    ordered = typeOrder.flatMap(type => atlas.nodes.filter(n => n.type === type));
-    classes = atlas.meta.evidence_order.map(id => nodes.get(id));
+    atlas = await response.json();
+    kinds = new Map(atlas.meta.input_kinds.map(k => [k.id, k]));
+    const tagged = [
+      ...atlas.entities.map(n => ({ ...n, node_type: 'entity' })),
+      ...atlas.territories.map(n => ({ ...n, node_type: 'territory' })),
+      ...atlas.evidence_records.map(n => ({ ...n, node_type: 'evidence_record' })),
+      ...atlas.outcomes.map(n => ({ ...n, node_type: 'outcome' }))
+    ];
+    nodes = new Map(tagged.map(n => [n.id, n]));
+    ordered = typeOrder.flatMap(type => tagged.filter(n => n.node_type === type));
     document.querySelector('h1').textContent = atlas.meta.title;
     $('subtitle').textContent = atlas.meta.subtitle; $('notice').textContent = atlas.meta.notice;
-    $('dataset-counts').textContent = `v${atlas.schema_version} · ${atlas.nodes.length} nodes · ${atlas.edges.length} edges · ` + typeOrder.map(type => `${atlas.nodes.filter(n => n.type === type).length} ${type}`).join(' · ');
-    atlas.meta.modes.forEach((item,index) => {
-      const tab = el('button',item.label); tab.type='button'; tab.role='tab'; tab.dataset.mode=item.id;
-      tab.addEventListener('click',() => switchMode(item.id));
-      tab.addEventListener('keydown',event => {
-        if (!['ArrowLeft','ArrowRight'].includes(event.key)) return;
-        event.preventDefault(); const next=(index+(event.key === 'ArrowRight' ? 1:2))%3;
+    $('dataset-counts').textContent = `v${atlas.schema_version} · reviewed ${atlas.meta.reviewed_at} · ${atlas.entities.length} entities · ${atlas.territories.length} territories · ${atlas.evidence_records.length} evidence records · ${atlas.outcomes.length} outcomes`;
+    atlas.meta.modes.forEach((item, index) => {
+      const tab = el('button', item.label); tab.type = 'button'; tab.role = 'tab'; tab.dataset.mode = item.id;
+      tab.addEventListener('click', () => switchMode(item.id));
+      tab.addEventListener('keydown', event => {
+        if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+        event.preventDefault(); const next = (index + (event.key === 'ArrowRight' ? 1 : 2)) % 3;
         switchMode(atlas.meta.modes[next].id); $('modes').children[next].focus();
       }); $('modes').append(tab);
     });
-    buildGraph(); switchMode(state.mode,false);
-    $('reset').addEventListener('click',() => { state.selectedNodeId=null; state.hiddenEvidenceClasses.clear(); switchMode(atlas.meta.modes[0].id); });
-    document.addEventListener('keydown',event => {
+    buildGraph(); switchMode(state.mode, false);
+    $('reset').addEventListener('click', () => { state.selectedNodeId = null; switchMode(atlas.meta.modes[0].id); });
+    document.addEventListener('keydown', event => {
       if (event.altKey || event.ctrlKey || event.metaKey) return;
-      if (['1','2','3'].includes(event.key)) { event.preventDefault(); switchMode(atlas.meta.modes[Number(event.key)-1].id); $('modes').children[Number(event.key)-1].focus(); }
+      if (['1', '2', '3'].includes(event.key)) { event.preventDefault(); switchMode(atlas.meta.modes[Number(event.key) - 1].id); $('modes').children[Number(event.key) - 1].focus(); }
       if (event.key === 'Escape') {
-        const previous=state.selectedNodeId; state.selectedNodeId=null; updateDetail();
-        const target=narrow.matches ? [...$('outline').querySelectorAll('[data-node]')].find(item => item.dataset.node === previous) : nodeElements.get(previous);
+        const previous = state.selectedNodeId; state.selectedNodeId = null; updateDetail();
+        const target = narrow.matches ? [...$('outline').querySelectorAll('[data-node]')].find(item => item.dataset.node === previous) : nodeElements.get(previous);
         target?.focus(); highlight(focusedNode()); announce('Selection cleared.');
       }
     });
     new ResizeObserver(() => layout()).observe($('canvas'));
-    narrow.addEventListener('change',() => { renderOutline(); layout(); updateDetail(); highlight(null); });
+    narrow.addEventListener('change', () => { renderOutline(); layout(); updateDetail(); highlight(null); });
   } catch (error) {
-    $('question').textContent='The atlas could not be loaded'; $('canvas').hidden=true;
-    $('error').hidden=false; $('error').replaceChildren(el('h2','Serve this directory locally'),el('p','The atlas reads data/atlas.json at runtime. Opening index.html directly with file:// will not work. Start a local static server from this directory:'),el('p','python -m http.server 8000'),el('p','Then open http://localhost:8000. If a server is already running, check that data/atlas.json is present and valid.'));
-    $('reset').disabled=true;
+    $('question').textContent = 'The atlas could not be loaded'; $('canvas').hidden = true;
+    $('error').hidden = false; $('error').replaceChildren(el('h2', 'Serve this directory locally'), el('p', 'The atlas reads data/atlas.json at runtime. Opening index.html directly with file:// will not work. Start a local static server from this directory:'), el('p', 'python -m http.server 8000'), el('p', 'Then open http://localhost:8000. If a server is already running, check that data/atlas.json is present and valid.'));
+    $('reset').disabled = true;
   }
 }
 start();

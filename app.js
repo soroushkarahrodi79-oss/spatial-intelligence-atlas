@@ -186,7 +186,7 @@ function detailContent(node, inline = false) {
   if (node.folds?.length) section('Folded terms',node.folds.join(' · '));
   if (node.note) section('Declaration',node.note);
   if (node.unused_reason) section('Unused in this version',node.unused_reason);
-  if (node.type === 'decision') section('Evidence floor',`${floor(node)}. Minimum substantiation rank of supporting evidence-producing methods; governance methods and project links are excluded.`);
+  if (node.type === 'decision') section('Input-class floor',`${floor(node)}. Lowest declared evidence-status rank among supporting methods; governance methods and project links are excluded. This is an input-provenance summary, not validation, causal attribution or decision sufficiency.`);
   const linked = connections(node.id);
   [...new Set(linked.map(e => e.type))].forEach(type => {
     content.append(el(inline ? 'h4':'h3',type.replaceAll('_',' ')));
@@ -234,7 +234,7 @@ function renderOutline() {
   ordered.filter(n => n.type === mode().anchor_type).forEach(anchor => {
     const section = el('section',null,'outline-section'), heading = el('h3');
     const button = row(anchor); button.classList.add('anchor-row'); heading.append(button); section.append(heading);
-    if (anchor.type === 'decision') section.append(el('p',`Evidence floor: ${floor(anchor)}`,'label'));
+    if (anchor.type === 'decision') section.append(el('p',`Input-class floor: ${floor(anchor)}`,'label'));
     const direct = connections(anchor.id).filter(visibleEdge).map(e => other(e,anchor.id));
     const expanded = new Map(direct.map(n => [n.id,n]));
     if (anchor.type === 'evidence') direct.forEach(n => connections(n.id).filter(e => e.type === 'applies_method').forEach(e => expanded.set(e.source,nodes.get(e.source))));
@@ -265,7 +265,7 @@ function renderLegend() {
       highlight(null); announce(`${evidence.label} ${state.hiddenEvidenceClasses.has(evidence.id) ? 'off':'on'}. ${classes.length-state.hiddenEvidenceClasses.size} of ${classes.length} classes shown.`);
     }); $('legend').append(button);
   });
-  else $('legend').append(el('p',state.mode === 'territory' ? 'Conceptual anchors, not a map. Dashed territory: not declared. Curved links: conceptual siblings.' : 'Questions, not outputs. Evidence floor: minimum substantiation across supporting methods.','label'));
+  else $('legend').append(el('p',state.mode === 'territory' ? 'Conceptual anchors, not a map. Dashed territory: not declared. Curved links: conceptual siblings.' : 'Questions, not outputs. Input-class floor: lowest declared evidence status among supporting methods; not validation or decision sufficiency.','label'));
   $('empty-filter').hidden = state.mode !== 'evidence' || state.hiddenEvidenceClasses.size !== classes.length;
 }
 function switchMode(id, report = true) {

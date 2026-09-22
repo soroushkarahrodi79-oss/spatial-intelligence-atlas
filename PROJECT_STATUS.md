@@ -1,6 +1,6 @@
 # PROJECT_STATUS.md
 
-**Audit date:** 2026-09-14
+**Audit date:** 2026-09-22
 
 ---
 
@@ -16,8 +16,8 @@ documents (`SPEC.md`, `DESIGN_CONTRACT.md`, `data/atlas.json`) are **Locked**,
 and `DESIGN_CONTRACT.md` §9.1 caps the implementation at three files
 (`index.html`, `styles.css`, `app.js`) plus `data/atlas.json`, whose *schema*
 is explicitly frozen ("modifiable in content but not in schema"). There are
-no open issues and no open pull requests. Nothing in the repository indicates
-active feature development; the artifact is finished as specified for v0.1.
+Nothing in the repository indicates active feature development; the artifact is
+finished as specified for v0.1.
 
 This is not `PAUSED_PENDING_EVIDENCE`: the repository isn't waiting on
 evidence to resume a v0.1 effort — v0.1 is complete. It is not
@@ -34,14 +34,14 @@ loosened at will.
 | Tag | `v0.1.0` |
 | Commit | `d3f399cf7317ea3951a5ee4761b4de01f3731fa5` |
 | Published | 2026-09-05 |
-| `main` tip (this audit) | `1002a1685fab1ed73f02e96eee60f83319910928` (2026-09-14) |
+| Audit baseline (`main`) | `6c78ac441ffe6e5bcc6b923f0005ac4d1fda995b` (2026-09-14) |
 
-`main` has advanced two commits past the `v0.1.0` tag since publication —
-`6651bca` (adding this file) and its merge commit `1002a16`, both
-documentation-only. `v0.1.0` remains the released artifact and the reference
-for everything in this document; `main` may carry documentary corrections
-like this one after the tag without those changes constituting a new
-release. Any future change to the *artifact itself* (`index.html`,
+At the audit baseline, `main` had advanced four commits past the `v0.1.0` tag:
+two documentation commits (`6651bca`, `604a585`) and their merge commits
+(`1002a16`, `6c78ac4`). `v0.1.0` remains the released artifact and the
+reference for everything in this document; `main` may carry documentary
+corrections after the tag without those changes constituting a new release.
+Any future change to the *artifact itself* (`index.html`,
 `styles.css`, `app.js`, `data/atlas.json`) would need its own tag under §6.
 
 ## 3. Demonstrated vs. simulated / derived / provisional / unvalidated
@@ -59,16 +59,18 @@ per-edge evidence classification. As declared in `README.md` and enforced by
 | `PROVISIONAL` | Asserted by this atlas, not substantiated by the source | 8 |
 | `MISSING` | Not declared by the source; the absence is itself the finding | 2 |
 
-In plain terms: **almost nothing in this artifact is demonstrated.** Two
-relationships are `REAL`. The large majority of the graph's evidence edges
-(8 of 12) are `PROVISIONAL` — asserted by the atlas's author, not verified by
-the owner of the source system — and the atlas is explicitly designed to make
-that visible rather than hide it (empty `DERIVED`/`CALIBRATED`/`SIMULATED`
-classes still render in the legend at zero). This is a documentation and
-evidence-labelling exercise over five separate, pre-existing systems (HATI,
-FIRSTLOOK-MAD, SNTO, FIELDOS, FAB); the atlas performs no computation over
-live data, makes no predictions, and does not execute or integrate any of the
-five systems it describes (`SPEC.md` §1.1, §9).
+In plain terms: two evidence-production relationships are source-stated as
+`REAL` at the **input** level, while the large majority of the graph's evidence
+edges (8 of 12) are `PROVISIONAL` — asserted by the atlas's author, not verified
+by the owner of the source system. Neither fact establishes validation, causal
+attribution, or decision sufficiency. The atlas is explicitly designed to make
+that limitation visible rather than hide it (empty
+`DERIVED`/`CALIBRATED`/`SIMULATED` classes still render in the legend at zero).
+This is a documentation and evidence-labelling exercise over five separate,
+pre-existing systems (HATI, FIRSTLOOK-MAD, SNTO, FIELDOS, FAB); the atlas
+performs no computation over live data, makes no predictions, and does not
+execute or integrate any of the five systems it describes (`SPEC.md` §1.1,
+§9).
 
 ## 4. Claim ceiling
 
@@ -87,6 +89,8 @@ artifact may **not** be used to claim, imply, or be cited as:
 - An evidence status stronger than what the source project description
   explicitly states (`support == "stated"` required for anything above
   `PROVISIONAL`/`MISSING`).
+- Scientific support for a decision merely because its input-class floor is
+  `INPUT: STATED`; that label records source-declared input provenance only.
 
 The maximum defensible framing is: *an explanatory, hand-authored, evidence-
 labelled map of how five separate research artifacts relate conceptually,
@@ -140,8 +144,9 @@ maintainer, not a maintenance action.
 
 ## 7. Open issues and pull requests
 
-As of this audit: **zero open issues, zero open pull requests.** There is
-nothing to disposition.
+Issue and pull-request counts are operational metadata, not part of the release
+claim. They should be checked on GitHub at review time rather than frozen here;
+the audit baseline in §2 is the stable reference for this document.
 
 ## 8. Licensing — unresolved, flagged rather than assumed
 

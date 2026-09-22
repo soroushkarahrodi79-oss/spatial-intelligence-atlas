@@ -187,7 +187,9 @@ epistemics. Each carries `rank`, `color`, `dash`, and `glyph`.
 | `e-provisional` | PROVISIONAL | Asserted by this atlas but not substantiated by the source description | 1 |
 | `e-missing` | MISSING | Not declared by the source description; the absence is itself the finding | 0 |
 
-**Ranking is deliberately coarse.** Ranks express *substantiation*, not quality.
+**Ranking is deliberately coarse.** Ranks express whether an input evidence
+class is stated in the source description, not quality, validity, causal
+attribution, or sufficiency for a decision.
 The four rank-2 classes are **not** ordered relative to one another; SIMULATED is
 not "worse" than DERIVED. The implementation MUST NOT sort, colour-ramp, or
 score the rank-2 classes against each other.
@@ -290,23 +292,28 @@ combined.
 - **Anchors:** the 5 `decision` nodes, in a row across the upper area.
 - **Visible node types:** `decision`, `project`, `method`.
 - **Visible edge types:** `supports_decision`, `applies_method`.
-- **Evidence floor:** for each decision, the implementation computes the
-  **minimum substantiation rank** across all methods with a `supports_decision`
-  edge into it, and displays it as one of three states: `MISSING` (0),
-  `PROVISIONAL` (1), `SUBSTANTIATED` (2). It MUST NOT display a rank-2 class
-  name as the floor, because rank-2 classes are unordered (§4.4).
+- **Input-class floor:** for each decision, the implementation computes the
+  **minimum declared evidence-status rank** across all methods with a
+  `supports_decision` edge into it, and displays it as one of three states:
+  `INPUT: MISSING` (0), `INPUT: PROVISIONAL` (1), `INPUT: STATED` (2). It MUST
+  NOT display a rank-2 class name as the floor, because rank-2 classes are
+  unordered (§4.4). This floor describes the provenance class of linked method
+  inputs only. It MUST NOT be presented as validation, causal attribution, or
+  evidence that the decision question can be answered adequately.
   - **Governance methods are excluded.** `m-evidence-provenance` and
     `m-evidence-classification` have no `yields_evidence` edge (§4.3) and are
     skipped in the computation. They are not treated as rank 0.
   - Project-level `supports_decision` edges are also excluded; only methods
     contribute a rank.
   - Expected v0.1 result, which doubles as a correctness check:
-    `d-eligibility` PROVISIONAL, `d-scenario` PROVISIONAL, `d-risk`
-    PROVISIONAL, `d-monitoring` PROVISIONAL, `d-observed` SUBSTANTIATED.
+    `d-eligibility` INPUT: PROVISIONAL, `d-scenario` INPUT: PROVISIONAL,
+    `d-risk` INPUT: PROVISIONAL, `d-monitoring` INPUT: PROVISIONAL,
+    `d-observed` INPUT: STATED.
 - `p-fab` has no `supports_decision` edges and is parked at the left margin in a
   visibly inert state, labelled as such.
-- **The point of the mode:** every question is reachable, but the floor beneath
-  most of them is provisional.
+- **The point of the mode:** every question is reachable, but the lowest
+  declared input class linked to most of them is provisional. Reachability is
+  not evidence that a question has been answered.
 
 ---
 
@@ -425,8 +432,9 @@ independently verifiable by inspection.
   produce pixel-identical layouts.
 - **A7** — EVIDENCE mode renders all six legend entries, including
   `DERIVED 0` and `CALIBRATED 0`.
-- **A8** — DECISIONS mode shows an evidence floor for each decision as
-  MISSING / PROVISIONAL / SUBSTANTIATED, never as a rank-2 class name.
+- **A8** — DECISIONS mode shows an input-class floor for each decision as
+  INPUT: MISSING / INPUT: PROVISIONAL / INPUT: STATED, never as a rank-2 class
+  name, and explains that the floor is not validation or decision sufficiency.
 
 ### Semantics
 - **A9** — Edge colour and dash pattern derive solely from `edge.evidence`

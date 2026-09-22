@@ -2,26 +2,30 @@
 
 **Tourism, Risk & Decision Systems**
 
-A small, static, client-side visual artifact that explains the relationships
-between five existing research/software systems by placing them in a shared
-conceptual space.
+A small, static, client-side research map. The deployed v0.1.1 runtime explains
+five existing systems; the approved v0.2 design narrows the future artifact to
+three research cases and one supporting instrument.
 
-> **Five separate systems. Related conceptually, not technically integrated.**
+> **Deployed v0.1.1: five separate systems, related conceptually and not
+> technically integrated. v0.2 remains documentation only.**
 
 ---
 
 **Project status:** see [`PROJECT_STATUS.md`](./PROJECT_STATUS.md) for the
-canonical release lock, evidence ceiling, licensing note, and disposition of
-open issues/PRs as of the last audit.
+canonical release state, active gate, evidence ceiling, and licensing note.
 
 ---
 
 ## Current status
 
-**Implemented — v0.1.1.**
+**Runtime: v0.1.1 released and locked. v0.2: Gate 2 draft.**
 
 The current maintenance release of the first bounded implementation is
 complete. The original `v0.1.0` release remains preserved at its tag.
+
+Gate 1 of v0.2 was approved and merged on 2026-09-22. Gate 2 is reviewing the
+exact semantic content and commit-pinned sources. No v0.2 runtime or dataset
+change is authorised yet; the deployed site remains v0.1.1.
 
 > The `v0.1.0` shown in the interface footer is the dataset's
 > `schema_version`, not the repository release tag. Release `v0.1.1` clarified
@@ -29,19 +33,19 @@ complete. The original `v0.1.0` release remains preserved at its tag.
 
 | File | Role | State |
 |------|------|-------|
-| `SPEC.md` | Source of truth for **meaning and behaviour** | Locked |
-| `DESIGN_CONTRACT.md` | Source of truth for **form and limits** | Locked |
-| `data/atlas.json` | Source of truth for **content** | Locked |
+| `SPEC.md` | v0.2 meaning, behaviour, and Gate 2 content proposal | Gate 2 draft |
+| `DESIGN_CONTRACT.md` | v0.2 form and limits | Gate 1 approved |
+| `data/atlas.json` | Deployed v0.1.1 content | Runtime locked |
 | `README.md` | Orientation (this file) | Current |
 | `index.html` | Structure | Implemented |
 | `styles.css` | Presentation | Implemented |
 | `app.js` | Behaviour | Implemented |
 
-Nothing else may be added. See `DESIGN_CONTRACT.md` §9.
+No runtime file or dataset change may occur before separate Gate 3 approval.
 
 ---
 
-## What this is
+## What the deployed v0.1.1 runtime is
 
 An **explanatory** artifact, not an operational one. It renders a fixed,
 hand-authored dataset as a typed graph, viewed through three fixed projections:
@@ -55,6 +59,9 @@ hand-authored dataset as a typed graph, viewed through three fixed projections:
 It performs no computation over live data, makes no predictions, and does not
 execute any part of the systems it describes.
 
+The v0.2 design keeps the three-mode structure but changes DECISIONS to show
+documented outcomes and claim ceilings. See `SPEC.md` for the proposed content.
+
 ## What this is not
 
 It is **not** an integration of the five systems, a data pipeline, a product
@@ -63,7 +70,7 @@ full list is in `SPEC.md` §9.
 
 ---
 
-## The five systems
+## The five deployed v0.1.1 systems
 
 | System | Territory | Domain |
 |--------|-----------|--------|
@@ -82,7 +89,7 @@ explicit null-territory node rather than quietly omitting it.
 
 ---
 
-## Evidence semantics
+## Deployed v0.1.1 evidence semantics
 
 Every relationship in the atlas carries an evidence status. Six classes:
 
@@ -115,9 +122,9 @@ class. All three still render in the legend, with a count of zero. A visibly
 provisional graph is the correct result, not a defect — and hiding an empty
 class is a specification violation.
 
-`PROVISIONAL` means *asserted, not verified*. Resolving a provisional edge to a
-substantive class requires confirmation from the owner of the source system, and
-is deferred to v0.2.
+`PROVISIONAL` means *asserted, not verified*. v0.2 does not promote these legacy
+edges: its approved design replaces them with discrete source-pinned evidence
+records and prohibits entity-to-entity edges.
 
 In **DECISIONS** mode, `INPUT: MISSING`, `INPUT: PROVISIONAL`, and
 `INPUT: STATED` summarise only the lowest declared evidence class among methods

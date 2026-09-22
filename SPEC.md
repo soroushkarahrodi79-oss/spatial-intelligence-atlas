@@ -4,8 +4,8 @@
 
 **Target version:** 0.2.0
 
-**Document state:** GATE 1 DRAFT — REVIEW REQUIRED — IMPLEMENTATION NOT
-AUTHORISED
+**Document state:** GATE 1 APPROVED — GATE 2 CONTENT FREEZE DRAFT —
+IMPLEMENTATION NOT AUTHORISED
 
 **Gate record:** GitHub issue #5
 
@@ -441,20 +441,133 @@ This design is ready for implementation review only when all are true:
 - **A13** — The runtime remains fully static and makes no network request except
   user-initiated navigation to a declared source.
 - **A14** — The v0.1.0 and v0.1.1 tags and release assets remain untouched.
-- **A15** — A separate implementation gate approves exact content and pinned
-  sources before any runtime or dataset change.
+- **A15** — A separate content gate approves exact content and pinned sources
+  before any implementation gate or runtime/dataset change.
 
 ---
 
 ## 11. Gate sequence
 
-1. **Gate 1 — specification:** review this document and
-   `DESIGN_CONTRACT.md`. No runtime implementation.
-2. **Gate 2 — content freeze:** verify exact questions, outcomes, claim
-   ceilings, statuses, source URLs, pinned refs, and review dates.
-3. **Gate 3 — implementation:** change the runtime and migrate
+1. **Gate 1 — specification — APPROVED:** `SPEC.md` and
+   `DESIGN_CONTRACT.md`, merged through PR #6.
+2. **Gate 2 — content freeze — DRAFT:** verify exact questions, outcomes,
+   claim ceilings, statuses, source URLs, pinned refs, and review dates.
+3. **Gate 3 — implementation — UNAUTHORISED:** change the runtime and migrate
    `data/atlas.json` only after Gates 1 and 2 pass.
-4. **Gate 4 — verification/release:** test invariants, accessibility,
-   responsive behaviour, claim wording, links, and release provenance.
+4. **Gate 4 — verification/release — UNAUTHORISED:** test invariants,
+   accessibility, responsive behaviour, claim wording, links, and release
+   provenance.
 
 No later gate is implied by approval of an earlier one.
+
+---
+
+## 12. Gate 2 semantic content freeze
+
+**State:** DRAFT FOR MAINTAINER REVIEW. The records below are the complete
+semantic payload proposed for v0.2. They do not authorise edits to the runtime
+or `data/atlas.json`.
+
+### 12.1 Scope clarification
+
+The HATI case in v0.2 is the frozen **pedestrian-heat extension**, not the
+original DOI-bound HATI-Madrid pilot. The published pilot is relevant context,
+but its research question and locked results MUST NOT be combined with the
+extension's `ABSTAIN / NO ROBUST DIFFERENCE` outcome.
+
+### 12.2 Entities
+
+| id | kind | label | role | research question | research status | reviewed_at | source_ids |
+|---|---|---|---|---|---|---|---|
+| `c-hati-pedestrian` | `case` | HATI — Pedestrian Heat Extension | Frozen robustness case for evidence-first pedestrian heat comparison | Across the two frozen Atocha–Puerta de Alcalá routes and tested departure times, does the modelled thermal evidence remain strong enough under justified canopy-vintage and side-of-street perturbations to establish either route as robustly cooler? | `frozen` | `2026-09-22` | `s-hati-gate3b`, `s-hati-status` |
+| `c-snto-pnsg` | `case` | SNTO — PNSG Decision Evidence | Bounded destination-management case using environmental and governance evidence | With the evidence currently ingested, which PNSG public-use units, if any, justify priority management review or monitoring for the 2027 planning cycle, and where is evidence insufficient to establish priority? | `active` | `2026-09-22` | `s-snto-brief`, `s-snto-readme` |
+| `c-chalus` | `case` | CHALUS — Western Mazandaran Pilot | Closed historical road-accessibility verification case | Do paired January and route-bounded June 2024 historical-network reconstructions meet the pre-registered verification standard required before Earth-observation processing and any later tourism-accessibility claim? | `closed` | `2026-09-22` | `s-chalus-closeout`, `s-chalus-readme` |
+| `i-fieldos` | `instrument` | FieldOS | Offline-first supporting instrument for structured tourism field evidence capture | `null` | `active` | `2026-09-22` | `s-fieldos-run`, `s-fieldos-readme` |
+
+### 12.3 Territories
+
+| id | label | kind | basis | source_ids |
+|---|---|---|---|---|
+| `t-madrid` | Madrid — Atocha to Puerta de Alcalá | bounded urban route-comparison context | The HATI extension freezes two candidate pedestrian routes between Atocha and Puerta de Alcalá. | `s-hati-gate3b` |
+| `t-pnsg` | Parque Nacional de la Sierra de Guadarrama | protected-area destination | The SNTO decision brief concerns PNSG public-use units and the 2027 planning cycle. | `s-snto-brief` |
+| `t-western-mazandaran` | Western Mazandaran — Chalus, Nowshahr and Kelardasht | bounded regional accessibility study area | CHALUS evaluates three destinations from south, east and west gateways for the June 2024 event context. | `s-chalus-readme`, `s-chalus-closeout` |
+
+FieldOS has no case-specific territory. No null-territory node is created.
+
+### 12.4 Evidence records
+
+| id | entity | input_kind | substantiation | statement | limitation | source_ids |
+|---|---|---|---|---|---|---|
+| `ev-hati-modelled-routes` | `c-hati-pedestrian` | `simulated` | `source_stated` | A modelled two-route thermal comparison was stress-tested at two departure times against justified canopy-source-vintage and side-of-street perturbations. | The ensemble does not establish observed pedestrian exposure, health, safety, preference, or a robust route winner. | `s-hati-gate3b`, `s-hati-status` |
+| `ev-snto-s2-inputs` | `c-snto-pnsg` | `acquired` | `source_stated` | Real Sentinel-2 observations cover 21 PNSG campaign assets from January 2021 through June 2026. | Satellite vegetation signal is environmental context, not visitor pressure, tourism impact, or causal attribution. | `s-snto-brief` |
+| `ev-snto-trends` | `c-snto-pnsg` | `derived` | `source_stated` | NDVI/NDMI/EVI series and Mann–Kendall/Sen results are derived per asset; six assets green, fourteen show no trend, and one declines significantly. | Derived environmental trends do not establish trail condition, ecological impact, or cause. | `s-snto-brief` |
+| `ev-snto-prug` | `c-snto-pnsg` | `acquired` | `source_stated` | Official PNSG PRUG protection zoning is available as a real management layer. | Zoning is not evidence of visitor volume, condition, or impact. | `s-snto-brief` |
+| `ev-snto-visitor-gap` | `c-snto-pnsg` | `unestablished` | `not_established` | No visitor-use evidence exists at asset or trail scale in the reviewed source set. | Without a matching use denominator, a physical-intervention priority cannot be established. | `s-snto-brief` |
+| `ev-chalus-osm-source` | `c-chalus` | `acquired` | `source_stated` | The January OSM binary source was recovered by recorded SHA-256 and used with the bounded June reconstruction inputs. | OSM-attested network state is not independent confirmation that decisive motorway sections were operational at the historical cutoff. | `s-chalus-closeout` |
+| `ev-chalus-routes` | `c-chalus` | `derived` | `source_stated` | Paired retrospective networks produced reproducible modelled distances for nine gateway–destination pairs and eighteen route states; the maximum January–June difference was 0.011%. | Numeric stability alone does not satisfy the pre-registered historical-verification standard. | `s-chalus-closeout` |
+| `ev-chalus-verification-gap` | `c-chalus` | `unestablished` | `not_established` | Full Haraz correspondence, complete June turn restrictions, and independent decisive-motorway operational status were not established. | These gaps trigger the frozen no-go rule regardless of the stable modelled distances. | `s-chalus-closeout` |
+| `ev-fieldos-iphone-run` | `i-fieldos` | `observed` | `owner_attested` | One 60–120 minute offline field workflow on a physical iPhone completed on 2026-08-31; tested capture, close/reopen persistence, export, and backup passed with no intended data loss reported. | The result is one first-party session without independent audit; observation counts, exact duration, device/OS details, timing metrics, and storage-pressure results were not recorded. | `s-fieldos-run`, `s-fieldos-readme` |
+| `ev-fieldos-android-gap` | `i-fieldos` | `unestablished` | `not_established` | No physical Android test had been run at the reviewed commit. | Cross-platform reliability is not established. | `s-fieldos-readme` |
+
+### 12.5 Outcomes
+
+| id | entity | outcome_type | statement | claim_ceiling | reviewed_at | source_ids |
+|---|---|---|---|---|---|---|
+| `o-hati-abstain` | `c-hati-pedestrian` | `abstain` | `ABSTAIN / NO ROBUST DIFFERENCE`: the route-difference sign reversed under at least one justified perturbation at both tested departure times and the ensemble spanned zero. | Neither route is established as cooler, preferred, accurate, comfortable, behaviourally superior, physiologically safer, lower-dose, or healthier; the result does not mean the routes are thermally identical. | `2026-09-22` | `s-hati-gate3b`, `s-hati-status` |
+| `o-snto-insufficient` | `c-snto-pnsg` | `insufficient_evidence` | Evidence is insufficient to prioritise any physical intervention, closure, quota, restoration, or budget commitment; monitoring and improved data collection are the proportionate actions. | No asset/trail visitor volume, tourism causality, ground condition, ecological impact, monetary allocation, closure, or restriction claim is supported. | `2026-09-22` | `s-snto-brief` |
+| `o-chalus-no-go` | `c-chalus` | `no_go` | `GATE 2A-R CLOSED — NO-GO`: the historical-verification standard was not met, so Earth-observation processing and Gate 2B remain unauthorised. | The case does not establish tourist delay, cancellations, demand, revenue loss, destination resilience, infrastructure investment need, or a verified historical motorway-operability claim. | `2026-09-22` | `s-chalus-closeout`, `s-chalus-readme` |
+| `o-fieldos-functional` | `i-fieldos` | `functional_test` | One owner-attested iPhone field workflow passed the executed offline capture-to-backup checks with no intended data loss reported. | FieldOS is not thereby validated, production-ready, field-proven across conditions, independently audited, or cross-platform verified. | `2026-09-22` | `s-fieldos-run`, `s-fieldos-readme` |
+
+### 12.6 Sources
+
+All repository URLs below are commit-pinned. A moving branch URL is not a
+substitute.
+
+| id | kind | label | pinned_ref | accessed_at | url |
+|---|---|---|---|---|---|
+| `s-hati-gate3b` | `closeout` | HATI Gate 3B evidence-sufficiency decision | `c69688e7827f1faaf855fdb58a8e80a497d73830` | `2026-09-22` | https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/docs/research/pedestrian-heat/gate3b/GATE3B_DECISION.md |
+| `s-hati-status` | `closeout` | HATI canonical project status | `c69688e7827f1faaf855fdb58a8e80a497d73830` | `2026-09-22` | https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/PROJECT_STATUS.md |
+| `s-snto-brief` | `brief` | SNTO PNSG Public-Use Decision Evidence Brief 2026/27 | `2c65fe2ac9a09662cddef4cfa68290e0cd6e1278` | `2026-09-22` | https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/docs/PNSG_DECISION_EVIDENCE_BRIEF.md |
+| `s-snto-readme` | `repository` | SNTO repository status snapshot | `2c65fe2ac9a09662cddef4cfa68290e0cd6e1278` | `2026-09-22` | https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/README.md |
+| `s-chalus-closeout` | `closeout` | CHALUS Gate 2A-R final closeout report | `eaa50dccd499b85204982d838ccf340d4d499992` | `2026-09-22` | https://github.com/soroushkarahrodi79-oss/CHALUS/blob/eaa50dccd499b85204982d838ccf340d4d499992/docs/GATE2AR_FINAL_REPORT.md |
+| `s-chalus-readme` | `repository` | CHALUS repository status snapshot | `eaa50dccd499b85204982d838ccf340d4d499992` | `2026-09-22` | https://github.com/soroushkarahrodi79-oss/CHALUS/blob/eaa50dccd499b85204982d838ccf340d4d499992/README.md |
+| `s-fieldos-run` | `closeout` | First FieldOS field run | `271d3a77c58361f43459d068f4e8a100611a87fd` | `2026-09-22` | https://github.com/soroushkarahrodi79-oss/fieldos/blob/271d3a77c58361f43459d068f4e8a100611a87fd/docs/FIRST_FIELD_RUN.md |
+| `s-fieldos-readme` | `repository` | FieldOS repository status snapshot | `271d3a77c58361f43459d068f4e8a100611a87fd` | `2026-09-22` | https://github.com/soroushkarahrodi79-oss/fieldos/blob/271d3a77c58361f43459d068f4e8a100611a87fd/README.md |
+
+### 12.7 Relationships
+
+| id | type | source | target |
+|---|---|---|---|
+| `r-hati-territory` | `situated_in` | `c-hati-pedestrian` | `t-madrid` |
+| `r-hati-evidence` | `documents` | `c-hati-pedestrian` | `ev-hati-modelled-routes` |
+| `r-hati-outcome` | `reports` | `c-hati-pedestrian` | `o-hati-abstain` |
+| `r-snto-territory` | `situated_in` | `c-snto-pnsg` | `t-pnsg` |
+| `r-snto-s2` | `documents` | `c-snto-pnsg` | `ev-snto-s2-inputs` |
+| `r-snto-trends` | `documents` | `c-snto-pnsg` | `ev-snto-trends` |
+| `r-snto-prug` | `documents` | `c-snto-pnsg` | `ev-snto-prug` |
+| `r-snto-gap` | `documents` | `c-snto-pnsg` | `ev-snto-visitor-gap` |
+| `r-snto-outcome` | `reports` | `c-snto-pnsg` | `o-snto-insufficient` |
+| `r-chalus-territory` | `situated_in` | `c-chalus` | `t-western-mazandaran` |
+| `r-chalus-source` | `documents` | `c-chalus` | `ev-chalus-osm-source` |
+| `r-chalus-routes` | `documents` | `c-chalus` | `ev-chalus-routes` |
+| `r-chalus-gap` | `documents` | `c-chalus` | `ev-chalus-verification-gap` |
+| `r-chalus-outcome` | `reports` | `c-chalus` | `o-chalus-no-go` |
+| `r-fieldos-run` | `documents` | `i-fieldos` | `ev-fieldos-iphone-run` |
+| `r-fieldos-gap` | `documents` | `i-fieldos` | `ev-fieldos-android-gap` |
+| `r-fieldos-outcome` | `reports` | `i-fieldos` | `o-fieldos-functional` |
+
+There are zero entity-to-entity relationships.
+
+### 12.8 Gate 2 acceptance checks
+
+- [ ] Every semantic record above has been reviewed by the maintainer.
+- [ ] Every claim and explicit absence resolves to a declared commit-pinned
+  source.
+- [ ] HATI's original pilot and pedestrian extension remain distinct.
+- [ ] No source supports or implies an entity-to-entity edge.
+- [ ] No evidence record combines incompatible `input_kind` values.
+- [ ] No status, evidence record, or outcome functions as a maturity score.
+- [ ] Layout coordinates remain an implementation concern and carry no semantic
+  meaning; they will be added and visually verified only at Gate 3.
+- [ ] Runtime files and `data/atlas.json` remain unchanged until Gate 3 is
+  separately authorised.

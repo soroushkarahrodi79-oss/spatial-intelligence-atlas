@@ -64,17 +64,16 @@ The included entities are separate. The atlas MUST NOT imply a pipeline,
 technical integration, shared runtime, data exchange, common validation, or
 product suite.
 
-- There is no default project-to-project relationship.
-- A direct relationship may exist only when a pinned primary source documents
-  that exact relationship.
-- Conceptual similarity belongs in shared theme or outcome nodes, not in an
-  invented direct edge.
-- FieldOS MUST NOT be connected to another entity until a source documents an
-  executed use of FieldOS in that entity's work.
+- There is no project-to-project relationship in the v0.2 schema.
+- Adding any direct entity relationship requires a later gate that names its
+  semantics and pins a primary source; it cannot be improvised as content.
+- Conceptual similarity may be described in bounded prose; it does not create
+  an edge.
+- FieldOS has no entity-to-entity edge in v0.2. A later documented executed use
+  may justify a new gate, but does not authorise an ad hoc content edit.
 - No directional flow, arrow, or layout may imply data passing between cases.
 
-An empty set of project-to-project relationships is valid and preferable to an
-unsupported complete graph.
+The set of project-to-project relationships in v0.2 is required to be empty.
 
 ### 1.3 Evidence and result discipline (binding)
 
@@ -121,8 +120,6 @@ CASE ── situated_in ──> TERRITORY
 
 INSTRUMENT ── documents ──> EVIDENCE_RECORD
 
-ENTITY ── documented_relation ── ENTITY
-        only when a pinned source supports the exact relation
 ```
 
 The detail panel, not the edge count, carries the scientific meaning. Every
@@ -144,17 +141,20 @@ An entity has `kind: "case" | "instrument"` and these required fields:
 | `label` | Public project name |
 | `role` | One-sentence reason for inclusion |
 | `research_question` | Exact bounded question, or `null` for an instrument |
-| `documented_result` | Source-bounded result; never promotional synthesis |
-| `claim_ceiling` | Explicit statement of what cannot be inferred |
-| `research_status` | Source-supported lifecycle label |
+| `research_status` | `active`, `frozen`, `closed`, or `maintenance` |
 | `reviewed_at` | ISO date of the source review |
-| `territory_ids` | Zero or more declared territories |
-| `source_ids` | One or more pinned primary sources |
+| `source_ids` | Sources supporting identity, question, and lifecycle status |
 | `layout` | Deterministic coordinates for all three modes |
 
 `instrument` is a distinct kind, not a weaker case. FieldOS MUST use
 `kind: "instrument"`, carry no research question invented by the atlas, and be
 visually separated from the three cases.
+
+Results, claim ceilings, territories, and evidence records are linked through
+relationship objects (§4.6). They MUST NOT be duplicated as entity fields.
+`research_status` describes lifecycle only. Publication is represented by a
+source object, functional testing by an outcome, and neither changes the
+lifecycle vocabulary.
 
 ### 4.2 `territory`
 
@@ -176,31 +176,51 @@ is not a quality score. Required fields:
 
 | Field | Allowed values / rule |
 |---|---|
-| `id`, `entity_id`, `label` | Stable identifiers and concise public label |
+| `id`, `label` | Stable identifier and concise public label |
 | `input_kind` | `observed`, `acquired`, `derived`, `simulated`, `reported`, or `unestablished` |
 | `substantiation` | `source_stated`, `owner_attested`, or `not_established` |
 | `basis` | Exact bounded paraphrase or short quotation |
 | `limitation` | What this record does not establish |
-| `source_ids` | At least one pinned source unless `not_established` records an explicit absence |
+| `source_ids` | At least one pinned source; `not_established` points to the reviewed source set in which support was absent |
 
 `input_kind` and `substantiation` MUST NOT be collapsed into a single scale.
 The interface MUST NOT rank them or calculate a maturity score.
 
+Input-kind definitions are binding:
+
+| Value | Meaning |
+|---|---|
+| `observed` | Direct observation recorded for the bounded study or test |
+| `acquired` | Existing real-world data obtained from a declared external source |
+| `derived` | Produced from other records through a declared transformation |
+| `simulated` | Produced by a model under stated assumptions or conditions |
+| `reported` | Supplied as a report or assertion rather than directly observed by the project |
+| `unestablished` | The reviewed sources do not establish an input kind |
+
+Substantiation values are mutually exclusive and use this precedence:
+
+- `owner_attested` — a first-party action or observation is claimed by the
+  owner but has not been independently verified;
+- `source_stated` — a pinned source documents the record and it is not being
+  represented specifically as an unverified owner attestation;
+- `not_established` — the reviewed source set does not establish the record.
+
 ### 4.4 `outcome`
 
 An outcome is the result documented by a reviewed source. Required fields:
-`id`, `entity_id`, `outcome_type`, `statement`, `claim_ceiling`, `source_ids`,
-and `reviewed_at`.
+`id`, `outcome_type`, `statement`, `claim_ceiling`, `source_ids`, and
+`reviewed_at`.
 
 Allowed `outcome_type` values are:
 
-- `published_finding`
+- `bounded_finding`
 - `abstain`
 - `insufficient_evidence`
 - `no_go`
 - `functional_test`
 
-These values are categorical, not ordinal. `published_finding` is not
+These values are categorical, not ordinal. Publication belongs in
+`research_status`, not in `outcome_type`. A `bounded_finding` is not
 automatically stronger than `no_go`; the underlying question and evidence
 boundary control interpretation.
 
@@ -231,27 +251,30 @@ object; arbitrary links in prose are forbidden.
 
 ### 4.6 `relationship`
 
-Allowed relationship types are `situated_in`, `documents`, `reports`, and
-`documented_relation`.
+Allowed relationship types are `situated_in`, `documents`, and `reports`.
 
-Every relationship has `source`, `target`, `type`, `basis`, and `source_ids`.
-For `documented_relation`, `source_ids` MUST contain a pinned primary source
-that explicitly supports the relation. There is no `conceptually_adjacent`
-type in v0.2.
+Every relationship has only `id`, `source`, `target`, and `type`. Its legal
+pairs are `case → territory`, `entity → evidence_record`, and
+`entity → outcome`, respectively. The target territory, evidence record, or
+outcome carries the basis and sources; duplicating them on the edge is
+forbidden. There is no generic or direct entity-to-entity relationship type in
+v0.2.
 
 ### 4.7 Data invariants
 
 - **I1** — Every referenced id resolves to an existing object.
-- **I2** — Every core case has a non-null question, result, claim ceiling,
-  status, review date, territory, evidence record, outcome, and pinned source.
+- **I2** — Every core case has a non-null question, status, review date, and
+  pinned source, and is linked to at least one territory, evidence record, and
+  outcome carrying the exact result and claim ceiling.
 - **I3** — Every instrument is explicitly typed and visually separated from
   core cases.
-- **I4** — Every outcome and evidence record resolves to at least one declared
-  source, except an explicit `not_established` absence record.
+- **I4** — Every outcome and evidence record, including an explicit
+  `not_established` absence record, resolves to at least one declared source.
 - **I5** — Every source used for a substantive claim has a `pinned_ref`.
 - **I6** — Every outbound link resolves to a declared source URL.
-- **I7** — No `documented_relation` exists without direct source support.
-- **I8** — No duplicate or reverse-duplicate undirected relationship exists.
+- **I7** — No entity-to-entity relationship exists.
+- **I8** — Every evidence record and outcome has exactly one incoming entity
+  relationship; the parent link is not duplicated inside the target object.
 - **I9** — Every visible node has deterministic coordinates for each mode.
 - **I10** — No vocabulary encodes an ordinal project maturity or quality score.
 
@@ -402,12 +425,12 @@ This design is ready for implementation review only when all are true:
   preserved in v0.1 history.
 - **A3** — Every core case has a pinned primary source, exact result, claim
   ceiling, lifecycle status, and review date.
-- **A4** — FieldOS is never presented as an equal research case or connected to
-  another entity without evidence of executed use.
+- **A4** — FieldOS is never presented as an equal research case and has no
+  entity-to-entity edge; a documented executed use would require a later gate.
 - **A5** — The schema separates entity, territory, evidence record, outcome,
   source, and relationship objects.
 - **A6** — No all-pairs or default conceptual project graph exists.
-- **A7** — Every direct entity relationship is source-backed.
+- **A7** — No direct entity-to-entity relationship type or edge exists.
 - **A8** — DECISIONS mode reports outcomes; it does not calculate them.
 - **A9** — Every external link is declared in `source` data and requires an
   explicit user action.

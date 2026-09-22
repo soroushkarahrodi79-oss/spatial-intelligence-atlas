@@ -8,16 +8,17 @@
 
 **RELEASE_LOCKED**
 
-The repository holds one deliberately bounded release, `v0.1.0`, published
-2026-09-05 at commit `d3f399c`. `main` has since advanced with
-documentation-only commits (see §2); the released artifact itself has not
-changed. `README.md` states the three source-of-truth
+The repository holds a deliberately bounded maintenance release, `v0.1.1`,
+published 2026-09-22 at commit `f116b7c`. It clarifies input-evidence semantics
+and pins two source references; it adds no capability and makes no schema
+change. The original `v0.1.0` release remains preserved at its tag (see §2).
+`README.md` states the three source-of-truth
 documents (`SPEC.md`, `DESIGN_CONTRACT.md`, `data/atlas.json`) are **Locked**,
 and `DESIGN_CONTRACT.md` §9.1 caps the implementation at three files
 (`index.html`, `styles.css`, `app.js`) plus `data/atlas.json`, whose *schema*
-is explicitly frozen ("modifiable in content but not in schema"). There are
-Nothing in the repository indicates active feature development; the artifact is
-finished as specified for v0.1.
+is explicitly frozen ("modifiable in content but not in schema"). Nothing in
+the repository indicates active feature development; the artifact is finished
+as specified for v0.1.
 
 This is not `PAUSED_PENDING_EVIDENCE`: the repository isn't waiting on
 evidence to resume a v0.1 effort — v0.1 is complete. It is not
@@ -31,17 +32,19 @@ loosened at will.
 
 | | |
 |---|---|
-| Tag | `v0.1.0` |
-| Commit | `d3f399cf7317ea3951a5ee4761b4de01f3731fa5` |
-| Published | 2026-09-05 |
-| Audit baseline (`main`) | `6c78ac441ffe6e5bcc6b923f0005ac4d1fda995b` (2026-09-14) |
+| Current tag | `v0.1.1` |
+| Current commit | `f116b7c164ba0eda3ef88bb6ab8def46ede2d80e` |
+| Published | 2026-09-22 |
+| Original release | `v0.1.0` — `d3f399cf7317ea3951a5ee4761b4de01f3731fa5` — 2026-09-05 |
+| Dataset schema | `0.1.0` (unchanged in `v0.1.1`) |
+| Audit baseline (`main`) | `f116b7c164ba0eda3ef88bb6ab8def46ede2d80e` (2026-09-22) |
 
-At the audit baseline, `main` had advanced four commits past the `v0.1.0` tag:
-two documentation commits (`6651bca`, `604a585`) and their merge commits
-(`1002a16`, `6c78ac4`). `v0.1.0` remains the released artifact and the
-reference for everything in this document; `main` may carry documentary
-corrections after the tag without those changes constituting a new release.
-Any future change to the *artifact itself* (`index.html`,
+Pull request #3 was merged as `f116b7c` and tagged `v0.1.1`. It changed the
+runtime copy and dataset content needed to distinguish stated input provenance
+from validation, causality, or decision sufficiency. Because the JSON shape did
+not change, `data/atlas.json` correctly retains `schema_version: "0.1.0"`;
+that value must not be read as the release tag. `v0.1.0` remains immutable at
+its original tag. Any future change to the *artifact itself* (`index.html`,
 `styles.css`, `app.js`, `data/atlas.json`) would need its own tag under §6.
 
 ## 3. Demonstrated vs. simulated / derived / provisional / unvalidated
@@ -50,7 +53,7 @@ The dataset (`data/atlas.json`, 31 nodes / 54 edges) carries an explicit,
 per-edge evidence classification. As declared in `README.md` and enforced by
 `SPEC.md` §1.2:
 
-| Class | Meaning | v0.1 count |
+| Class | Meaning | v0.1.1 count |
 |---|---|---|
 | `REAL` | Directly observed or acquired data | 2 |
 | `DERIVED` | Computed from other evidence via a declared transformation | 0 |
@@ -163,8 +166,9 @@ rendering code); it is not something this audit will guess at.
 
 ## 9. Publication identifiers and versioning
 
-No DOI is currently associated with this repository or its `v0.1.0` release
-(none found in `README.md`, `SPEC.md`, `DESIGN_CONTRACT.md`, the release
+No DOI is currently associated with this repository or its `v0.1.0` or
+`v0.1.1` releases (none found in `README.md`, `SPEC.md`,
+`DESIGN_CONTRACT.md`, the release
 notes, or repository metadata). If a DOI is minted for this or a future
 release, it should be recorded here alongside the corresponding tag, and the
 version/tag it was minted against must not be altered retroactively — mint a

@@ -18,9 +18,14 @@ open issues/PRs as of the last audit.
 
 ## Current status
 
-**Implemented — v0.1.0.**
+**Implemented — v0.1.1.**
 
-The first bounded implementation of the Spatial Intelligence Atlas is complete.
+The current maintenance release of the first bounded implementation is
+complete. The original `v0.1.0` release remains preserved at its tag.
+
+> The `v0.1.0` shown in the interface footer is the dataset's
+> `schema_version`, not the repository release tag. Release `v0.1.1` clarified
+> evidence semantics without changing that schema.
 
 | File | Role | State |
 |------|------|-------|
@@ -81,7 +86,7 @@ explicit null-territory node rather than quietly omitting it.
 
 Every relationship in the atlas carries an evidence status. Six classes:
 
-| Class | Meaning | v0.1 count |
+| Class | Meaning | v0.1.1 count |
 |-------|---------|-----------|
 | `REAL` | Directly observed or acquired data | 2 |
 | `DERIVED` | Computed from other evidence via a declared transformation | **0** |
@@ -102,7 +107,7 @@ description explicitly supports it**. Every edge records:
 An edge may terminate at `REAL`, `DERIVED`, `CALIBRATED`, or `SIMULATED` **only**
 when `support == "stated"`. Authored assertions terminate at `PROVISIONAL`.
 
-**`DERIVED` and `CALIBRATED` are unused in v0.1 because no source description
+**`DERIVED` and `CALIBRATED` are unused in v0.1.1 because no source description
 supports either status.** `SIMULATED` is also at zero: the one concept that
 named it (*scenarios*) is held at `PROVISIONAL`, because the supplied
 description names the concept but does not explicitly establish its evidence

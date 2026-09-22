@@ -19,7 +19,7 @@
       "R2": "Decision nodes are interrogatives. The atlas claims a system could inform a question; it never claims a system produces a decision.",
       "R3": "An edge may terminate at a substantive evidence class (e-real, e-derived, e-calibrated, e-simulated) only when support == \"stated\".",
       "R4": "Edge colour and dash pattern derive solely from edge.evidence. A null value renders as a neutral hairline.",
-      "R5": "Governance methods (m-evidence-provenance, m-evidence-classification) describe how evidence is audited, not produced. They have no yields_evidence edges and are excluded from decision evidence-floor computation.",
+      "R5": "Governance methods (m-evidence-provenance, m-evidence-classification) describe how evidence is audited, not produced. They have no yields_evidence edges and are excluded from the decision input-class floor. That floor summarises declared method inputs; it does not establish validation or decision sufficiency.",
       "R6": "conceptually_adjacent is symmetric and non-directional. It must never be drawn with an arrowhead and never implies technical integration."
     },
     "modes": [
@@ -50,9 +50,9 @@
     ],
     "evidence_order": ["e-real", "e-derived", "e-calibrated", "e-simulated", "e-provisional", "e-missing"],
     "evidence_floor_labels": {
-      "0": "MISSING",
-      "1": "PROVISIONAL",
-      "2": "SUBSTANTIATED"
+      "0": "INPUT: MISSING",
+      "1": "INPUT: PROVISIONAL",
+      "2": "INPUT: STATED"
     }
   },
 
@@ -561,10 +561,10 @@
     { "id": "ye-04", "type": "yields_evidence", "source": "m-scenarios", "target": "e-provisional", "support": "authored", "basis": "The source names \"scenarios\" but does not explicitly establish its evidence class, so no substantive class is asserted in v0.1.", "evidence": "e-provisional" },
     { "id": "ye-05", "type": "yields_evidence", "source": "m-decision-engine", "target": "e-provisional", "support": "authored", "basis": "The source description names a decision engine but does not declare its rules or outputs.", "evidence": "e-provisional" },
     { "id": "ye-06", "type": "yields_evidence", "source": "m-environmental-signals", "target": "e-provisional", "support": "authored", "basis": "The source description names environmental signals but does not declare their source or class.", "evidence": "e-provisional" },
-    { "id": "ye-07", "type": "yields_evidence", "source": "m-real-data-acquisition", "target": "e-real", "support": "stated", "basis": "FIRSTLOOK-MAD: \"real-data acquisition\" — the source states the data is real.", "evidence": "e-real" },
+    { "id": "ye-07", "type": "yields_evidence", "source": "m-real-data-acquisition", "target": "e-real", "support": "stated", "basis": "FIRSTLOOK-MAD README.md and docs/PHASE_0D2_PREREGISTRATION.md at 3690ac14147fce82753467abb6017a20f0d7f568 explicitly record acquired, repository-backed REAL_SOURCE_DATA inputs. REAL applies only to those inputs; it does not imply observational sufficiency, scientific validation, or decision support.", "evidence": "e-real" },
     { "id": "ye-08", "type": "yields_evidence", "source": "m-sentinel2", "target": "e-provisional", "support": "authored", "basis": "The source names \"Sentinel-2\" but does not explicitly establish its evidence class, so no substantive class is asserted in v0.1.", "evidence": "e-provisional" },
     { "id": "ye-09", "type": "yields_evidence", "source": "m-open-data", "target": "e-provisional", "support": "authored", "basis": "The source names \"open data\" but does not explicitly establish its evidence class, so no substantive class is asserted in v0.1.", "evidence": "e-provisional" },
-    { "id": "ye-10", "type": "yields_evidence", "source": "m-field-collection", "target": "e-real", "support": "stated", "basis": "FIELDOS: \"field evidence, observations\" — the source names direct observation.", "evidence": "e-real" },
+    { "id": "ye-10", "type": "yields_evidence", "source": "m-field-collection", "target": "e-real", "support": "stated", "basis": "FieldOS README.md and docs/FIRST_FIELD_RUN.md at 271d3a77c58361f43459d068f4e8a100611a87fd record one owner-attested real field run on 2026-08-31. REAL applies to direct field observations from that bounded run; it does not establish independent validation, repeated reliability, or decision sufficiency.", "evidence": "e-real" },
 
     { "id": "sd-01", "type": "supports_decision", "source": "p-hati", "target": "d-eligibility", "support": "stated", "basis": "HATI: \"spatial eligibility\", \"decision engine\"", "evidence": null },
     { "id": "sd-02", "type": "supports_decision", "source": "m-decision-engine", "target": "d-eligibility", "support": "stated", "basis": "HATI: \"decision engine\"", "evidence": null },
@@ -576,11 +576,11 @@
     { "id": "sd-08", "type": "supports_decision", "source": "p-firstlook", "target": "d-risk", "support": "stated", "basis": "FIRSTLOOK-MAD: \"spatial risk\"", "evidence": null },
     { "id": "sd-09", "type": "supports_decision", "source": "m-environmental-signals", "target": "d-risk", "support": "authored", "basis": "Authored: signals are treated here as risk inputs. Not stated in the source description.", "evidence": null },
     { "id": "sd-10", "type": "supports_decision", "source": "m-real-data-acquisition", "target": "d-risk", "support": "authored", "basis": "Authored: acquisition is treated here as a risk input. Not stated in the source description.", "evidence": null },
-    { "id": "sd-11", "type": "supports_decision", "source": "m-evidence-provenance", "target": "d-risk", "support": "authored", "basis": "Authored: provenance is treated here as a precondition for trusting a risk claim. Governance method; excluded from evidence-floor computation (rule R5).", "evidence": null },
+    { "id": "sd-11", "type": "supports_decision", "source": "m-evidence-provenance", "target": "d-risk", "support": "authored", "basis": "Authored: provenance is treated here as a precondition for trusting a risk claim. Governance method; excluded from input-class floor computation (rule R5).", "evidence": null },
     { "id": "sd-12", "type": "supports_decision", "source": "p-snto", "target": "d-monitoring", "support": "stated", "basis": "SNTO: \"destination monitoring\"", "evidence": null },
     { "id": "sd-13", "type": "supports_decision", "source": "m-sentinel2", "target": "d-monitoring", "support": "authored", "basis": "Authored: imagery is treated here as a monitoring input. Not stated in the source description.", "evidence": null },
     { "id": "sd-14", "type": "supports_decision", "source": "m-open-data", "target": "d-monitoring", "support": "authored", "basis": "Authored: open data is treated here as a monitoring input. Not stated in the source description.", "evidence": null },
-    { "id": "sd-15", "type": "supports_decision", "source": "m-evidence-classification", "target": "d-monitoring", "support": "authored", "basis": "Authored: classification is treated here as a precondition for interpreting monitoring output. Governance method; excluded from evidence-floor computation (rule R5).", "evidence": null },
+    { "id": "sd-15", "type": "supports_decision", "source": "m-evidence-classification", "target": "d-monitoring", "support": "authored", "basis": "Authored: classification is treated here as a precondition for interpreting monitoring output. Governance method; excluded from input-class floor computation (rule R5).", "evidence": null },
     { "id": "sd-16", "type": "supports_decision", "source": "p-fieldos", "target": "d-observed", "support": "stated", "basis": "FIELDOS: \"field evidence, observations\"", "evidence": null },
     { "id": "sd-17", "type": "supports_decision", "source": "m-field-collection", "target": "d-observed", "support": "stated", "basis": "FIELDOS: \"spatial field data collection\"", "evidence": null },
 

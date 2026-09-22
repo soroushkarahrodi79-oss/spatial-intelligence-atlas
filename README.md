@@ -114,6 +114,12 @@ class is a specification violation.
 substantive class requires confirmation from the owner of the source system, and
 is deferred to v0.2.
 
+In **DECISIONS** mode, `INPUT: MISSING`, `INPUT: PROVISIONAL`, and
+`INPUT: STATED` summarise only the lowest declared evidence class among methods
+linked to a question. They do **not** mean that the question has been answered,
+that a causal relationship has been shown, or that a management decision is
+scientifically justified.
+
 ---
 
 ## Dataset shape

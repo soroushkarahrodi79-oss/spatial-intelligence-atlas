@@ -1,11 +1,11 @@
 # DESIGN_CONTRACT.md — Spatial Intelligence Atlas
 
 **Target version:** 0.2.0
-**Status:** GATE 1 APPROVED — GATE 2 APPROVED — GATE 3 IMPLEMENTATION DRAFTED
-on branch `impl/v0.2-gate3`, not yet merged to `main`. This document
-constrains v0.2 form. `SPEC.md` constrains meaning, behaviour, and the
-approved Gate 2 content freeze. Releases `v0.1.0` and `v0.1.1` remain
-immutable.
+**Status:** ALL GATES APPROVED — RELEASED AS `v0.2.0` (2026-09-22). This
+document constrains v0.2 form as implemented and deployed. `SPEC.md`
+constrains meaning, behaviour, and the approved Gate 2 content freeze.
+Releases `v0.1.0` and `v0.1.1` remain immutable, preserved historical
+releases.
 Where a visual choice is not covered here, choose the more restrained option.
 
 Everything in this document is a **limit**, not a suggestion. A limit stated as

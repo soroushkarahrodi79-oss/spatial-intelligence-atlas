@@ -6,122 +6,119 @@
 
 ## 1. Status
 
-**ACTIVE_BOUNDED — V0.2 GATE 3 IMPLEMENTATION DRAFTED, PENDING MERGE**
+**ACTIVE_BOUNDED — V0.2.0 RELEASED AND DEPLOYED**
 
-The runtime deployed to GitHub Pages (served from `main`) remains the
-deliberately bounded maintenance release `v0.1.1`, published 2026-09-22 at
-commit `f116b7c`. The original `v0.1.0` release remains preserved at its tag
-(see §2).
+The runtime deployed to GitHub Pages (served from `main`) is release
+**`v0.2.0`**, merged through PR #8 at `54128ea` and tagged on 2026-09-22. It
+supersedes v0.1.1 as the live artifact. Both `v0.1.0` and `v0.1.1` remain
+preserved, immutable, at their original tags (see §2).
 
-Gate 1 (specification) was approved and merged through PR #6 at `9edfa5a`.
-Gate 2 (semantic content freeze) was drafted through PR #7 and **approved by
-the maintainer on 2026-09-22** in issue #5. Gate 3 (runtime and dataset
-implementation) has been drafted on branch `impl/v0.2-gate3`, migrating
-`index.html`, `styles.css`, `app.js`, and `data/atlas.json` to the v0.2
-contract; it is **not yet merged to `main`**. Because GitHub Pages deploys
-from `main`, merging that branch would make v0.2 the live artifact — this
-repository treats that merge as requiring the same explicit maintainer
-confirmation as Gate 4 (verification/release), not as implied by Gate 3
-drafting alone.
+All four v0.2 gates are complete:
+
+1. **Gate 1 — specification and design contract** — approved and merged
+   through PR #6.
+2. **Gate 2 — semantic content freeze** — drafted through PR #7, approved by
+   the maintainer on 2026-09-22 in issue #5.
+3. **Gate 3 — runtime and dataset implementation** — drafted on branch
+   `impl/v0.2-gate3`, migrating `index.html`, `styles.css`, `app.js`, and
+   `data/atlas.json` to the approved contract.
+4. **Gate 4 — verification and release** — the maintainer explicitly
+   confirmed merging Gate 3 to `main` and cutting the `v0.2.0` release on
+   2026-09-22 (issue #5, PR #8).
 
 ## 2. Reference release
 
 | | |
 |---|---|
-| Current tag | `v0.1.1` |
-| Current commit | `f116b7c164ba0eda3ef88bb6ab8def46ede2d80e` |
+| Current tag | `v0.2.0` |
+| Current commit | `54128ea9ac642a6fefe614be4b2f3631635a6847` |
 | Published | 2026-09-22 |
-| Original release | `v0.1.0` — `d3f399cf7317ea3951a5ee4761b4de01f3731fa5` — 2026-09-05 |
-| Dataset schema | `0.1.0` (unchanged in `v0.1.1`) |
-| Gate 1 baseline (`main`) | `9edfa5a6afda27efea53c7ace92c5d7921bdbf67` (2026-09-22) |
-| Gate 2 content freeze (`main`) | `badd2a5321a998dfff5734275f26c37e317682e2` (2026-09-22), approved by maintainer 2026-09-22 |
-| Gate 3 implementation branch | `impl/v0.2-gate3`, not yet merged |
+| Dataset schema | `0.2.0` |
+| Prior release | `v0.1.1` — `f116b7c164ba0eda3ef88bb6ab8def46ede2d80e` — 2026-09-22 (preserved, immutable) |
+| Original release | `v0.1.0` — `d3f399cf7317ea3951a5ee4761b4de01f3731fa5` — 2026-09-05 (preserved, immutable) |
+| Gate 1 baseline | `9edfa5a6afda27efea53c7ace92c5d7921bdbf67` (2026-09-22) |
+| Gate 2 content freeze | `badd2a5321a998dfff5734275f26c37e317682e2` (2026-09-22), approved by maintainer 2026-09-22 |
+| Gate 3 implementation | PR #8, branch `impl/v0.2-gate3`, merged as `54128ea` |
 
-Pull request #3 was merged as `f116b7c` and tagged `v0.1.1`. It changed the
-runtime copy and dataset content needed to distinguish stated input provenance
-from validation, causality, or decision sufficiency. Because the JSON shape did
-not change, `data/atlas.json` correctly retains `schema_version: "0.1.0"`;
-that value must not be read as the release tag. `v0.1.0` remains immutable at
-its original tag. PR #6 approved the v0.2 specification and design contract;
-PR #7 froze the v0.2 semantic content; neither changed the deployed artifact.
-The Gate 3 implementation branch migrates the runtime and dataset per that
-contract but remains unmerged. Merging to `main` and cutting a v0.2 release
-requires separate, explicit maintainer confirmation (Gate 4).
+Pull request #3 was merged as `f116b7c` and tagged `v0.1.1`; it remains
+preserved as historical, immutable content — it is **not** the current
+release. `v0.1.0` remains immutable at its original tag. PR #6 approved the
+v0.2 specification and design contract; PR #7 froze the v0.2 semantic
+content; PR #8 implemented that contract in the runtime and dataset and was
+merged with explicit maintainer confirmation, then tagged `v0.2.0`.
 
-## 3. Deployed v0.1.1 evidence state
+## 3. Deployed v0.2.0 content
 
-The deployed dataset (`data/atlas.json`, 31 nodes / 54 edges) carries the
-v0.1.1 per-edge evidence classification documented in `README.md`:
+The deployed dataset (`data/atlas.json`, schema `0.2.0`) carries a
+selective, evidence-informed content model: 4 entities (3 core cases, 1
+supporting instrument), 3 territories, 10 evidence records, 4 outcomes, 8
+commit-pinned sources, and 17 relationships. There are **zero**
+entity-to-entity relationships.
 
-| Class | Meaning | v0.1.1 count |
+| Entity | Kind | Documented result |
 |---|---|---|
-| `REAL` | Directly observed or acquired data | 2 |
-| `DERIVED` | Computed from other evidence via a declared transformation | 0 |
-| `CALIBRATED` | Adjusted or validated against an independent reference | 0 |
-| `SIMULATED` | Produced by a model under specified conditions | 0 |
-| `PROVISIONAL` | Asserted by this atlas, not substantiated by the source | 8 |
-| `MISSING` | Not declared by the source; the absence is itself the finding | 2 |
+| HATI — Pedestrian Heat Extension | Core case | `ABSTAIN` / no robust difference |
+| SNTO — PNSG Decision Evidence | Core case | `INSUFFICIENT EVIDENCE` |
+| CHALUS — Western Mazandaran Pilot | Core case | `NO-GO` |
+| FieldOS | Supporting instrument | `FUNCTIONAL TEST` |
 
-In plain terms: two evidence-production relationships are source-stated as
-`REAL` at the **input** level, while the large majority of the graph's evidence
-edges (8 of 12) are `PROVISIONAL` — asserted by the atlas's author, not verified
-by the owner of the source system. Neither fact establishes validation, causal
-attribution, or decision sufficiency. The atlas is explicitly designed to make
-that limitation visible rather than hide it (empty
-`DERIVED`/`CALIBRATED`/`SIMULATED` classes still render in the legend at zero).
-This is a documentation and evidence-labelling exercise over five separate,
-pre-existing systems (HATI, FIRSTLOOK-MAD, SNTO, FIELDOS, FAB); the atlas
-performs no computation over live data, makes no predictions, and does not
-execute or integrate any of the five systems it describes (`SPEC.md` §1.1,
-§9).
+Each evidence record carries a separate `input_kind` (`observed` / `acquired`
+/ `derived` / `simulated` / `reported` / `unestablished`) and `substantiation`
+(`source_stated` / `owner_attested` / `not_established`); the two axes are
+never collapsed. Full content is frozen in `SPEC.md` §12 and was reviewed
+against the pinned commits listed in §2.6 of the same document before this
+release.
+
+FIRSTLOOK-MAD and FAB, and the five-system all-pairs graph they were part of,
+remain preserved as immutable v0.1 history (`v0.1.0`, `v0.1.1`) but are not
+primary v0.2 entities. See `SPEC.md` §1.1 for the selection principle.
 
 ## 4. Claim ceiling
 
-For the deployed v0.1.1 runtime, this repository and its rendered
-artifact may **not** be used to claim, imply, or be cited as:
+For the deployed `v0.2.0` runtime, this repository and its rendered artifact
+may **not** be used to claim, imply, or be cited as:
 
-- Accuracy, validation, or operational readiness of HATI, FIRSTLOOK-MAD,
-  SNTO, FIELDOS, or FAB, or of the atlas itself.
-- Technical integration, a data pipeline, a product suite, or an
-  "end-to-end"/"unified" system connecting the five projects — the only
-  permitted relationship is the symmetric, non-directional
-  `conceptually_adjacent` edge.
+- Validation, causal attribution, operational readiness, or management
+  sufficiency for HATI, SNTO, CHALUS, or FieldOS beyond what its pinned
+  source states.
+- Technical integration, a data pipeline, shared runtime, or product suite
+  connecting the four entities — there is no entity-to-entity relationship in
+  v0.2.
 - A real map, geographic projection, or validated territory data (territories
   are conceptual anchors, not geometry).
-- Ranking, scoring, or maturity ordering of the five projects.
-- An evidence status stronger than what the source project description
-  explicitly states (`support == "stated"` required for anything above
-  `PROVISIONAL`/`MISSING`).
-- Scientific support for a decision merely because its input-class floor is
-  `INPUT: STATED`; that label records source-declared input provenance only.
+- Ranking, scoring, or maturity ordering of the entities, or treatment of
+  `input_kind` / `substantiation` / `outcome_type` as an ordinal scale.
+- Tourism demand, visitor pressure, revenue, closure, restriction, or
+  investment effects not established by the reviewed source for that entity.
+- Scientific support for a decision beyond the documented outcome's stated
+  `claim_ceiling`.
 
-The maximum defensible framing of v0.1.1 is: *an explanatory, hand-authored, evidence-
-labelled map of how five separate research artifacts relate conceptually,
-current as of the source descriptions consulted when `data/atlas.json` was
-authored.*
+The maximum defensible framing of `v0.2.0` is: *a selective, evidence-informed
+research map of three tourism and spatial-decision research cases and one
+supporting instrument, showing what was studied, what result was documented,
+what remains unsupported, and where the reader can verify it — current as of
+the pinned source commits reviewed for Gate 2.*
 
-For v0.2 on the Gate 3 branch, the maximum defensible framing is: *an
-implemented, contract-conformant v0.2 artifact, reviewed but not yet merged,
-deployed, or released*. Until it is merged to `main` and a release is cut, it
-does not supersede the v0.1.1 claim ceiling above, which continues to govern
-the live GitHub Pages site.
+For the preserved `v0.1.1` release, the maximum defensible framing remains:
+*an explanatory, hand-authored, evidence-labelled map of how five separate
+research artifacts relate conceptually, current as of the source descriptions
+consulted when that release's `data/atlas.json` was authored.* That framing
+no longer describes the live site.
 
 ## 5. Currently allowed changes
 
-The following changes are currently allowed:
+With all four v0.2 gates complete, ordinary maintenance applies:
 
-- Fixing typos, broken links, or formatting in `README.md`, `SPEC.md`,
-  `DESIGN_CONTRACT.md`.
-- Implementing Gate 3 (`index.html`, `styles.css`, `app.js`,
-  `data/atlas.json`) on a review branch, per the approved Gate 2 content and
-  `DESIGN_CONTRACT.md`.
-- Correcting documentation so it distinguishes deployed v0.1.1 from the v0.2
-  implementation branch.
+- Fixing typos, broken links, or formatting in any documentation file.
+- Bug fixes to `index.html`, `styles.css`, or `app.js` that do not change the
+  content model, design contract, or claim ceiling.
 - Re-triggering deployment (e.g. GitHub Pages) with no content change.
 
-Not currently allowed without a separate, explicit maintainer confirmation:
-merging the Gate 3 branch to `main` (this changes the deployed GitHub Pages
-site), or creating a v0.2 release/tag.
+Any change to the v0.2 content model (`SPEC.md` §4), design contract
+(`DESIGN_CONTRACT.md`), or the semantic payload in `SPEC.md` §12 (adding an
+entity, an entity-to-entity relationship, or a new claim) requires a new,
+separately gated proposal — the same discipline that produced v0.2, not an
+ad hoc edit.
 
 ## 6. v0.2 gate sequence
 
@@ -129,16 +126,18 @@ site), or creating a v0.2 release/tag.
 |---|---|---|
 | Gate 1 — specification and design | **APPROVED** | PR #6 / `9edfa5a` |
 | Gate 2 — semantic content and pinned sources | **APPROVED** | Issue #5, 2026-09-22 |
-| Gate 3 — runtime and dataset implementation | **DRAFTED, PENDING MERGE** | Branch `impl/v0.2-gate3` |
-| Gate 4 — verification and release | **UNAUTHORISED** | Requires explicit maintainer confirmation to merge and release |
+| Gate 3 — runtime and dataset implementation | **APPROVED, MERGED** | PR #8 / `54128ea` |
+| Gate 4 — verification and release | **APPROVED, RELEASED** | Issue #5, tag `v0.2.0`, 2026-09-22 |
 
-Approval of one gate does not imply approval of the next.
+All four gates are complete for `v0.2.0`. A future v0.3 (or any content-model
+change) restarts this sequence from Gate 0.
 
 ## 7. Open issues and pull requests
 
-Issue and pull-request counts are operational metadata, not part of the release
-claim. They should be checked on GitHub at review time rather than frozen here;
-the audit baseline in §2 is the stable reference for this document.
+Issue and pull-request counts are operational metadata, not part of the
+release claim. They should be checked on GitHub at review time rather than
+frozen here; the audit baseline in §2 is the stable reference for this
+document.
 
 ## 8. Licensing — unresolved, flagged rather than assumed
 
@@ -155,10 +154,10 @@ rendering code); it is not something this audit will guess at.
 
 ## 9. Publication identifiers and versioning
 
-No DOI is currently associated with this repository or its `v0.1.0` or
-`v0.1.1` releases (none found in `README.md`, `SPEC.md`,
-`DESIGN_CONTRACT.md`, the release
-notes, or repository metadata). If a DOI is minted for this or a future
-release, it should be recorded here alongside the corresponding tag, and the
-version/tag it was minted against must not be altered retroactively — mint a
-new DOI for a new version instead of reissuing an old one.
+No DOI is currently associated with this repository or its `v0.1.0`,
+`v0.1.1`, or `v0.2.0` releases (none found in `README.md`, `SPEC.md`,
+`DESIGN_CONTRACT.md`, the release notes, or repository metadata). If a DOI is
+minted for this or a future release, it should be recorded here alongside the
+corresponding tag, and the version/tag it was minted against must not be
+altered retroactively — mint a new DOI for a new version instead of
+reissuing an old one.

@@ -4,20 +4,19 @@
 
 **Target version:** 0.2.0
 
-**Document state:** GATE 1 APPROVED — GATE 2 APPROVED — GATE 3 IMPLEMENTATION
-DRAFTED (this branch) — GATE 4 VERIFICATION/RELEASE UNAUTHORISED
+**Document state:** GATE 1 APPROVED — GATE 2 APPROVED — GATE 3 APPROVED,
+MERGED — GATE 4 APPROVED, RELEASED AS `v0.2.0`
 
 **Gate record:** GitHub issue #5
 
 **Historical baseline:** releases `v0.1.0` and `v0.1.1` remain immutable.
 
-This document is the source of truth for v0.2 meaning and behaviour. The
-maintainer approved Gate 2's semantic content freeze on 2026-09-22 and
-authorised Gate 3 implementation. `index.html`, `styles.css`, `app.js`, and
-`data/atlas.json` have been migrated to this contract on a review branch
-(`impl/v0.2-gate3`) and are not yet merged to `main` or released. Merging to
-`main` makes this the live GitHub Pages artifact, so it is treated as
-requiring the same explicit maintainer confirmation as Gate 4.
+This document is the source of truth for the deployed v0.2 meaning and
+behaviour. The maintainer approved Gate 2's semantic content freeze, Gate 3
+implementation (PR #8, merged as `54128ea`), and Gate 4 (merge to `main` and
+release) on 2026-09-22. `index.html`, `styles.css`, `app.js`, and
+`data/atlas.json` on `main` implement this contract and are the live GitHub
+Pages artifact, tagged `v0.2.0`.
 
 ---
 
@@ -456,24 +455,25 @@ This design is ready for implementation review only when all are true:
 2. **Gate 2 — content freeze — APPROVED (2026-09-22):** the semantic payload in
    §12 is frozen; content drafted through PR #7 and approved by the maintainer
    in issue #5.
-3. **Gate 3 — implementation — DRAFTED, PENDING MERGE:** the runtime and
-   `data/atlas.json` have been migrated to this contract on branch
-   `impl/v0.2-gate3`. Not yet merged to `main`.
-4. **Gate 4 — verification/release — UNAUTHORISED:** test invariants,
-   accessibility, responsive behaviour, claim wording, links, and release
-   provenance; cut a v0.2 release. Because GitHub Pages deploys from `main`,
-   merging the Gate 3 branch is treated as part of this gate and requires
-   explicit maintainer confirmation, not merge-alone.
+3. **Gate 3 — implementation — APPROVED, MERGED (2026-09-22):** the runtime
+   and `data/atlas.json` were migrated to this contract on branch
+   `impl/v0.2-gate3` and merged to `main` through PR #8 (`54128ea`).
+4. **Gate 4 — verification/release — APPROVED, RELEASED (2026-09-22):**
+   invariants, accessibility, and interaction behaviour were verified before
+   merge; the maintainer explicitly confirmed the merge to `main` and the
+   `v0.2.0` release in issue #5.
 
-No later gate is implied by approval of an earlier one.
+All four gates are complete for `v0.2.0`. A content-model change (a new
+entity, an entity-to-entity relationship, a new claim) restarts this sequence
+from Gate 0, per `PROJECT_STATUS.md` §5–§6.
 
 ---
 
 ## 12. Gate 2 semantic content freeze
 
-**State:** APPROVED (2026-09-22). The records below are the complete semantic
-payload for v0.2 and have been migrated into `data/atlas.json` on branch
-`impl/v0.2-gate3` under Gate 3.
+**State:** APPROVED (2026-09-22) and RELEASED as `v0.2.0`. The records below
+are the complete semantic payload for v0.2 and are live in `data/atlas.json`
+on `main`.
 
 ### 12.1 Scope clarification
 
@@ -576,5 +576,5 @@ There are zero entity-to-entity relationships.
 - [x] No status, evidence record, or outcome functions as a maturity score.
 - [x] Layout coordinates were added and visually verified at Gate 3; they carry
   no semantic meaning.
-- [x] Runtime files and `data/atlas.json` were migrated under Gate 3 on branch
-  `impl/v0.2-gate3`, after Gate 2 approval.
+- [x] Runtime files and `data/atlas.json` were migrated under Gate 3 (PR #8)
+  and merged to `main`, after Gate 2 approval.

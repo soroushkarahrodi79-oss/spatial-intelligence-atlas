@@ -1,10 +1,13 @@
 # SPEC.md — Spatial Intelligence Atlas
 
 **Artifact:** Spatial Intelligence Atlas — Tourism, Risk & Decision Systems
-**Version:** 0.1.0 (implemented and released; tag `v0.1.0` at commit
-`d3f399c`, 2026-09-05). This document remains the binding specification —
-"locked" means the implementation must conform to it, not that no
-implementation exists. See `PROJECT_STATUS.md` for the release record.
+**Version:** 0.1.1 (maintenance release; tag `v0.1.1` at commit `f116b7c`,
+2026-09-22). The original `v0.1.0` release remains preserved at commit
+`d3f399c` (2026-09-05). Release `v0.1.1` changed evidence wording and pinned
+source references without changing the dataset schema, which remains `0.1.0`.
+This document remains the binding specification — "locked" means the
+implementation must conform to it, not that no implementation exists. See
+`PROJECT_STATUS.md` for the full release record.
 **Status of this document:** SOURCE OF TRUTH. Where this document and any other
 statement disagree, this document wins. `data/atlas.json` is the source of truth
 for *content*; this document is the source of truth for *meaning and behaviour*;

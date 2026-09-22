@@ -3,11 +3,13 @@
 **Tourism, Risk & Decision Systems**
 
 A small, static, client-side research map. The deployed v0.1.1 runtime explains
-five existing systems; the approved v0.2 design narrows the future artifact to
-three research cases and one supporting instrument.
+five existing systems; the approved v0.2 design narrows the artifact to three
+research cases and one supporting instrument, with a documented result and
+claim ceiling for each.
 
 > **Deployed v0.1.1: five separate systems, related conceptually and not
-> technically integrated. v0.2 remains documentation only.**
+> technically integrated. v0.2 is implemented on branch `impl/v0.2-gate3`,
+> reviewed but not yet merged or released.**
 
 ---
 
@@ -18,30 +20,35 @@ canonical release state, active gate, evidence ceiling, and licensing note.
 
 ## Current status
 
-**Runtime: v0.1.1 released and locked. v0.2: Gate 2 draft.**
+**Deployed runtime: v0.1.1, released and locked. v0.2: Gate 3 implementation
+drafted on a branch, pending merge and release.**
 
 The current maintenance release of the first bounded implementation is
-complete. The original `v0.1.0` release remains preserved at its tag.
+complete and remains what GitHub Pages serves. The original `v0.1.0` release
+remains preserved at its tag.
 
-Gate 1 of v0.2 was approved and merged on 2026-09-22. Gate 2 is reviewing the
-exact semantic content and commit-pinned sources. No v0.2 runtime or dataset
-change is authorised yet; the deployed site remains v0.1.1.
+Gate 1 (specification) and Gate 2 (semantic content freeze) are approved. The
+v0.2 runtime and dataset have been migrated to the approved contract on branch
+`impl/v0.2-gate3`. Because GitHub Pages deploys from `main`, merging that
+branch is treated as requiring the same explicit maintainer confirmation as
+Gate 4 (verification/release) — it is not implied by Gate 3 drafting alone.
+Until that merge, the deployed site remains v0.1.1.
 
-> The `v0.1.0` shown in the interface footer is the dataset's
+> The `v0.1.0` shown in the deployed interface footer is the dataset's
 > `schema_version`, not the repository release tag. Release `v0.1.1` clarified
-> evidence semantics without changing that schema.
+> evidence semantics without changing that schema. The v0.2 footer instead
+> shows `schema_version: "0.2.0"` directly, since the shape changed.
 
 | File | Role | State |
 |------|------|-------|
-| `SPEC.md` | v0.2 meaning, behaviour, and Gate 2 content proposal | Gate 2 draft |
+| `SPEC.md` | v0.2 meaning, behaviour, and Gate 2 content (approved) | Gate 2 approved |
 | `DESIGN_CONTRACT.md` | v0.2 form and limits | Gate 1 approved |
-| `data/atlas.json` | Deployed v0.1.1 content | Runtime locked |
+| `data/atlas.json` | v0.1.1 on `main`; v0.2 content on `impl/v0.2-gate3` | Gate 3 drafted |
 | `README.md` | Orientation (this file) | Current |
-| `index.html` | Structure | Implemented |
-| `styles.css` | Presentation | Implemented |
-| `app.js` | Behaviour | Implemented |
+| `index.html` / `styles.css` / `app.js` | v0.1.1 on `main`; v0.2 on `impl/v0.2-gate3` | Gate 3 drafted |
 
-No runtime file or dataset change may occur before separate Gate 3 approval.
+Merging the Gate 3 branch to `main`, and creating a v0.2 release, requires
+separate, explicit maintainer confirmation.
 
 ---
 
@@ -67,6 +74,40 @@ documented outcomes and claim ceilings. See `SPEC.md` for the proposed content.
 It is **not** an integration of the five systems, a data pipeline, a product
 suite, a real map, a dashboard, a CV, or a claim of operational readiness. The
 full list is in `SPEC.md` §9.
+
+---
+
+## The v0.2 implementation (Gate 3 draft, branch `impl/v0.2-gate3`)
+
+v0.2 narrows the artifact to a selective, evidence-informed research map:
+**three core cases and one supporting instrument**, each with a research
+question (or role, for the instrument), a documented result, a claim ceiling,
+a research status, and pinned primary sources.
+
+| Entity | Kind | Territory | Documented result |
+|---|---|---|---|
+| HATI — Pedestrian Heat Extension | Core case | Madrid — Atocha to Puerta de Alcalá | `ABSTAIN` / no robust difference |
+| SNTO — PNSG Decision Evidence | Core case | Parque Nacional de la Sierra de Guadarrama | `INSUFFICIENT EVIDENCE` |
+| CHALUS — Western Mazandaran Pilot | Core case | Western Mazandaran | `NO-GO` |
+| FieldOS | Supporting instrument | — no case-specific territory | `FUNCTIONAL TEST` |
+
+FIRSTLOOK-MAD and FAB remain preserved in v0.1 history but are not primary
+v0.2 entities (see `SPEC.md` §1.1 for the selection principle). There are
+**zero** entity-to-entity relationships in v0.2 — only `situated_in`
+(case → territory), `documents` (entity → evidence record), and `reports`
+(entity → outcome). The dataset carries 4 entities, 3 territories, 10
+evidence records, 4 outcomes, 8 commit-pinned sources, and 17 relationships.
+Full content is frozen in `SPEC.md` §12.
+
+The evidence-input vocabulary changed from v0.1.1's six classes
+(`REAL`/`DERIVED`/`CALIBRATED`/`SIMULATED`/`PROVISIONAL`/`MISSING`) to a
+different six-value scale defined in `SPEC.md` §4.3: `OBSERVED`, `ACQUIRED`,
+`DERIVED`, `SIMULATED`, `REPORTED`, `UNESTABLISHED`. Each is paired with a
+separate `substantiation` value (`SOURCE-STATED`, `OWNER-ATTESTED`, or `NOT
+ESTABLISHED`) — the two are never collapsed into one scale.
+
+Run it the same way as v0.1.1 (see **Running it locally** below) after
+checking out `impl/v0.2-gate3`.
 
 ---
 

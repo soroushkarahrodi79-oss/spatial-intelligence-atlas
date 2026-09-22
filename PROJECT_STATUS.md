@@ -6,18 +6,23 @@
 
 ## 1. Status
 
-**ACTIVE_BOUNDED — V0.2 DOCUMENTATION ONLY**
+**ACTIVE_BOUNDED — V0.2 GATE 3 IMPLEMENTATION DRAFTED, PENDING MERGE**
 
-The deployed runtime remains the deliberately bounded maintenance release
-`v0.1.1`, published 2026-09-22 at commit `f116b7c`. It adds no capability and
-makes no schema change. The original `v0.1.0` release remains preserved at its
-tag (see §2).
+The runtime deployed to GitHub Pages (served from `main`) remains the
+deliberately bounded maintenance release `v0.1.1`, published 2026-09-22 at
+commit `f116b7c`. The original `v0.1.0` release remains preserved at its tag
+(see §2).
 
-A separate, bounded v0.2 documentation track is active. Gate 1 was approved and
-merged through PR #6 at `9edfa5a`; it changes the future meaning and design
-contract but does not alter the deployed runtime. Gate 2 is drafting the exact
-semantic records and commit-pinned sources. `index.html`, `styles.css`,
-`app.js`, and `data/atlas.json` remain locked until separate Gate 3 approval.
+Gate 1 (specification) was approved and merged through PR #6 at `9edfa5a`.
+Gate 2 (semantic content freeze) was drafted through PR #7 and **approved by
+the maintainer on 2026-09-22** in issue #5. Gate 3 (runtime and dataset
+implementation) has been drafted on branch `impl/v0.2-gate3`, migrating
+`index.html`, `styles.css`, `app.js`, and `data/atlas.json` to the v0.2
+contract; it is **not yet merged to `main`**. Because GitHub Pages deploys
+from `main`, merging that branch would make v0.2 the live artifact — this
+repository treats that merge as requiring the same explicit maintainer
+confirmation as Gate 4 (verification/release), not as implied by Gate 3
+drafting alone.
 
 ## 2. Reference release
 
@@ -29,15 +34,19 @@ semantic records and commit-pinned sources. `index.html`, `styles.css`,
 | Original release | `v0.1.0` — `d3f399cf7317ea3951a5ee4761b4de01f3731fa5` — 2026-09-05 |
 | Dataset schema | `0.1.0` (unchanged in `v0.1.1`) |
 | Gate 1 baseline (`main`) | `9edfa5a6afda27efea53c7ace92c5d7921bdbf67` (2026-09-22) |
+| Gate 2 content freeze (`main`) | `badd2a5321a998dfff5734275f26c37e317682e2` (2026-09-22), approved by maintainer 2026-09-22 |
+| Gate 3 implementation branch | `impl/v0.2-gate3`, not yet merged |
 
 Pull request #3 was merged as `f116b7c` and tagged `v0.1.1`. It changed the
 runtime copy and dataset content needed to distinguish stated input provenance
 from validation, causality, or decision sufficiency. Because the JSON shape did
 not change, `data/atlas.json` correctly retains `schema_version: "0.1.0"`;
 that value must not be read as the release tag. `v0.1.0` remains immutable at
-its original tag. PR #6 later approved the v0.2 specification and design
-contract without changing the artifact itself. Any future runtime or dataset
-change requires Gate 3 approval and a new release.
+its original tag. PR #6 approved the v0.2 specification and design contract;
+PR #7 froze the v0.2 semantic content; neither changed the deployed artifact.
+The Gate 3 implementation branch migrates the runtime and dataset per that
+contract but remains unmerged. Merging to `main` and cutting a v0.2 release
+requires separate, explicit maintainer confirmation (Gate 4).
 
 ## 3. Deployed v0.1.1 evidence state
 
@@ -91,9 +100,11 @@ labelled map of how five separate research artifacts relate conceptually,
 current as of the source descriptions consulted when `data/atlas.json` was
 authored.*
 
-For v0.2 during Gate 2, the maximum defensible framing is: *an approved design
-with a draft, source-pinned semantic content freeze*. It is not an implemented,
-deployed, or released v0.2 artifact.
+For v0.2 on the Gate 3 branch, the maximum defensible framing is: *an
+implemented, contract-conformant v0.2 artifact, reviewed but not yet merged,
+deployed, or released*. Until it is merged to `main` and a release is cut, it
+does not supersede the v0.1.1 claim ceiling above, which continues to govern
+the live GitHub Pages site.
 
 ## 5. Currently allowed changes
 
@@ -101,22 +112,25 @@ The following changes are currently allowed:
 
 - Fixing typos, broken links, or formatting in `README.md`, `SPEC.md`,
   `DESIGN_CONTRACT.md`.
-- Drafting and reviewing the Gate 2 semantic content in `SPEC.md`.
+- Implementing Gate 3 (`index.html`, `styles.css`, `app.js`,
+  `data/atlas.json`) on a review branch, per the approved Gate 2 content and
+  `DESIGN_CONTRACT.md`.
 - Correcting documentation so it distinguishes deployed v0.1.1 from the v0.2
-  documentation track.
+  implementation branch.
 - Re-triggering deployment (e.g. GitHub Pages) with no content change.
 
-Not currently allowed: changing any runtime file, migrating the dataset schema,
-implementing v0.2, changing the deployed site, or creating a v0.2 release.
+Not currently allowed without a separate, explicit maintainer confirmation:
+merging the Gate 3 branch to `main` (this changes the deployed GitHub Pages
+site), or creating a v0.2 release/tag.
 
 ## 6. v0.2 gate sequence
 
 | Gate | State | Authority |
 |---|---|---|
 | Gate 1 — specification and design | **APPROVED** | PR #6 / `9edfa5a` |
-| Gate 2 — semantic content and pinned sources | **DRAFT** | Documentation only |
-| Gate 3 — runtime and dataset implementation | **UNAUTHORISED** | Requires separate maintainer approval |
-| Gate 4 — verification and release | **UNAUTHORISED** | Requires Gate 3 completion |
+| Gate 2 — semantic content and pinned sources | **APPROVED** | Issue #5, 2026-09-22 |
+| Gate 3 — runtime and dataset implementation | **DRAFTED, PENDING MERGE** | Branch `impl/v0.2-gate3` |
+| Gate 4 — verification and release | **UNAUTHORISED** | Requires explicit maintainer confirmation to merge and release |
 
 Approval of one gate does not imply approval of the next.
 

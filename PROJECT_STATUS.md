@@ -6,27 +6,18 @@
 
 ## 1. Status
 
-**RELEASE_LOCKED**
+**ACTIVE_BOUNDED — V0.2 DOCUMENTATION ONLY**
 
-The repository holds a deliberately bounded maintenance release, `v0.1.1`,
-published 2026-09-22 at commit `f116b7c`. It clarifies input-evidence semantics
-and pins two source references; it adds no capability and makes no schema
-change. The original `v0.1.0` release remains preserved at its tag (see §2).
-`README.md` states the three source-of-truth
-documents (`SPEC.md`, `DESIGN_CONTRACT.md`, `data/atlas.json`) are **Locked**,
-and `DESIGN_CONTRACT.md` §9.1 caps the implementation at three files
-(`index.html`, `styles.css`, `app.js`) plus `data/atlas.json`, whose *schema*
-is explicitly frozen ("modifiable in content but not in schema"). Nothing in
-the repository indicates active feature development; the artifact is finished
-as specified for v0.1.
+The deployed runtime remains the deliberately bounded maintenance release
+`v0.1.1`, published 2026-09-22 at commit `f116b7c`. It adds no capability and
+makes no schema change. The original `v0.1.0` release remains preserved at its
+tag (see §2).
 
-This is not `PAUSED_PENDING_EVIDENCE`: the repository isn't waiting on
-evidence to resume a v0.1 effort — v0.1 is complete. It is not
-`ACTIVE_BOUNDED`: there is no ongoing development inside the bound, only a
-closed release. It is not `MAINTENANCE_ONLY` in the open-ended sense, because
-the contract itself (§9.1–9.2) forbids adding files or scope, not merely
-discourages it — the lock is structural, not a policy choice that could be
-loosened at will.
+A separate, bounded v0.2 documentation track is active. Gate 1 was approved and
+merged through PR #6 at `9edfa5a`; it changes the future meaning and design
+contract but does not alter the deployed runtime. Gate 2 is drafting the exact
+semantic records and commit-pinned sources. `index.html`, `styles.css`,
+`app.js`, and `data/atlas.json` remain locked until separate Gate 3 approval.
 
 ## 2. Reference release
 
@@ -37,21 +28,21 @@ loosened at will.
 | Published | 2026-09-22 |
 | Original release | `v0.1.0` — `d3f399cf7317ea3951a5ee4761b4de01f3731fa5` — 2026-09-05 |
 | Dataset schema | `0.1.0` (unchanged in `v0.1.1`) |
-| Audit baseline (`main`) | `f116b7c164ba0eda3ef88bb6ab8def46ede2d80e` (2026-09-22) |
+| Gate 1 baseline (`main`) | `9edfa5a6afda27efea53c7ace92c5d7921bdbf67` (2026-09-22) |
 
 Pull request #3 was merged as `f116b7c` and tagged `v0.1.1`. It changed the
 runtime copy and dataset content needed to distinguish stated input provenance
 from validation, causality, or decision sufficiency. Because the JSON shape did
 not change, `data/atlas.json` correctly retains `schema_version: "0.1.0"`;
 that value must not be read as the release tag. `v0.1.0` remains immutable at
-its original tag. Any future change to the *artifact itself* (`index.html`,
-`styles.css`, `app.js`, `data/atlas.json`) would need its own tag under §6.
+its original tag. PR #6 later approved the v0.2 specification and design
+contract without changing the artifact itself. Any future runtime or dataset
+change requires Gate 3 approval and a new release.
 
-## 3. Demonstrated vs. simulated / derived / provisional / unvalidated
+## 3. Deployed v0.1.1 evidence state
 
-The dataset (`data/atlas.json`, 31 nodes / 54 edges) carries an explicit,
-per-edge evidence classification. As declared in `README.md` and enforced by
-`SPEC.md` §1.2:
+The deployed dataset (`data/atlas.json`, 31 nodes / 54 edges) carries the
+v0.1.1 per-edge evidence classification documented in `README.md`:
 
 | Class | Meaning | v0.1.1 count |
 |---|---|---|
@@ -77,7 +68,7 @@ execute or integrate any of the five systems it describes (`SPEC.md` §1.1,
 
 ## 4. Claim ceiling
 
-Per `SPEC.md` §9 (binding, v0.1 non-goals), this repository and its rendered
+For the deployed v0.1.1 runtime, this repository and its rendered
 artifact may **not** be used to claim, imply, or be cited as:
 
 - Accuracy, validation, or operational readiness of HATI, FIRSTLOOK-MAD,
@@ -95,55 +86,39 @@ artifact may **not** be used to claim, imply, or be cited as:
 - Scientific support for a decision merely because its input-class floor is
   `INPUT: STATED`; that label records source-declared input provenance only.
 
-The maximum defensible framing is: *an explanatory, hand-authored, evidence-
+The maximum defensible framing of v0.1.1 is: *an explanatory, hand-authored, evidence-
 labelled map of how five separate research artifacts relate conceptually,
 current as of the source descriptions consulted when `data/atlas.json` was
 authored.*
 
-## 5. Allowed maintenance changes
+For v0.2 during Gate 2, the maximum defensible framing is: *an approved design
+with a draft, source-pinned semantic content freeze*. It is not an implemented,
+deployed, or released v0.2 artifact.
 
-Consistent with the lock in `DESIGN_CONTRACT.md` §9 and `SPEC.md` §9:
+## 5. Currently allowed changes
+
+The following changes are currently allowed:
 
 - Fixing typos, broken links, or formatting in `README.md`, `SPEC.md`,
   `DESIGN_CONTRACT.md`.
-- Correcting factual errors in `data/atlas.json` **content** (e.g. a
-  mis-transcribed quotation in a `basis` field) without changing the JSON
-  **schema**.
-- Accessibility, browser-compatibility, or correctness fixes to `index.html`,
-  `styles.css`, `app.js` that do not add a file, a dependency, a network
-  request, persistence, or any capability listed as forbidden in
-  `SPEC.md` §9.3–9.4 and `DESIGN_CONTRACT.md` §9.3.
+- Drafting and reviewing the Gate 2 semantic content in `SPEC.md`.
+- Correcting documentation so it distinguishes deployed v0.1.1 from the v0.2
+  documentation track.
 - Re-triggering deployment (e.g. GitHub Pages) with no content change.
-- Documentation-only additions that record facts about the existing release
-  (this file is one such addition).
 
-Not allowed under the current lock without first reopening development
-(§6): adding files beyond the three-file budget plus `data/atlas.json`,
-changing the `atlas.json` schema, resolving a `PROVISIONAL` edge to a
-substantive class, or adding any feature, integration, or scope not already
-in `SPEC.md` v0.1.
+Not currently allowed: changing any runtime file, migrating the dataset schema,
+implementing v0.2, changing the deployed site, or creating a v0.2 release.
 
-## 6. What would reopen development
+## 6. v0.2 gate sequence
 
-`README.md` and `SPEC.md` §1.2 defer exactly one class of change to a future
-version: **resolving a `PROVISIONAL` evidence edge to a substantive class
-(`REAL`, `DERIVED`, `CALIBRATED`, or `SIMULATED`) requires confirmation from
-the owner of the corresponding source system** (HATI, FIRSTLOOK-MAD, SNTO,
-FIELDOS, or FAB), and is explicitly deferred to v0.2. Absent such
-confirmation for a specific edge, the current `PROVISIONAL`/`MISSING`
-labelling stands and no development beyond §5 maintenance is warranted.
+| Gate | State | Authority |
+|---|---|---|
+| Gate 1 — specification and design | **APPROVED** | PR #6 / `9edfa5a` |
+| Gate 2 — semantic content and pinned sources | **DRAFT** | Documentation only |
+| Gate 3 — runtime and dataset implementation | **UNAUTHORISED** | Requires separate maintainer approval |
+| Gate 4 — verification and release | **UNAUTHORISED** | Requires Gate 3 completion |
 
-A second, narrower path exists: `DESIGN_CONTRACT.md` §9.2 permits **one**
-additional local asset if the artifact provably cannot satisfy `SPEC.md`
-without it (a v0.1 gap, not a new feature request). This exception is not
-invoked in v0.1; if ever invoked, the file and justification must be
-recorded in `README.md` per that section.
-
-No other trigger (new source system, feature request, aesthetic preference,
-or general "more content") is sufficient on its own to reopen development
-under the current contract; any such request would first require amending
-`SPEC.md`/`DESIGN_CONTRACT.md` themselves, which is a decision for the
-maintainer, not a maintenance action.
+Approval of one gate does not imply approval of the next.
 
 ## 7. Open issues and pull requests
 

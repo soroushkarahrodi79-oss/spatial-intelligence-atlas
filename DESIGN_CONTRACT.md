@@ -154,9 +154,7 @@ no pill shapes.
   offset ≤ 12% of edge length. No bundling, no orthogonal routing, no bezier
   flourishes.
 - Arrowheads: 5px, plain triangle, on `documents`, `reports`, and
-  `situated_in`. A source-backed `documented_relation` uses no arrowhead unless
-  the source itself establishes direction. There is no
-  `conceptually_adjacent` edge in v0.2.
+  `situated_in`. There is no generic entity-to-entity edge in v0.2.
 - Edges render **beneath** nodes, always.
 - Maximum edge opacity at rest: 0.55. Highlighted: 1.0. Dimmed: 0.12.
 
@@ -217,6 +215,9 @@ colour **and** a stroke pattern **and** a glyph; all three are required.
 
 Binding notes:
 
+- Only evidence-record nodes and their incoming `documents` edges use this
+  palette, keyed to the target record's `input_kind`. All other nodes and edges
+  are achromatic.
 - `substantiation` is always stated as text: `SOURCE-STATED`,
   `OWNER-ATTESTED`, or `NOT ESTABLISHED`. It receives no colour.
 - Outcomes are achromatic. `ABSTAIN`, `INSUFFICIENT EVIDENCE`, `NO-GO`, and
@@ -611,7 +612,7 @@ A reviewer can verify the finished artifact against this list alone.
 - [ ] `prefers-reduced-motion` yields instant repositioning (§6.3)
 - [ ] Readable and operable at 360px with the structured fallback (§7.3)
 - [ ] Full keyboard operation with a visible achromatic focus ring (§8.3)
-- [ ] No `conceptually_adjacent` edge or unsupported entity relation exists
+- [ ] No direct entity-to-entity edge or generic relationship type exists
 - [ ] FieldOS is visibly labelled `SUPPORTING INSTRUMENT`
 - [ ] Outcomes are achromatic and their claim ceilings are visible
 - [ ] The non-integration notice is visible in all three modes (SPEC §8)

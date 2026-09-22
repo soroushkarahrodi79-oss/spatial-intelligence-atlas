@@ -1,7 +1,9 @@
 # DESIGN_CONTRACT.md — Spatial Intelligence Atlas
 
-**Version:** 0.1.0
-**Status:** BINDING. This document constrains form. `SPEC.md` constrains meaning.
+**Target version:** 0.2.0
+**Status:** GATE 1 DRAFT — REVIEW REQUIRED — IMPLEMENTATION NOT AUTHORISED.
+This document proposes the form constraints for v0.2. `SPEC.md` proposes the
+meaning and behaviour. Releases `v0.1.0` and `v0.1.1` remain immutable.
 Where a visual choice is not covered here, choose the more restrained option.
 
 Everything in this document is a **limit**, not a suggestion. A limit stated as
@@ -24,7 +26,7 @@ The artifact should look like it was **printed**, then dimmed for the screen.
 ### 1.2 Four governing rules
 
 - **Colour is a semantic, not a decoration.** The only chromatic elements in the
-  entire artifact are the six evidence classes (§3.3). Everything else —
+  entire artifact are the evidence input kinds (§3.3). Everything else —
   chrome, type, panels, hairlines, node fills, focus rings — is achromatic.
   If you want to add a colour, the answer is no.
 - **Hairline over fill.** Structure is drawn with 1px rules and outlines.
@@ -83,7 +85,7 @@ outlined text, more than two font families.
 │  min-height 480px                        │  hairline left      │
 │                                          │                     │
 ├──────────────────────────────────────────┤                     │
-│  LEGEND  (fixed height 64px, hairline)   │                     │
+│  KEY     (fixed height 64px, hairline)   │                     │
 ├──────────────────────────────────────────┴─────────────────────┤
 │  PROVENANCE FOOTER      (fixed height 40px, hairline top)      │
 └────────────────────────────────────────────────────────────────┘
@@ -113,10 +115,11 @@ Each mode is a **banded** layout — anchors in one band, contributors in others
 Bands read as horizontal strata. This is what makes the artifact read as
 *spatial* rather than as a hairball.
 
-- TERRITORY: territories (upper band) / projects (middle band).
-- EVIDENCE: projects (top) / methods (middle, staggered two rows) / evidence
-  classes (bottom).
-- DECISIONS: decisions (top) / projects (middle) / methods (bottom, staggered).
+- TERRITORY: territories (upper band) / core cases (middle band) / supporting
+  instrument rail (lower edge).
+- EVIDENCE: entities (top) / evidence records (middle and lower bands).
+- DECISIONS: documented outcomes (top) / core cases (middle) / supporting
+  instrument rail (lower edge).
 
 Bands may be separated by a hairline rule at 8% opacity. Nothing stronger.
 
@@ -126,15 +129,16 @@ Form encodes type. Type is **never** encoded by colour.
 
 | Type | Form | Size (diameter / height) |
 |------|------|--------------------------|
-| `project` | Filled square, sharp corners | 16px |
+| `entity` where `kind: case` | Filled square, sharp corners | 16px |
+| `entity` where `kind: instrument` | Outlined square, 2px double rule | 16px |
 | `territory` | Outlined rectangle, 2px stroke, sharp corners | 20 × 12px |
-| `territory` where `is_null: true` | Same rectangle, **dashed** 3-3 stroke, no fill | 20 × 12px |
-| `method` | Small filled circle | 8px |
-| `evidence` | Outlined circle carrying the class glyph inside | 18px |
-| `decision` | Outlined diamond (square rotated 45°) | 16px |
+| `evidence_record` | Outlined circle carrying the input-kind glyph | 18px |
+| `outcome` | Outlined diamond (square rotated 45°) | 16px |
 
-`t-unbound` MUST use the dashed variant and MUST carry the visible label
-"No territory declared". Its distinction MUST survive greyscale printing.
+Case and instrument forms MUST be accompanied by the literal labels
+`CORE CASE` and `SUPPORTING INSTRUMENT` in the detail panel and structured
+fallback. Shape alone is insufficient. There is no synthetic null-territory
+node in v0.2.
 
 ### 2.6 Corner radius
 
@@ -149,20 +153,19 @@ no pill shapes.
 - Geometry: straight lines, or a single quadratic curve with control-point
   offset ≤ 12% of edge length. No bundling, no orthogonal routing, no bezier
   flourishes.
-- Arrowheads: 5px, plain triangle, on `yields_evidence` and `supports_decision`
-  only. **Never** on `conceptually_adjacent` (SPEC §1.1).
+- Arrowheads: 5px, plain triangle, on `documents`, `reports`, and
+  `situated_in`. There is no generic entity-to-entity edge in v0.2.
 - Edges render **beneath** nodes, always.
 - Maximum edge opacity at rest: 0.55. Highlighted: 1.0. Dimmed: 0.12.
 
 ### 2.8 Labels
 
-- Every `project`, `territory`, `evidence`, and `decision` node is
+- Every entity, territory, evidence-record, and outcome node is
   **permanently labelled**. Labels are not hover-only.
-- `method` labels are permanently visible in EVIDENCE and DECISIONS modes
-  (where methods are anchored in a staggered band with room for them). Methods
-  are hidden entirely in TERRITORY mode, so the question does not arise.
-- Labels sit 8px below their node, centred, and MUST NOT overlap. The stored
-  coordinates and the two-row stagger exist precisely to guarantee this.
+- Evidence-record labels are permanently visible in EVIDENCE mode. Outcome
+  labels are permanently visible in DECISIONS mode.
+- Labels sit 8px below their node, centred, and MUST NOT overlap. Stored
+  mode-specific coordinates and spacing exist precisely to guarantee this.
 - No label may be truncated with an ellipsis. If a label does not fit at the
   minimum supported viewport, the responsive fallback (§7.3) takes over.
 
@@ -175,13 +178,13 @@ no pill shapes.
 | Token | Value | Use |
 |-------|-------|-----|
 | `--bg` | `#0F1113` | Page ground |
-| `--surface` | `#15181B` | Detail panel, legend strip |
+| `--surface` | `#15181B` | Detail panel, key strip |
 | `--rule` | `#22262B` | Hairlines, borders |
 | `--rule-strong` | `#2E343A` | Active borders, band separators |
-| `--ink` | `#E8E6E3` | Primary text, project node fill |
+| `--ink` | `#E8E6E3` | Primary text, core-case node fill |
 | `--ink-2` | `#A7A9AD` | Secondary text, labels |
 | `--ink-3` | `#7E8288` | Muted text, counts, provenance footer |
-| `--edge` | `#3A4046` | Neutral edge (`edge.evidence == null`) |
+| `--edge` | `#3A4046` | Structural edge without input-kind encoding |
 
 ### 3.2 Computed contrast (against `--bg`, WCAG 2.x relative luminance)
 
@@ -195,42 +198,49 @@ no pill shapes.
 introduced.** `--rule`, `--rule-strong`, and `--edge` are decorative structure
 and are exempt, but MUST NOT be used for text.
 
-### 3.3 Evidence palette — the only colour in the artifact
+### 3.3 Evidence-input palette — the only colour in the artifact
 
-Each class has a colour **and** a stroke pattern **and** a glyph. All three are
-required; colour alone never carries meaning (§8 accessibility, SPEC A15).
+Colour encodes `input_kind` only. It does not encode research status,
+substantiation, outcome, project quality, or success. Each input kind has a
+colour **and** a stroke pattern **and** a glyph; all three are required.
 
-| Class | Hex | Contrast vs `--bg` | Dash pattern | Glyph |
-|-------|-----|--------------------|--------------|-------|
-| REAL | `#3FA98C` | **6.60 : 1** | solid | `●` filled circle |
-| DERIVED | `#5B9BD5` | **6.41 : 1** | `6 3` | `◐` half circle |
-| CALIBRATED | `#C9A227` | **7.88 : 1** | `2 3` | `◎` ringed circle |
-| SIMULATED | `#D98B3A` | **6.99 : 1** | `8 3 2 3` | `◇` diamond |
-| PROVISIONAL | `#8B9099` | **5.96 : 1** | `1 3` | `○` open circle |
-| MISSING | `#C46A78` | **5.16 : 1** | `3 3` (0.5px) | `⊘` slashed circle |
+| Input kind | Hex | Contrast vs `--bg` | Dash pattern | Glyph |
+|---|---|---|---|---|
+| OBSERVED | `#3FA98C` | **6.60 : 1** | solid | filled circle |
+| ACQUIRED | `#5B9BD5` | **6.41 : 1** | `6 3` | half circle |
+| DERIVED | `#C9A227` | **7.88 : 1** | `2 3` | ringed circle |
+| SIMULATED | `#D98B3A` | **6.99 : 1** | `8 3 2 3` | diamond |
+| REPORTED | `#8B9099` | **5.96 : 1** | `1 3` | open circle |
+| UNESTABLISHED | `#C46A78` | **5.16 : 1** | `3 3` (0.5px) | slashed circle |
 
-Notes that are binding:
+Binding notes:
 
-- PROVISIONAL is deliberately **near-achromatic**. Unsubstantiated should look
-  unsubstantiated. Do not "improve" it into a brighter hue.
-- Glyphs must be drawn as SVG shapes, **not** as text characters or an icon
-  font, so that rendering is identical across platforms.
-- These six values are the complete chromatic budget. No accent colour, no
-  brand colour, no hover colour, no success/error colour exists.
+- Only evidence-record nodes and their incoming `documents` edges use this
+  palette, keyed to the target record's `input_kind`. All other nodes and edges
+  are achromatic.
+- `substantiation` is always stated as text: `SOURCE-STATED`,
+  `OWNER-ATTESTED`, or `NOT ESTABLISHED`. It receives no colour.
+- Outcomes are achromatic. `ABSTAIN`, `INSUFFICIENT EVIDENCE`, `NO-GO`, and
+  `FUNCTIONAL TEST` use the same ink tokens and cannot resemble success/error
+  badges.
+- Glyphs are drawn as SVG shapes, not text characters or an icon font.
+- These six values are the complete chromatic budget. No brand, hover,
+  success, error, lifecycle-status, or outcome colour exists.
 - Focus rings, selection states, and hover states are achromatic (§8.3).
 
 ### 3.4 Colour-vision safety
 
 The palette separates on hue **and** lightness, but the binding guarantee is
 structural: **every colour distinction in the artifact is duplicated by a dash
-pattern and a glyph, and every edge's class is also stated as text in the detail
-panel.** The artifact must remain fully readable when rendered in greyscale.
+pattern and a glyph, and every encoded input kind is also stated as text in the
+detail panel.** The artifact must remain fully readable when rendered in
+greyscale.
 Verification requirement: view the finished artifact with a greyscale filter and
-confirm all six classes remain distinguishable by dash pattern alone.
+confirm all six input kinds remain distinguishable by dash pattern alone.
 
 ### 3.5 Theme
 
-Dark only in v0.1. No light mode, no theme toggle, no `prefers-color-scheme`
+Dark only in v0.2. No light mode, no theme toggle, no `prefers-color-scheme`
 branch. `color-scheme: dark` is declared so form controls and scrollbars match.
 
 ---
@@ -257,7 +267,7 @@ and offline-correct.
 | `display` | 28 / 32px | 500 | −0.02em | sans | Artifact title (once per page) |
 | `heading` | 18 / 24px | 500 | −0.01em | sans | Mode question, detail panel node name |
 | `body` | 14 / 20px | 400 | 0 | sans | Definitions, panel prose, notices |
-| `label` | 12 / 16px | 500 | +0.02em | sans | Node labels, legend, mode control |
+| `label` | 12 / 16px | 500 | +0.02em | sans | Node labels, evidence key, mode control |
 | `micro` | 11 / 14px | 400 | +0.04em | mono | Ids, counts, evidence tags, footer |
 
 No sixth size. No size between steps. Minimum type size in the artifact is
@@ -275,18 +285,17 @@ naturally satisfies this; the header notice must be constrained explicitly.
 
 ### 4.5 Case
 
-**Exactly one uppercase context:** the `label` step, used for the evidence class
-names, the mode control, and the legend. Everything else is sentence case. Node
-labels for projects, territories, methods, and decisions are **sentence case or
-their canonical casing** (e.g. "SOLWEIG", "Sentinel-2", "HATI" keep their real
-casing — that is canonical, not decoration).
+**Exactly one uppercase context:** the `label` step, used for evidence input
+kinds, outcome verdicts, role labels, and the mode control. Everything else is
+sentence case. Entity, territory, evidence-record, and outcome explanatory
+labels use sentence case or their canonical casing (e.g. "Sentinel-2" and
+"HATI" keep their real casing — that is canonical, not decoration).
 
 Title case is not used anywhere.
 
 ### 4.6 Numerals
 
-`font-variant-numeric: tabular-nums` on all counts and ids, so legend counts do
-not shift when filtered.
+`font-variant-numeric: tabular-nums` on all dates, counts, and ids.
 
 ---
 
@@ -294,41 +303,41 @@ not shift when filtered.
 
 ### 5.1 The complete interaction inventory
 
-Exactly five, as enumerated in SPEC §7:
+Exactly five, as enumerated in SPEC §6:
 
 1. Switch mode
 2. Hover / focus a node → highlight 1-hop neighbourhood + tooltip
 3. Select a node → detail panel
-4. Toggle an evidence class in the legend (EVIDENCE mode only)
+4. Open a declared source from the detail panel
 5. Reset view
 
 **Adding a sixth interaction is a contract violation.** Explicitly excluded:
 pan, zoom, drag, search, multi-select, right-click menu, keyboard shortcuts
-beyond those listed in §5.3, hover on edges, resizable panels, collapsible
-sections, tabs within the panel, tooltips on chrome, and any modal.
+beyond those listed in §5.3, hover on edges, filters, resizable panels,
+collapsible sections, tabs within the panel, source previews, tooltips on
+chrome, and any modal.
 
 ### 5.2 State model
 
-Total application state is three values:
+Total application state is two values:
 
 ```
 { mode: "territory" | "evidence" | "decisions",
-  selectedNodeId: string | null,
-  hiddenEvidenceClasses: Set<string> }
+  selectedNodeId: string | null }
 ```
 
-No history stack, no undo, no URL sync, no persistence. `localStorage` is not
-used. Reloading returns to the initial state: TERRITORY, nothing selected,
-nothing filtered.
+No history stack, no undo, no URL sync, no filter state, no persistence.
+`localStorage` is not used. Reloading returns to TERRITORY with nothing
+selected.
 
 ### 5.3 Keyboard contract
 
 | Key | Action |
 |-----|--------|
-| `Tab` / `Shift+Tab` | Move through: mode control → graph nodes (document order) → legend → reset → panel |
+| `Tab` / `Shift+Tab` | Move through: mode control → graph nodes (document order) → reset → panel and its source links |
 | `1` `2` `3` | Switch to TERRITORY / EVIDENCE / DECISIONS |
 | `←` `→` | When the mode control has focus, move between modes |
-| `Enter` / `Space` | Select the focused node; toggle the focused legend class |
+| `Enter` / `Space` | Select the focused node; activate a focused source link |
 | `Esc` | Deselect; return focus to the previously focused node |
 
 Keyboard focus and pointer hover produce **identical** highlight rendering.
@@ -344,7 +353,7 @@ wins; overlap must be avoided by the stored coordinates in the first place.
 ### 5.5 Latency budget
 
 Mode switch, hover highlight, and selection must be perceptually immediate.
-With 31 nodes and ~54 edges rendered as SVG, no virtualisation, throttling, or
+At the bounded v0.2 scale, no virtualisation, throttling, or
 `requestAnimationFrame` loop is required or permitted.
 
 ---
@@ -402,7 +411,8 @@ The full frame of §2.2. Graph canvas and 320px detail panel side by side.
   still shows an empty state.
 - Graph canvas takes full width; canvas inset reduces from 48px to 32px.
 - Header rail wraps to two rows; the non-integration notice stays visible.
-- `method` labels may reduce to the `micro` step (11px). No further reduction.
+- Evidence-record and outcome labels may reduce to the `micro` step (11px). No
+  further reduction.
 
 ### 7.3 Narrow — 360px to 639px: structured fallback
 
@@ -413,12 +423,13 @@ Instead the artifact renders a **structured outline** of the same data, from the
 same `atlas.json`, honouring the current mode:
 
 - Mode control becomes a full-width segmented control at the top.
-- The current mode's anchors become section headings (territories / evidence
-  classes / decision questions).
-- Under each anchor, its connected nodes are listed with their evidence glyph,
-  dash swatch, and class name as text.
+- The current mode's anchors become section headings (territories / entities /
+  documented outcomes).
+- Under each anchor, connected nodes are listed with role, input-kind glyph or
+  outcome label, and the relevant limitation as text.
 - Tapping a row opens the same detail content inline beneath it.
-- The legend becomes a horizontal, wrapping row of class chips with counts.
+- The evidence key becomes a horizontal, wrapping row of input kinds. It is
+  explanatory, not interactive.
 
 This fallback is **not** a degraded experience to be apologised for; it is the
 correct rendering of a graph at that width, and it must be designed with the
@@ -444,41 +455,45 @@ Target: **WCAG 2.2 Level AA**. The following are binding minimums.
 - The mode control is a `role="tablist"` with `role="tab"` items and
   `aria-selected`, or a fieldset of radios. Either is acceptable; a `<div>` of
   click handlers is not.
-- Legend toggles are real `<button>` elements with `aria-pressed`.
+- Source links are real `<a>` elements. They identify new-tab navigation in
+  their accessible names and use `rel="noopener noreferrer"`.
 
 ### 8.2 The graph
 
 - The `<svg>` carries `role="group"` and an `aria-label` naming the current mode
   and its question.
 - Each node is individually focusable (`tabindex="0"`) with an `aria-label` of
-  the form: *"HATI, project, Madrid, 5 connections"*.
+  the form: *"HATI, core case, Madrid, documented outcome: abstain, 3
+  connections"*.
 - Node focus order follows a documented, stable order: by type in SPEC §4 order,
   then by dataset order within type.
 - Edges are `aria-hidden="true"`; edge information is conveyed through the node
   `aria-label` and the detail panel, which is the accessible representation of
   the relationships.
-- An `aria-live="polite"` region announces: mode changes, selection changes, and
-  legend filter changes. It announces **state**, not decoration
-  (e.g. *"Evidence mode. 3 of 6 classes shown."*).
+- An `aria-live="polite"` region announces mode and selection changes. It
+  announces state, not decoration (e.g. *"Evidence mode. HATI selected."*).
 
 ### 8.3 Focus
 
 - Visible focus ring: **2px solid `--ink`, 2px offset**, on every focusable
   element including SVG nodes. Never removed, never replaced by a colour change
   alone.
-- Focus ring is achromatic so it never collides with evidence-class colour.
+- Focus ring is achromatic so it never collides with evidence-input colour.
 - `:focus-visible` is used for pointer users; keyboard focus is always shown.
 
-### 8.4 Colour independence (binding, SPEC A15)
+### 8.4 Colour independence (binding)
 
 No information is conveyed by colour alone, anywhere:
 
-- Evidence class → colour **+** dash pattern **+** glyph **+** text label.
+- Evidence input kind → colour **+** dash pattern **+** glyph **+** text label.
+- Substantiation → literal text; never colour alone.
+- Outcome type → literal text **+** diamond form; outcomes remain achromatic.
 - Current mode → colour **+** `aria-selected` **+** a filled underline rule
   **+** weight change on the label.
 - Selected node → colour **+** a 2px achromatic outline ring **+** its presence
   in the detail panel.
-- Null territory → dashed stroke **+** the literal label "No territory declared".
+- Supporting instrument → outlined double-rule form **+** the literal label
+  `SUPPORTING INSTRUMENT`.
 
 ### 8.5 Other
 
@@ -497,8 +512,8 @@ No information is conveyed by colour alone, anywhere:
 
 ### 9.1 The file budget (binding)
 
-After this preparation stage, the complete runtime implementation may add
-**no more than three files**:
+After Gates 1 and 2 are approved, the v0.2 runtime implementation remains
+limited to the existing three application files:
 
 ```
 index.html
@@ -506,8 +521,9 @@ styles.css
 app.js
 ```
 
-Plus `data/atlas.json`, which already exists and is **modifiable in content but
-not in schema**.
+Plus `data/atlas.json`. Its migration to the schema defined in SPEC §4 is
+authorised only at Gate 3. No second dataset, migration script, or generated
+copy may be added.
 
 ### 9.2 The one-asset exception, narrowly defined
 
@@ -520,8 +536,8 @@ background image, a texture, a screenshot, a basemap, a GeoJSON file, a licence
 badge, a second stylesheet, a second script, a service worker, a manifest, a
 config file, and a minified copy of anything.
 
-As of v0.1 the exception is **not invoked**. If a future implementer invokes it,
-they MUST record the file and the justification in `README.md`.
+As of this v0.2 draft the exception is **not invoked**. If a future implementer
+invokes it, they MUST record the file and the justification in `README.md`.
 
 ### 9.3 Absolute technical prohibitions
 
@@ -543,6 +559,10 @@ The artifact is **static and client-side**. It MUST NOT include or require:
   Tailwind, or graph-layout library
 - A test suite, CI configuration, or deployment configuration
 
+Ordinary user-initiated navigation through a declared HTTPS source link is not
+a runtime data request and is permitted. The application MUST NOT prefetch,
+preview, scrape, validate, or monitor the destination.
+
 ### 9.4 Implementation technique constraints
 
 - **Rendering:** inline **SVG**, authored via DOM APIs. Not `<canvas>` (loses
@@ -554,9 +574,9 @@ The artifact is **static and client-side**. It MUST NOT include or require:
   preprocessor, no CSS-in-JS, no utility framework.
 - **Data loading:** `app.js` fetches `data/atlas.json` at runtime.
   `atlas.json` content MUST NOT be duplicated or inlined into `index.html` or
-  `app.js` — one source of truth (SPEC A1). Because `file://` blocks `fetch`,
+  `app.js` — one source of truth. Because `file://` blocks `fetch`,
   the artifact requires a local static server; this is documented in `README.md`
-  and handled by the explicit error state required by SPEC A22.
+  and handled by an explicit visible error state.
 
 ### 9.5 Complexity ceiling
 
@@ -576,12 +596,15 @@ this document rather than a refactor:
 
 A reviewer can verify the finished artifact against this list alone.
 
-- [ ] Only `index.html`, `styles.css`, `app.js` were added (§9.1)
-- [ ] Zero network requests beyond the four local files (§9.3)
+- [ ] Runtime remains limited to `index.html`, `styles.css`, `app.js`, and
+  `data/atlas.json` (§9.1)
+- [ ] Zero runtime network requests beyond local files; external navigation is
+  explicit and source-declared (§9.3)
 - [ ] No framework, no build step, no package manager (§9.3)
 - [ ] Rendering is inline SVG (§9.4)
 - [ ] Node positions come from `atlas.json`; two loads are pixel-identical (§2.3)
-- [ ] Only the six evidence classes carry colour; all else achromatic (§1.2, §3.3)
+- [ ] Only the six evidence input kinds carry colour; all else is achromatic
+  (§1.2, §3.3)
 - [ ] Every colour distinction is duplicated by dash pattern and glyph (§3.4, §8.4)
 - [ ] Exactly five type sizes, two weights, one uppercase context (§4)
 - [ ] Exactly five interactions; no pan, zoom, drag, or search (§5.1)
@@ -589,6 +612,8 @@ A reviewer can verify the finished artifact against this list alone.
 - [ ] `prefers-reduced-motion` yields instant repositioning (§6.3)
 - [ ] Readable and operable at 360px with the structured fallback (§7.3)
 - [ ] Full keyboard operation with a visible achromatic focus ring (§8.3)
-- [ ] `conceptually_adjacent` edges have no arrowheads (§2.7)
-- [ ] The non-integration notice is visible in all three modes (SPEC §8.2)
+- [ ] No direct entity-to-entity edge or generic relationship type exists
+- [ ] FieldOS is visibly labelled `SUPPORTING INSTRUMENT`
+- [ ] Outcomes are achromatic and their claim ceilings are visible
+- [ ] The non-integration notice is visible in all three modes (SPEC §8)
 - [ ] Artifact remains legible in greyscale (§3.4)

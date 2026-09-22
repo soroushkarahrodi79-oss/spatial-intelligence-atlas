@@ -1,485 +1,460 @@
 # SPEC.md — Spatial Intelligence Atlas
 
 **Artifact:** Spatial Intelligence Atlas — Tourism, Risk & Decision Systems
-**Version:** 0.1.1 (maintenance release; tag `v0.1.1` at commit `f116b7c`,
-2026-09-22). The original `v0.1.0` release remains preserved at commit
-`d3f399c` (2026-09-05). Release `v0.1.1` changed evidence wording and pinned
-source references without changing the dataset schema, which remains `0.1.0`.
-This document remains the binding specification — "locked" means the
-implementation must conform to it, not that no implementation exists. See
-`PROJECT_STATUS.md` for the full release record.
-**Status of this document:** SOURCE OF TRUTH. Where this document and any other
-statement disagree, this document wins. `data/atlas.json` is the source of truth
-for *content*; this document is the source of truth for *meaning and behaviour*;
-`DESIGN_CONTRACT.md` is the source of truth for *form and limits*.
+
+**Target version:** 0.2.0
+
+**Document state:** GATE 1 DRAFT — REVIEW REQUIRED — IMPLEMENTATION NOT
+AUTHORISED
+
+**Gate record:** GitHub issue #5
+
+**Historical baseline:** releases `v0.1.0` and `v0.1.1` remain immutable.
+
+This document is the proposed source of truth for v0.2 meaning and behaviour.
+It does not alter the released v0.1 artifacts and does not authorise changes to
+`index.html`, `styles.css`, `app.js`, or `data/atlas.json`. On approval, this
+document and `DESIGN_CONTRACT.md` become the implementation contract for v0.2.
 
 ---
 
 ## 1. Purpose
 
-The Spatial Intelligence Atlas is a small, static, client-side visual artifact
-that **explains the relationships between five existing research/software
-systems** by placing them in a shared conceptual space.
+The Spatial Intelligence Atlas is a small, static, client-side research map
+that shows, for a deliberately selected set of tourism and spatial-decision
+projects:
 
-It answers three questions, and only these three:
+1. **where the work is situated**;
+2. **what evidence or input is actually documented**; and
+3. **what result was reached, including abstention, insufficient evidence, or
+   no-go outcomes**.
 
-1. **Where does this work happen?** (TERRITORY)
-2. **What is it actually founded on?** (EVIDENCE)
-3. **What decisions could it inform?** (DECISIONS)
+The north star is:
 
-The atlas is an **explanatory** artifact, not an operational one. It renders a
-fixed, hand-authored dataset. It performs no computation over live data, makes
-no predictions, and does not execute any part of the systems it describes.
+> From projects to defensible decisions: what was studied, what result was
+> documented, what remains unsupported, and where the reader can verify it.
 
-### 1.1 The non-integration principle (binding)
+The atlas is explanatory, not operational. It renders a fixed, hand-authored
+and source-pinned dataset. It performs no live analysis, prediction, ranking,
+repository integration, or scientific validation.
 
-The five systems described here are **separate**. The atlas MUST NOT imply, by
-visual language, wording, or layout, that they form a pipeline, a product suite,
-a data flow, or a technically integrated stack.
+### 1.1 Selection principle (binding)
 
-Consequences that are binding on implementation:
+Inclusion is earned by a documented research question, a reviewable evidence
+record, and a bounded result. A repository is not included merely because it
+exists, is visually attractive, or belongs to the same portfolio.
 
-- Project-to-project relationships use exactly one edge type,
-  `conceptually_adjacent`, which is **symmetric and non-directional**.
-- No arrowheads, no flow animation, and no directional gradients may be drawn on
-  `conceptually_adjacent` edges.
-- The five projects MUST be laid out as **siblings**, never as a chain or funnel.
-- No copy anywhere in the UI may use the words *pipeline*, *integration*,
-  *stack*, *platform*, *end-to-end*, or *unified system* in reference to the
-  relationship between projects.
+The initial v0.2 scope is:
 
-### 1.2 The evidence-discipline principle (binding)
+| Entity | Role | Required presentation |
+|---|---|---|
+| HATI | Core research case | Published/frozen case with its documented abstention result and claim ceiling |
+| SNTO | Core research case | Active bounded research with real Sentinel-2 inputs and an insufficient-evidence result |
+| CHALUS | Core research case | Closed no-go case whose verification standard was not met |
+| FieldOS | Supporting instrument | Functionally tested field-capture instrument; not an equal scientific case |
 
-The atlas asserts an evidence status **only where the source project description
-explicitly supports it**. Everything else is labelled `PROVISIONAL` (asserted,
-not substantiated) or `MISSING` (not declared at all).
+FIRSTLOOK-MAD and FAB remain part of the immutable v0.1 history but are not
+primary v0.2 entities. Dizin, SNTO Alpine, Iran Soil, JOB, and other portfolio
+repositories remain excluded until a later gate establishes a documented
+question, evidence record, result, and reason for inclusion.
 
-This is deliberate. A visibly provisional graph is a correct result, not a
-defect. The implementation MUST NOT "fill in" a more confident status to make
-the visualisation look richer.
+### 1.2 Non-integration principle (binding)
+
+The included entities are separate. The atlas MUST NOT imply a pipeline,
+technical integration, shared runtime, data exchange, common validation, or
+product suite.
+
+- There is no project-to-project relationship in the v0.2 schema.
+- Adding any direct entity relationship requires a later gate that names its
+  semantics and pins a primary source; it cannot be improvised as content.
+- Conceptual similarity may be described in bounded prose; it does not create
+  an edge.
+- FieldOS has no entity-to-entity edge in v0.2. A later documented executed use
+  may justify a new gate, but does not authorise an ad hoc content edit.
+- No directional flow, arrow, or layout may imply data passing between cases.
+
+The set of project-to-project relationships in v0.2 is required to be empty.
+
+### 1.3 Evidence and result discipline (binding)
+
+The atlas keeps three dimensions separate:
+
+- **research status** — where an entity sits in its own lifecycle;
+- **evidence record** — what input, observation, derivation, simulation, or
+  owner attestation is documented;
+- **research outcome** — what the reviewed source actually concluded.
+
+None is a proxy for the others. Real input does not establish validation,
+causality, decision sufficiency, or a positive result. A no-go or abstention is
+a legitimate documented outcome, not a failed card to hide.
 
 ---
 
 ## 2. Audience
 
-Ordered by priority. Design conflicts resolve toward the higher-priority reader.
+Design conflicts resolve toward the higher-priority reader.
 
-| # | Reader | What they need in the first 30 seconds |
-|---|--------|----------------------------------------|
-| 1 | **Research reviewer / examiner** | What these systems are, what they rest on, where the claims are weak |
-| 2 | **Domain peer** (tourism, climate risk, geospatial) | Territory, method vocabulary, evidence provenance |
-| 3 | **Technical reader** (engineer, data scientist) | The conceptual model and its explicit limits |
-| 4 | **Institutional / non-specialist reader** | A legible, non-hyped overview that does not overstate maturity |
+| # | Reader | First-30-second need |
+|---|---|---|
+| 1 | Research reviewer / examiner | Question, documented result, limitation, source |
+| 2 | Tourism or spatial-planning peer | Territory, evidence provenance, decision boundary |
+| 3 | Technical reader | Data model and explicit non-integration limits |
+| 4 | Institutional reader | A legible overview without maturity or operational hype |
 
-Not in the audience: end users of any of the five systems, prospective
-customers, and anyone expecting an operational tool.
+The atlas is not for operational end users, customers, incident response, or
+live destination management.
 
 ---
 
 ## 3. Conceptual model
 
-The atlas is a **single typed graph** rendered through three fixed projections.
-There is one dataset; the three modes are three views of it, not three datasets.
+The atlas is one typed graph rendered through three projections. The graph does
+not model software architecture.
+
+```text
+CASE ── situated_in ──> TERRITORY
+  │
+  ├── documents ──────> EVIDENCE_RECORD
+  │
+  └── reports ────────> OUTCOME
+
+INSTRUMENT ── documents ──> EVIDENCE_RECORD
 
 ```
-                    ┌──────────────┐
-        operates_in │  TERRITORY   │  where the work is situated
-        ┌──────────►└──────────────┘
-        │
-┌───────┴──────┐  applies_method   ┌──────────────┐  yields_evidence  ┌──────────────┐
-│   PROJECT    ├──────────────────►│    METHOD    ├──────────────────►│   EVIDENCE   │
-└───────┬──────┘                   └──────┬───────┘                   │    CLASS     │
-        │                                 │                           └──────────────┘
-        │        supports_decision        │  supports_decision
-        │        ┌────────────────────────┘
-        ▼        ▼
-   ┌──────────────────┐
-   │     DECISION     │  a question the work could help answer
-   └──────────────────┘
 
-   PROJECT ◄──── conceptually_adjacent ────► PROJECT   (symmetric, NOT integration)
-```
-
-Three rules govern the whole model:
-
-- **R1 — Verbatim vocabulary.** Every `method` node label is a term taken
-  verbatim from a source project description. Terms that were folded into
-  another node are recorded in that node's `folds` array; nothing is silently
-  discarded.
-- **R2 — Decisions are questions, not outputs.** Every `decision` node is
-  phrased as an interrogative. The atlas does not claim any system produces a
-  decision; it claims a system could *inform* a question. This avoids asserting
-  capability that the source descriptions do not establish.
-- **R3 — Support before status.** Every edge carries `support`, one of
-  `stated` (present in the source description, with a `basis` quotation) or
-  `authored` (asserted by the atlas author). An edge may terminate at a
-  substantive evidence class (`e-real`, `e-derived`, `e-calibrated`,
-  `e-simulated`) **only** if `support == "stated"`. Authored assertions must
-  terminate at `e-provisional` or `e-missing`.
+The detail panel, not the edge count, carries the scientific meaning. Every
+core case exposes its question, result, claim ceiling, lifecycle status,
+review date, and primary sources.
 
 ---
 
-## 4. Node types
+## 4. Content model
 
-Five types. Counts are fixed for v0.1 and match `data/atlas.json` exactly.
+### 4.1 `entity`
 
-### 4.1 `project` — 5 nodes
+An entity has `kind: "case" | "instrument"` and these required fields:
 
-The five systems being related. Visual weight 3 (heaviest).
+| Field | Requirement |
+|---|---|
+| `id` | Stable unique identifier |
+| `kind` | `case` or `instrument` |
+| `label` | Public project name |
+| `role` | One-sentence reason for inclusion |
+| `research_question` | Exact bounded question, or `null` for an instrument |
+| `research_status` | `active`, `frozen`, `closed`, or `maintenance` |
+| `reviewed_at` | ISO date of the source review |
+| `source_ids` | Sources supporting identity, question, and lifecycle status |
+| `layout` | Deterministic coordinates for all three modes |
 
-| id | Label | Territory | Notes |
-|----|-------|-----------|-------|
-| `p-hati` | HATI — Heat-Aware Tourism Intelligence | Madrid | Extreme heat and tourism |
-| `p-firstlook` | FIRSTLOOK-MAD | Madrid | Wildfire / interurban environmental risk |
-| `p-snto` | SNTO — Smart Tourism Observatory | Sierra de Guadarrama | Destination intelligence |
-| `p-fieldos` | FIELDOS | *not declared* | Field observation infrastructure |
-| `p-fab` | FAB | *not declared* | Visual/research interface experimentation |
+`instrument` is a distinct kind, not a weaker case. FieldOS MUST use
+`kind: "instrument"`, carry no research question invented by the atlas, and be
+visually separated from the three cases.
 
-`p-fab` carries `evidence_declaration: "e-missing"`. The source description
-states FAB is *"not a data source unless explicitly represented as such."* No
-such explicit representation exists in v0.1, therefore FAB has **zero**
-`applies_method` edges and is rendered as a non-evidentiary node.
+Results, claim ceilings, territories, and evidence records are linked through
+relationship objects (§4.6). They MUST NOT be duplicated as entity fields.
+`research_status` describes lifecycle only. Publication is represented by a
+source object, functional testing by an outcome, and neither changes the
+lifecycle vocabulary.
 
-### 4.2 `territory` — 3 nodes
+### 4.2 `territory`
 
-| id | Label | Kind |
-|----|-------|------|
-| `t-madrid` | Madrid | urban / municipal |
-| `t-guadarrama` | Sierra de Guadarrama | protected destination |
-| `t-unbound` | No territory declared | **null territory** (`is_null: true`) |
+A territory is a declared spatial context, not geometry. Required fields are
+`id`, `label`, `kind`, `basis`, and `source_ids`.
 
-`t-unbound` is a **modelling device, not a place**. It exists so that an
-undeclared territory is *visible* rather than silently absent. It MUST be
-rendered differently from real territories (see DESIGN_CONTRACT §2.5) and MUST
-be labelled in a way that makes its nature obvious.
+The initial territory set covers Madrid, Sierra de Guadarrama, and the bounded
+Northern Iran / Western Mazandaran study area used by CHALUS. FieldOS has no
+territory node merely to fill a gap; its lack of a case-specific territory is
+stated in its detail content.
 
-### 4.3 `method` — 12 nodes
+No basemap, coordinates, administrative precision, or boundary geometry is
+implied.
 
-Analytical, technical, or procedural concepts, labelled verbatim from source
-descriptions. Visual weight 1 (lightest).
+### 4.3 `evidence_record`
 
-`m-utci`, `m-solweig`, `m-heat-exposure`, `m-scenarios`, `m-decision-engine`,
-`m-environmental-signals`, `m-real-data-acquisition`, `m-evidence-provenance`,
-`m-sentinel2`, `m-open-data`, `m-evidence-classification`,
-`m-field-collection`.
+An evidence record describes a documented input or evidence-producing step. It
+is not a quality score. Required fields:
 
-Folded terms (recorded in node `folds`, not lost):
-- `m-sentinel2` folds *"remote sensing"*
-- `m-field-collection` folds *"field evidence"*, *"observations"*,
-  *"voice-to-text notes"*
-- `m-heat-exposure` folds *"heat exposure"* as its own label (no fold)
-- `m-evidence-provenance` and `m-evidence-classification` are **governance
-  methods**: they describe how evidence is audited and labelled, not how it is
-  produced. They therefore have **no** `yields_evidence` edges. This is correct,
-  not an omission.
+| Field | Allowed values / rule |
+|---|---|
+| `id`, `label` | Stable identifier and concise public label |
+| `input_kind` | `observed`, `acquired`, `derived`, `simulated`, `reported`, or `unestablished` |
+| `substantiation` | `source_stated`, `owner_attested`, or `not_established` |
+| `basis` | Exact bounded paraphrase or short quotation |
+| `limitation` | What this record does not establish |
+| `source_ids` | At least one pinned source; `not_established` points to the reviewed source set in which support was absent |
 
-Terms promoted out of `method` into `decision` (recorded on the decision node's
-`basis`): *"spatial eligibility"*, *"spatial risk"*, *"destination monitoring"*.
+`input_kind` and `substantiation` MUST NOT be collapsed into a single scale.
+The interface MUST NOT rank them or calculate a maturity score.
 
-### 4.4 `evidence` — 6 nodes (the status vocabulary)
+Input-kind definitions are binding:
 
-The six evidence classes are modelled as nodes so the atlas can display its own
-epistemics. Each carries `rank`, `color`, `dash`, and `glyph`.
+| Value | Meaning |
+|---|---|
+| `observed` | Direct observation recorded for the bounded study or test |
+| `acquired` | Existing real-world data obtained from a declared external source |
+| `derived` | Produced from other records through a declared transformation |
+| `simulated` | Produced by a model under stated assumptions or conditions |
+| `reported` | Supplied as a report or assertion rather than directly observed by the project |
+| `unestablished` | The reviewed sources do not establish an input kind |
 
-| id | Label | Definition | Substantiation rank |
-|----|-------|------------|---------------------|
-| `e-real` | REAL | Directly observed or acquired data | 2 (substantiated) |
-| `e-derived` | DERIVED | Computed from other evidence via a declared transformation | 2 |
-| `e-calibrated` | CALIBRATED | Adjusted or validated against an independent reference | 2 |
-| `e-simulated` | SIMULATED | Produced by a model under specified conditions | 2 |
-| `e-provisional` | PROVISIONAL | Asserted by this atlas but not substantiated by the source description | 1 |
-| `e-missing` | MISSING | Not declared by the source description; the absence is itself the finding | 0 |
+Substantiation values are mutually exclusive and use this precedence:
 
-**Ranking is deliberately coarse.** Ranks express whether an input evidence
-class is stated in the source description, not quality, validity, causal
-attribution, or sufficiency for a decision.
-The four rank-2 classes are **not** ordered relative to one another; SIMULATED is
-not "worse" than DERIVED. The implementation MUST NOT sort, colour-ramp, or
-score the rank-2 classes against each other.
+- `owner_attested` — a first-party action or observation is claimed by the
+  owner but has not been independently verified;
+- `source_stated` — a pinned source documents the record and it is not being
+  represented specifically as an unverified owner attestation;
+- `not_established` — the reviewed source set does not establish the record.
 
-**Unused classes in v0.1.** `e-derived` and `e-calibrated` have **zero**
-incoming edges, because no source description explicitly supports either status.
-`e-simulated` is **also zero**: the one concept that named it (`m-scenarios`) is
-held at `e-provisional`, because the supplied description names the concept but
-does not explicitly establish its evidence class (§1.2). This is a correct
-outcome of §1.2. The legend MUST still render all three classes, with an
-explicit count of `0`. Hiding an empty class is a specification violation.
+### 4.4 `outcome`
 
-### 4.5 `decision` — 5 nodes
+An outcome is the result documented by a reviewed source. Required fields:
+`id`, `outcome_type`, `statement`, `claim_ceiling`, `source_ids`, and
+`reviewed_at`.
 
-Interrogatives (rule R2). Visual weight 2.
+Allowed `outcome_type` values are:
 
-| id | Question | Grounded in |
-|----|----------|-------------|
-| `d-eligibility` | Where is intervention spatially eligible? | HATI: "spatial eligibility", "decision engine" |
-| `d-scenario` | How do outcomes differ across scenarios? | HATI: "scenarios" |
-| `d-risk` | Where is spatial risk concentrated? | FIRSTLOOK-MAD: "spatial risk" |
-| `d-monitoring` | Is the destination changing? | SNTO: "destination monitoring" |
-| `d-observed` | What was actually observed on the ground? | FIELDOS: "field evidence, observations" |
+- `bounded_finding`
+- `abstain`
+- `insufficient_evidence`
+- `no_go`
+- `functional_test`
 
-**Total: 31 nodes.**
+These values are categorical, not ordinal. Publication belongs in
+`research_status`, not in `outcome_type`. A `bounded_finding` is not
+automatically stronger than `no_go`; the underlying question and evidence
+boundary control interpretation.
 
----
+The initial content MUST preserve these distinctions:
 
-## 5. Edge types
+- HATI: the exact reviewed abstention / no-robust-difference result;
+- SNTO: insufficient evidence to prioritise the reviewed management action;
+- CHALUS: no-go because the historical-verification standard was not met;
+- FieldOS: a bounded owner-attested functional field run, not scientific
+  validation or production readiness.
 
-Five types. Every edge carries `id`, `type`, `source`, `target`, `support`
-(`stated` | `authored`), `basis` (string), and `evidence`
-(evidence-class id or `null`).
+### 4.5 `source`
 
-| type | source → target | Directed? | Arrowhead? | Meaning |
-|------|-----------------|-----------|------------|---------|
-| `operates_in` | project → territory | yes | no | The project declares activity in this territory |
-| `applies_method` | project → method | yes | no | The project's description names this method |
-| `yields_evidence` | method → evidence | yes | yes | Applying this method produces evidence of this class |
-| `supports_decision` | project \| method → decision | yes | yes | This could inform this question |
-| `conceptually_adjacent` | project ↔ project | **no** | **never** | Sibling relationship. **Not integration.** (§1.1) |
+Every substantive claim resolves to a declared source object:
 
-### 5.1 Edge styling invariant (binding)
+| Field | Requirement |
+|---|---|
+| `id` | Stable unique identifier |
+| `label` | Human-readable source title |
+| `kind` | `repository`, `commit`, `release`, `publication`, `brief`, or `closeout` |
+| `url` | HTTPS URL opened only by explicit user action |
+| `pinned_ref` | Commit SHA, release tag, DOI, or immutable document identifier |
+| `accessed_at` | ISO date |
 
-**Every edge's colour and stroke pattern is driven by `edge.evidence` and
-nothing else.** When `edge.evidence` is `null`, the edge renders as a neutral
-hairline. There is no per-edge-type colour. This keeps colour meaning
-one-dimensional and is the reason the palette is restricted (DESIGN_CONTRACT §3).
+A branch URL without `pinned_ref` is insufficient as the sole support for a
+result or claim ceiling. Every outbound UI link MUST correspond to one source
+object; arbitrary links in prose are forbidden.
 
-### 5.2 Data invariants (must be checkable by inspection)
+### 4.6 `relationship`
 
-- **I1** — Every `edge.source` and `edge.target` resolves to an existing node id.
-- **I2** — Every edge's `(source.type, target.type)` pair is legal for its `type`
-  per the table above.
-- **I3** — For `yields_evidence` edges, `edge.evidence == edge.target`.
-- **I4** — If `edge.evidence ∈ {e-real, e-derived, e-calibrated, e-simulated}`
-  then `edge.support == "stated"` and `edge.basis` is a non-empty quotation.
-- **I5** — Every node has `layout` coordinates for all three modes, each in
-  `[0, 1]`.
-- **I6** — `p-fab` has zero `applies_method` edges.
-- **I7** — No `conceptually_adjacent` edge is duplicated in reverse.
+Allowed relationship types are `situated_in`, `documents`, and `reports`.
 
----
+Every relationship has only `id`, `source`, `target`, and `type`. Its legal
+pairs are `case → territory`, `entity → evidence_record`, and
+`entity → outcome`, respectively. The target territory, evidence record, or
+outcome carries the basis and sources; duplicating them on the edge is
+forbidden. There is no generic or direct entity-to-entity relationship type in
+v0.2.
 
-## 6. The three interaction modes
+### 4.7 Data invariants
 
-Exactly three. No fourth mode may be added in v0.1. Modes are switched, never
-combined.
-
-### 6.1 TERRITORY
-
-**Question:** Where does this work happen?
-
-- **Anchors:** the 3 `territory` nodes, in a row across the upper third.
-- **Visible node types:** `territory`, `project`.
-- **Visible edge types:** `operates_in`, `conceptually_adjacent`.
-- **The point of the mode:** two of five projects have no declared territory.
-  `t-unbound` must make this legible at a glance.
-
-### 6.2 EVIDENCE
-
-**Question:** What is this actually founded on?
-
-- **Anchors:** the 6 `evidence` nodes, in a row across the lower area, in fixed
-  vocabulary order: REAL, DERIVED, CALIBRATED, SIMULATED, PROVISIONAL, MISSING.
-- **Visible node types:** `evidence`, `method`, `project`.
-- **Visible edge types:** `applies_method`, `yields_evidence`.
-- **Layout:** three tiers — projects (top), methods (middle, staggered),
-  evidence classes (bottom).
-- **Legend:** all six classes, always, with counts. `DERIVED 0` and
-  `CALIBRATED 0` are shown, not hidden (§4.4).
-- **Filter:** legend entries toggle their class on/off. This is the only filter
-  in the artifact.
-- **The point of the mode:** the graph is provisional-heavy. That is the finding.
-
-### 6.3 DECISIONS
-
-**Question:** What decisions could this inform?
-
-- **Anchors:** the 5 `decision` nodes, in a row across the upper area.
-- **Visible node types:** `decision`, `project`, `method`.
-- **Visible edge types:** `supports_decision`, `applies_method`.
-- **Input-class floor:** for each decision, the implementation computes the
-  **minimum declared evidence-status rank** across all methods with a
-  `supports_decision` edge into it, and displays it as one of three states:
-  `INPUT: MISSING` (0), `INPUT: PROVISIONAL` (1), `INPUT: STATED` (2). It MUST
-  NOT display a rank-2 class name as the floor, because rank-2 classes are
-  unordered (§4.4). This floor describes the provenance class of linked method
-  inputs only. It MUST NOT be presented as validation, causal attribution, or
-  evidence that the decision question can be answered adequately.
-  - **Governance methods are excluded.** `m-evidence-provenance` and
-    `m-evidence-classification` have no `yields_evidence` edge (§4.3) and are
-    skipped in the computation. They are not treated as rank 0.
-  - Project-level `supports_decision` edges are also excluded; only methods
-    contribute a rank.
-  - Expected v0.1 result, which doubles as a correctness check:
-    `d-eligibility` INPUT: PROVISIONAL, `d-scenario` INPUT: PROVISIONAL,
-    `d-risk` INPUT: PROVISIONAL, `d-monitoring` INPUT: PROVISIONAL,
-    `d-observed` INPUT: STATED.
-- `p-fab` has no `supports_decision` edges and is parked at the left margin in a
-  visibly inert state, labelled as such.
-- **The point of the mode:** every question is reachable, but the lowest
-  declared input class linked to most of them is provisional. Reachability is
-  not evidence that a question has been answered.
+- **I1** — Every referenced id resolves to an existing object.
+- **I2** — Every core case has a non-null question, status, review date, and
+  pinned source, and is linked to at least one territory, evidence record, and
+  outcome carrying the exact result and claim ceiling.
+- **I3** — Every instrument is explicitly typed and visually separated from
+  core cases.
+- **I4** — Every outcome and evidence record, including an explicit
+  `not_established` absence record, resolves to at least one declared source.
+- **I5** — Every source used for a substantive claim has a `pinned_ref`.
+- **I6** — Every outbound link resolves to a declared source URL.
+- **I7** — No entity-to-entity relationship exists.
+- **I8** — Every evidence record and outcome has exactly one incoming entity
+  relationship; the parent link is not duplicated inside the target object.
+- **I9** — Every visible node has deterministic coordinates for each mode.
+- **I10** — No vocabulary encodes an ordinal project maturity or quality score.
 
 ---
 
-## 7. Interaction behaviour
+## 5. The three modes
 
-Five interactions. No sixth. (Limits are enforced in DESIGN_CONTRACT §5.)
+Exactly three modes exist. They are projections of one dataset, not separate
+stories.
 
-### 7.1 Mode switch
-- Control: a three-item segmented control, always visible.
-- Keyboard: `1`, `2`, `3`; also arrow keys when the control has focus.
-- Node positions animate between the two modes' stored coordinates.
-- Selection is **preserved** across a mode switch if the selected node is
-  visible in the new mode; otherwise selection clears.
-- The mode change is announced via an ARIA live region.
+### 5.1 TERRITORY — Where was the work situated?
 
-### 7.2 Hover / focus (highlight)
-- Highlights the node and its direct (1-hop) neighbourhood.
-- All non-neighbourhood elements drop to a reduced opacity; **nothing is
-  removed** from the DOM.
-- Shows a small tooltip: node label + type + (for methods) its evidence class.
-- Hover and keyboard focus produce **identical** visual results.
+- Shows territories, core cases, and the supporting-instrument rail.
+- Shows only source-backed `situated_in` relationships.
+- FieldOS appears in the instrument rail with “No case-specific territory
+  assigned”; it is not connected to a synthetic null place.
+- Territory nodes are conceptual anchors, never map geometry.
 
-### 7.3 Select (click / Enter)
-- Opens the detail panel for that node.
-- Panel contents, in order:
-  1. Label and type
-  2. One-sentence definition
-  3. `basis` — the source phrase the node was drawn from
-  4. `folds` — any terms folded into this node (if present)
-  5. Connections, grouped by edge type, each showing `support` and `evidence`
-- Selecting a second node replaces the panel; it does not stack.
-- `Esc` deselects and returns focus to the previously focused node.
+### 5.2 EVIDENCE — What is actually documented?
 
-### 7.4 Legend filter (EVIDENCE mode only)
-- Toggling a class dims (never deletes) all edges and methods of that class.
-- Toggle state is announced. Toggling all classes off is permitted and shows an
-  explicit empty-state message.
+- Shows entities and their evidence records.
+- Each evidence record exposes `input_kind`, `substantiation`, `basis`,
+  limitation, and sources.
+- No evidence floor, composite score, maturity rank, or project ordering is
+  calculated.
+- Missing or unestablished support remains visible rather than being silently
+  omitted.
 
-### 7.5 Reset
-- A single "Reset view" control clears selection and all filters and returns to
-  TERRITORY mode.
+### 5.3 DECISIONS — What result was documented?
 
-### Explicitly excluded from v0.1
-No pan. No zoom. No node dragging. No free-text search. No URL state / deep
-linking. No export. No tooltips on edges. No context menus. No modals.
+- Shows entities and their outcome nodes.
+- The mode question concerns documented results, not hypothetical uses.
+- Outcome labels state the verdict before explanatory copy: for example
+  `ABSTAIN`, `INSUFFICIENT EVIDENCE`, `NO-GO`, or `FUNCTIONAL TEST`.
+- Every outcome displays its claim ceiling and primary-source link in the
+  detail panel.
+- The browser performs no inference over evidence records to generate an
+  outcome.
+
+---
+
+## 6. Interaction behaviour
+
+Exactly five interaction families are authorised:
+
+1. **Switch mode** using the persistent three-item control.
+2. **Hover or focus a node** to highlight its one-hop neighbourhood.
+3. **Select a node** to populate the detail panel.
+4. **Open a declared source** from the detail panel by explicit activation.
+5. **Reset view** to TERRITORY mode with no selection.
+
+Source links open with `target="_blank"` and `rel="noopener noreferrer"`. Their
+accessible name includes the source label and “opens in a new tab”. Opening a
+source is ordinary navigation; the application does not fetch, preview,
+scrape, or validate remote content.
+
+Selection survives a mode switch only when the selected object is visible in
+the destination mode. `Esc` clears selection and returns focus. Hover and
+keyboard focus produce identical highlighting.
+
+Explicitly excluded: pan, zoom, dragging, search, filtering, multi-select,
+export, URL state, persistence, edge tooltips, modal dialogs, source previews,
+and automatic navigation.
+
+---
+
+## 7. Detail-panel contract
+
+The detail panel is the primary accessible representation of meaning. Content
+order is fixed.
+
+For a case:
+
+1. label and `CORE CASE`;
+2. research question;
+3. documented result;
+4. claim ceiling;
+5. research status and `reviewed_at`;
+6. territory;
+7. evidence records;
+8. primary sources.
+
+For an instrument:
+
+1. label and `SUPPORTING INSTRUMENT`;
+2. role;
+3. documented functional result;
+4. limitations;
+5. research status and `reviewed_at`;
+6. evidence records;
+7. primary sources.
+
+For evidence, outcome, and territory nodes, the panel shows the node statement,
+basis, limitation or claim ceiling where applicable, parent entity, and
+sources. No field may be replaced by marketing copy.
 
 ---
 
 ## 8. Information hierarchy
 
-Reading order on first paint, top to bottom, is fixed:
+First-paint reading order is:
 
-1. **Title block** — "Spatial Intelligence Atlas" / "Tourism, Risk & Decision
-   Systems", plus a one-line statement of what the artifact is.
-2. **Non-integration notice** — a permanently visible, non-dismissible line:
-   *"Five separate systems. Related conceptually, not technically integrated."*
-   This is not a tooltip and not a footnote. It is structural.
-3. **Mode control** — three modes, current mode obvious without colour alone.
-4. **Mode question** — the current mode's question rendered as a subhead
-   (e.g. "What is this actually founded on?").
-5. **Graph canvas** — the largest element on the page.
-6. **Legend** — evidence classes with counts (EVIDENCE mode), or the current
-   mode's key.
-7. **Detail panel** — right side on wide viewports; empty state prompts
-   "Select a node".
-8. **Provenance footer** — dataset version, node/edge counts, and the sentence:
-   *"Evidence status is asserted only where the source description supports it.
-   PROVISIONAL means asserted, not verified."*
+1. title and one-line purpose;
+2. permanent non-integration notice;
+3. mode control and current mode question;
+4. graph canvas;
+5. role/outcome key;
+6. detail panel;
+7. provenance footer with release, schema version, review date, and the
+   statement: “Inputs, status, and outcomes are separate. Real input does not
+   establish validation or decision sufficiency.”
 
-### Visual weight ladder
-`project` (3) > `territory` / `decision` / `evidence` (2) > `method` (1).
-Edge weight never exceeds node weight; edges are hairlines throughout.
+The interface MUST make `CORE CASE` and `SUPPORTING INSTRUMENT` visible in text,
+not only by shape or position.
 
 ---
 
 ## 9. Explicit non-goals
 
-The artifact **does not**, and in v0.1 must not:
+The v0.2 artifact MUST NOT:
 
-1. Integrate, connect to, or read from any of the five source repositories.
-2. Represent a data pipeline or runtime dependency between the projects.
-3. Display a real map, basemap, tiles, coordinates, or geographic projection.
-   Territories are **conceptual anchors**, not geometry.
-4. Claim accuracy, validation, or operational readiness for any system.
-5. Assign an evidence status not explicitly supported by the source text.
-6. Represent the author's biography, CV, publication list, or career timeline.
-7. Perform any computation over real data.
-8. Include a backend, database, API, authentication, telemetry, analytics, or
-   runtime AI of any kind.
-9. Load anything over the network at runtime — no CDN, no webfont, no external
-   image, no remote JSON.
-10. Require a build step, bundler, package manager, or framework.
-11. Rank the five projects, score them, or imply maturity ordering.
-12. Use narrative, promotional, or marketing language.
-13. Provide search, export, printing, sharing, or persistence features.
-
----
-
-## 10. v0.1 acceptance criteria
-
-The implementation is complete when **all** of the following are true. Each is
-independently verifiable by inspection.
-
-### Data
-- **A1** — `data/atlas.json` is loaded at runtime and is the *only* source of
-  graph content. No node, edge, label, or coordinate is hard-coded in `app.js`.
-- **A2** — All seven invariants I1–I7 (§5.2) hold against the shipped dataset.
-- **A3** — Node counts render as: 5 project, 3 territory, 12 method, 6 evidence,
-  5 decision = 31.
-
-### Modes
-- **A4** — Exactly three modes exist and are reachable by pointer and keyboard.
-- **A5** — Each mode shows only its declared node and edge types (§6).
-- **A6** — Node positions in each mode match the stored `layout` coordinates for
-  that mode; no physics simulation, no randomness, no layout library. Two loads
-  produce pixel-identical layouts.
-- **A7** — EVIDENCE mode renders all six legend entries, including
-  `DERIVED 0` and `CALIBRATED 0`.
-- **A8** — DECISIONS mode shows an input-class floor for each decision as
-  INPUT: MISSING / INPUT: PROVISIONAL / INPUT: STATED, never as a rank-2 class
-  name, and explains that the floor is not validation or decision sufficiency.
-
-### Semantics
-- **A9** — Edge colour and dash pattern derive solely from `edge.evidence`
-  (§5.1); `null` renders as a neutral hairline.
-- **A10** — `conceptually_adjacent` edges render with no arrowhead, no
-  direction, and no animation.
-- **A11** — The non-integration notice (§8.2) is present, visible in all three
-  modes, and not dismissible.
-- **A12** — `t-unbound` is visually distinguished from real territories and its
-  label makes clear it denotes an undeclared territory.
-- **A13** — `p-fab` renders with zero method edges and is described in its
-  detail panel as not an evidence source.
-- **A14** — Every node's detail panel shows its `basis`.
-
-### Accessibility & form
-- **A15** — Every colour-encoded distinction has a redundant non-colour encoding
-  (stroke pattern **and** text label).
-- **A16** — Full keyboard operation: mode switch, node traversal, select,
-  deselect, legend toggle, reset.
-- **A17** — `prefers-reduced-motion: reduce` removes all transitions.
-- **A18** — No horizontal page scroll at any viewport width from 360px upward.
-- **A19** — All contrast ratios meet the values locked in DESIGN_CONTRACT §3.
-
-### Scope
-- **A20** — The repository contains exactly `index.html`, `styles.css`,
-  `app.js`, `data/atlas.json`, plus the three markdown documents. No other
-  runtime file, unless DESIGN_CONTRACT §9.2's narrow exception is invoked and
-  documented in README.
-- **A21** — Opening the artifact from a local static server works with zero
-  network requests beyond `index.html`, `styles.css`, `app.js`,
-  `data/atlas.json`.
-- **A22** — If `data/atlas.json` fails to load, the page renders a clear,
-  styled explanation and the command to serve the directory — never a blank
-  page and never a console-only error.
+1. integrate with or read from source repositories at runtime;
+2. imply technical integration or data exchange between entities;
+3. display a real map, basemap, tiles, route geometry, or projection;
+4. claim scientific validation, causal attribution, operational readiness, or
+   management sufficiency beyond a pinned source;
+5. infer tourism demand, visitor pressure, revenue, closure, restriction, or
+   investment effects not established by the reviewed source;
+6. rank projects, compute maturity, or turn outcomes into a success ladder;
+7. become a CV, repository catalogue, publication list, or chronological
+   portfolio;
+8. perform live computation over research data;
+9. include a backend, database, authentication, telemetry, analytics, or
+   runtime AI;
+10. load remote data, scripts, styles, fonts, images, or source previews;
+11. require a framework, package manager, build step, or layout library;
+12. use promotional language or conceal abstention and no-go outcomes.
 
 ---
 
-## 11. Deferred to v0.2+ (recorded, not authorised)
+## 10. Gate 1 acceptance criteria
 
-Listed so a later implementer does not mistake them for oversights:
-territory geometry / real basemap; resolving PROVISIONAL edges to substantive
-classes via source-owner confirmation; per-project temporal dimension;
-additional projects; deep linking; printable export.
+This design is ready for implementation review only when all are true:
 
-None of these may appear in v0.1.
+- **A1** — Scope contains exactly three core cases and one supporting
+  instrument unless a new gate amends the set.
+- **A2** — FIRSTLOOK-MAD and FAB are absent from the primary graph and remain
+  preserved in v0.1 history.
+- **A3** — Every core case has a pinned primary source, exact result, claim
+  ceiling, lifecycle status, and review date.
+- **A4** — FieldOS is never presented as an equal research case and has no
+  entity-to-entity edge; a documented executed use would require a later gate.
+- **A5** — The schema separates entity, territory, evidence record, outcome,
+  source, and relationship objects.
+- **A6** — No all-pairs or default conceptual project graph exists.
+- **A7** — No direct entity-to-entity relationship type or edge exists.
+- **A8** — DECISIONS mode reports outcomes; it does not calculate them.
+- **A9** — Every external link is declared in `source` data and requires an
+  explicit user action.
+- **A10** — No status, evidence kind, or outcome is treated as a project score.
+- **A11** — All three modes remain deterministic and usable from 360px upward.
+- **A12** — Full keyboard operation, non-colour redundancy, and reduced-motion
+  behaviour satisfy `DESIGN_CONTRACT.md`.
+- **A13** — The runtime remains fully static and makes no network request except
+  user-initiated navigation to a declared source.
+- **A14** — The v0.1.0 and v0.1.1 tags and release assets remain untouched.
+- **A15** — A separate implementation gate approves exact content and pinned
+  sources before any runtime or dataset change.
+
+---
+
+## 11. Gate sequence
+
+1. **Gate 1 — specification:** review this document and
+   `DESIGN_CONTRACT.md`. No runtime implementation.
+2. **Gate 2 — content freeze:** verify exact questions, outcomes, claim
+   ceilings, statuses, source URLs, pinned refs, and review dates.
+3. **Gate 3 — implementation:** change the runtime and migrate
+   `data/atlas.json` only after Gates 1 and 2 pass.
+4. **Gate 4 — verification/release:** test invariants, accessibility,
+   responsive behaviour, claim wording, links, and release provenance.
+
+No later gate is implied by approval of an earlier one.

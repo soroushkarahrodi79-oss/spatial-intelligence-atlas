@@ -113,10 +113,14 @@ Each evidence record carries two separate, never-collapsed axes:
 - **`substantiation`** — `source_stated`, `owner_attested`, or
   `not_established` (how well-supported the record is).
 
-Every node carries normalised `[0, 1]` layout coordinates for **all three
-modes**. Layout is fully deterministic — no force simulation, no physics, no
-randomness, no layout library. Two page loads at the same viewport size
-produce pixel-identical output.
+Each visible node carries deterministic normalised `[0, 1]` layout coordinates
+for **the modes in which it appears** — entities in all three modes,
+territories in TERRITORY, evidence records in EVIDENCE, and outcomes in
+DECISIONS. Not every node stores coordinates for all three modes; a node is
+only positioned in the modes it is visible in (`SPEC.md` invariant I9). Layout
+is fully deterministic — no force simulation, no physics, no randomness, no
+layout library. Two page loads at the same viewport size produce
+pixel-identical output.
 
 Every source is commit-pinned (`pinned_ref`) and every outbound link in the
 UI resolves to exactly one declared source object; arbitrary links in prose

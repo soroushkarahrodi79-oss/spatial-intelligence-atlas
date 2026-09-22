@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Immersive Globe Atlas — Prototype — Spatial Intelligence Atlas</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Vendored, self-contained. Globe.GL 2.46.2 (MIT) bundles three.js; no network at runtime. -->
+  <script defer src="vendor/globe.gl.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div id="proto-banner" role="note">
+    Experimental prototype — not a release. Reads the deployed <code>v0.2.0</code> dataset read-only; adds representative geographic locators (not study geometry).
+  </div>
+  <header class="rail">
+    <div class="identity">
+      <h1>Immersive Globe Atlas</h1>
+      <p id="subtitle">Tourism, Risk &amp; Decision Systems — prototype</p>
+    </div>
+    <div class="controls">
+      <p id="notice">Three research cases and one supporting instrument. Documented separately — never integrated, combined, or ranked.</p>
+      <div id="modes" role="tablist" aria-label="Atlas perspective"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="stage" aria-labelledby="question">
+      <div class="question-rail">
+        <h2 id="question">Loading atlas…</h2>
+        <span id="mode-count" class="micro"></span>
+      </div>
+
+      <div id="error" hidden role="alert"></div>
+
+      <!-- Territory / globe view -->
+      <div id="territory-view" hidden>
+        <div id="globe-wrap">
+          <div id="globe" aria-hidden="true"></div>
+          <div id="globe-fallback" hidden>
+            <h3>3D globe unavailable</h3>
+            <p class="micro">WebGL is not available in this browser, so the interactive globe cannot render. The same territorial information is listed below, and the Evidence and Decisions perspectives are fully available.</p>
+            <ul id="fallback-list"></ul>
+          </div>
+        </div>
+        <div class="nav-rail" aria-label="Fly to a case territory">
+          <span class="micro nav-label">Fly to:</span>
+          <div id="nav-buttons"></div>
+        </div>
+      </div>
+
+      <!-- Evidence / Decisions reading view -->
+      <div id="reading-view" hidden>
+        <div id="case-picker" role="group" aria-label="Select a case"></div>
+        <div id="reading"></div>
+      </div>
+
+      <div class="legend-rail">
+        <div id="legend" aria-label="Perspective key"></div>
+        <button id="reset" type="button">Reset view</button>
+      </div>
+    </section>
+
+    <aside id="detail" tabindex="-1" aria-label="Case details">
+      <h2>Select a case</h2>
+      <p>Choose a location on the globe, a “Fly to” control, or a case above to inspect its documented question, evidence, outcome, claim ceiling and sources.</p>
+    </aside>
+  </main>
+
+  <footer>
+    <span id="dataset-counts" class="micro"></span>
+    <p>Representative locators only — not study geometry, boundaries, or routes. Inputs, status, and outcomes are separate. Real input does not establish validation or decision sufficiency.</p>
+  </footer>
+
+  <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <noscript><p>Enable JavaScript to load the prototype from its local dataset.</p></noscript>
+</body>
+</html>

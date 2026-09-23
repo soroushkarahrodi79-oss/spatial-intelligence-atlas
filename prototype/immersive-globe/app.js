@@ -89,7 +89,59 @@ function sourceList(ids) {
 }
 
 /* ---------- globe ---------- */
+const CLUSTER_ALT = () => (geo.cluster_altitude_threshold || 1.4);
+const HOME = { lat: 34, lng: 10, altitude: 2.4 };
+let clusters = [], memberToCluster = new Map(), clustered = true;
+
+function buildClusters() {
+  clusters = (geo.clusters || []).map(c => {
+    const pts = c.members.map(id => geoById.get(id)).filter(Boolean);
+    const lat = pts.reduce((s, p) => s + p.lat, 0) / pts.length;
+    const lng = pts.reduce((s, p) => s + p.lng, 0) / pts.length;
+    return { ...c, lat, lng, pts };
+  });
+  memberToCluster = new Map();
+  clusters.forEach(c => c.members.forEach(m => memberToCluster.set(m, c)));
+}
+// Deterministic label set.
+// - World scale (clustered): a multi-member cluster collapses to one shared
+//   regional label; singletons keep their own label.
+// - Closer zoom (expanded): every point keeps its dot, but within a multi-member
+//   cluster only ONE verified label is shown at a time (the selected case, or the
+//   primary member if none is selected). Because Globe.GL label text and dot
+//   separation scale together with zoom, this — not altitude — is what prevents
+//   two labels ~0.5° apart from overprinting. Coordinates are never moved.
+function computeLabels(isClustered) {
+  const out = [];
+  if (isClustered) {
+    const hidden = new Set();
+    clusters.forEach(c => {
+      if (c.members.length > 1) {
+        out.push({ kind: 'cluster', id: c.id, label: c.label, lat: c.lat, lng: c.lng });
+        c.members.forEach(m => hidden.add(m));
+      }
+    });
+    geo.reference_points.forEach(p => {
+      if (!hidden.has(p.entity_id)) out.push({ kind: 'point', entity_id: p.entity_id, label: p.short_label, lat: p.lat, lng: p.lng });
+    });
+  } else {
+    geo.reference_points.forEach(p => {
+      const c = memberToCluster.get(p.entity_id);
+      let show = true;
+      if (c && c.members.length > 1) {
+        const selectedInCluster = c.members.includes(state.caseId);
+        show = selectedInCluster ? (state.caseId === p.entity_id) : (c.members[0] === p.entity_id);
+      }
+      out.push({ kind: 'point', entity_id: p.entity_id, label: show ? p.short_label : '', lat: p.lat, lng: p.lng });
+    });
+  }
+  return out;
+}
+function applyLabels() { if (globeReady) world.labelsData(computeLabels(clustered)); }
+function setClustered(next) { if (next !== clustered) { clustered = next; applyLabels(); } }
+
 function initGlobe(features) {
+  buildClusters();
   if (!webglSupported() || typeof Globe === 'undefined') { $('globe-fallback').hidden = false; renderFallback(); return; }
   try {
     world = Globe()(($('globe')))
@@ -99,30 +151,39 @@ function initGlobe(features) {
       .showAtmosphere(true)
       .atmosphereColor('#4a5a6a')
       .atmosphereAltitude(0.16)
-      .polygonsData(features)
+      .polygonsData([])
       .polygonCapColor(() => 'rgba(28,34,40,0.65)')
       .polygonSideColor(() => 'rgba(0,0,0,0)')
       .polygonStrokeColor(() => '#3A4046')
       .polygonAltitude(0.006)
-      .labelsData(geo.reference_points)
+      .labelsData(computeLabels(true))
       .labelLat(d => d.lat).labelLng(d => d.lng)
-      .labelText(d => d.short_label)
-      .labelSize(1.3)
-      .labelDotRadius(0.6)
-      .labelColor(() => '#E8E6E3')
+      .labelText(d => d.label)
+      .labelSize(d => d.kind === 'cluster' ? 1.15 : 1.3)
+      .labelDotRadius(d => d.kind === 'cluster' ? 0.75 : 0.6)
+      .labelColor(d => d.kind === 'cluster' ? '#A7A9AD' : '#E8E6E3')
       .labelResolution(2)
-      .onLabelClick(d => { selectCase(d.entity_id); flyTo(d.entity_id); })
+      .onLabelClick(d => {
+        if (d.kind === 'cluster') { flyToLatLng(d.lat, d.lng, 0.6); announce(`${d.label}: zooming in to individual cases.`); }
+        else { selectCase(d.entity_id); flyTo(d.entity_id); }
+      })
+      .onZoom(pov => setClustered(pov.altitude > CLUSTER_ALT()))
       .onGlobeClick(() => { /* no-op: interaction is via labels/controls */ });
     world.globeMaterial().color.set('#12161A');
     const ctrl = world.controls();
     ctrl.enableZoom = true;
     ctrl.autoRotate = !reduced.matches;
-    ctrl.autoRotateSpeed = 0.35;
+    ctrl.autoRotateSpeed = 0.32;
     // Stop ambient rotation on first user interaction.
     ctrl.addEventListener('start', () => { ctrl.autoRotate = false; });
     globeReady = true;
     sizeGlobe();
-    world.pointOfView({ lat: 38, lng: 12, altitude: 2.4 }, 0);
+    world.pointOfView({ ...HOME }, 0);
+    // Defer the heavy country-outline tessellation off the critical path so the
+    // globe and labels are interactive first; borders fade in a moment later.
+    const paintBorders = () => { if (globeReady) world.polygonsData(features); };
+    if ('requestIdleCallback' in window) requestIdleCallback(paintBorders, { timeout: 1500 });
+    else setTimeout(paintBorders, 200);
   } catch (e) {
     console.error('Globe init failed:', e);
     world = null; globeReady = false;
@@ -134,13 +195,21 @@ function sizeGlobe() {
   const wrap = $('globe-wrap');
   world.width(wrap.clientWidth).height(wrap.clientHeight);
 }
+function flyToLatLng(lat, lng, altitude) {
+  if (!globeReady) return;
+  if (world.controls()) world.controls().autoRotate = false;
+  const target = { lat, lng, altitude };
+  world.pointOfView(target, reduced.matches ? 0 : 1100);
+  // Ensure label state matches the destination even if onZoom does not fire.
+  setClustered(altitude > CLUSTER_ALT());
+}
 function flyTo(id) {
   const p = geoById.get(id);
   if (!p) return; // FieldOS / no location
-  if (globeReady) {
-    if (world.controls()) world.controls().autoRotate = false;
-    world.pointOfView({ lat: p.lat, lng: p.lng, altitude: 1.5 }, reduced.matches ? 0 : 1100);
-  }
+  // Members of a multi-point cluster get a closer altitude so nearby sibling
+  // labels separate legibly rather than overprinting.
+  const inCluster = memberToCluster.has(id) && memberToCluster.get(id).members.length > 1;
+  flyToLatLng(p.lat, p.lng, inCluster ? 0.45 : 0.9);
 }
 function renderFallback() {
   const list = $('fallback-list'); list.replaceChildren();
@@ -247,11 +316,13 @@ function renderEvidence() {
 }
 
 /* ---------- decisions / reading strip (STEP 5) ---------- */
-function readStep(index, heading, node) {
+function readStep(num, heading, kids) {
   const box = el('div', null, 'read-step');
-  box.append(el('span', index, 'step-index'));
+  box.append(el('span', num, 'read-num'));
   box.append(el('h3', heading));
-  node.forEach(n => box.append(n));
+  const body = el('div', null, 'read-body');
+  kids.forEach(k => body.append(k));
+  box.append(body);
   return box;
 }
 function renderDecisions() {
@@ -263,12 +334,11 @@ function renderDecisions() {
   note.append(el('p', 'Reading order, not an asserted causal pipeline. Each step is documented independently by the pinned sources; the sequence is how to read the case, not a claim that one step caused the next.'));
   wrap.append(note);
 
-  const arrow = () => el('div', '↓', 'read-arrow');
+  const strip = el('div', null, 'read-strip');
 
   // 1. Research question (or role for the instrument)
-  wrap.append(readStep('1 · Research question', e.kind === 'case' ? 'Question' : 'Role',
+  strip.append(readStep('1', e.kind === 'case' ? 'Research question' : 'Role',
     [el('p', e.research_question || e.role)]));
-  wrap.append(arrow());
 
   // 2. Documented evidence
   const records = evidenceFor(e.id);
@@ -281,13 +351,11 @@ function renderDecisions() {
     d.append(el('p', r.basis));
     evNodes.push(d);
   });
-  wrap.append(readStep('2 · Documented evidence', 'Evidence records', evNodes.length ? evNodes : [el('p', 'None declared.')]));
-  wrap.append(arrow());
+  strip.append(readStep('2', 'Documented evidence', evNodes.length ? evNodes : [el('p', 'None declared.')]));
 
   // 3. Limitations (per record)
   const lims = records.map(r => el('p', `${r.label}: ${r.limitation}`));
-  wrap.append(readStep('3 · Limitations', 'What the evidence does not establish', lims.length ? lims : [el('p', 'None declared.')]));
-  wrap.append(arrow());
+  strip.append(readStep('3', 'What the evidence does not establish', lims.length ? lims : [el('p', 'None declared.')]));
 
   // 4. Documented outcome
   const out = outcomeFor(e.id);
@@ -296,14 +364,14 @@ function renderDecisions() {
     const v = el('p'); v.append(el('span', verdictLabel[out.outcome_type], 'verdict'));
     outNodes.push(v, el('p', out.statement));
   }
-  wrap.append(readStep('4 · Documented outcome', 'Outcome', outNodes.length ? outNodes : [el('p', 'None declared.')]));
-  wrap.append(arrow());
+  strip.append(readStep('4', 'Documented outcome', outNodes.length ? outNodes : [el('p', 'None declared.')]));
 
   // 5. Claim ceiling
-  wrap.append(readStep('5 · Claim ceiling', 'How far this may be taken', [el('p', out ? out.claim_ceiling : '—')]));
+  strip.append(readStep('5', 'Claim ceiling — how far this may be taken', [el('p', out ? out.claim_ceiling : '—')]));
 
-  // sources
-  const src = el('div', null, 'read-step');
+  wrap.append(strip);
+
+  const src = el('div', null, 'read-sources');
   src.append(el('h3', 'Primary sources'));
   src.append(sourceList(e.source_ids));
   wrap.append(src);
@@ -376,6 +444,7 @@ function updateCount() {
 /* ---------- selection ---------- */
 function selectCase(id) {
   state.caseId = id;
+  if (globeReady && !clustered) applyLabels();
   markNav(); markPicker();
   renderDetail();
   if (state.mode === 'evidence') renderEvidence();
@@ -420,15 +489,30 @@ async function start() {
     $('reset').addEventListener('click', () => {
       state.caseId = null; renderDetail(); markNav(); markPicker();
       switchMode('territory');
-      if (globeReady) world.pointOfView({ lat: 38, lng: 12, altitude: 2.4 }, reduced.matches ? 0 : 900);
+      if (globeReady) { setClustered(true); world.pointOfView({ ...HOME }, reduced.matches ? 0 : 900); }
+      $('modes').children[0].focus();
     });
     document.addEventListener('keydown', ev => {
       if (ev.altKey || ev.ctrlKey || ev.metaKey) return;
       const order = ['territory', 'evidence', 'decisions'];
-      if (['1', '2', '3'].includes(ev.key)) { ev.preventDefault(); const i = Number(ev.key) - 1; switchMode(order[i]); $('modes').children[i].focus(); }
+      if (['1', '2', '3'].includes(ev.key) && !/^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName)) {
+        ev.preventDefault(); const i = Number(ev.key) - 1; switchMode(order[i]); $('modes').children[i].focus();
+      }
+      if (ev.key === 'Escape' && state.caseId) {
+        ev.preventDefault();
+        const prev = state.caseId;
+        state.caseId = null; renderDetail(); markNav(); markPicker();
+        if (globeReady && !clustered) applyLabels();
+        if (state.mode === 'evidence') renderEvidence();
+        if (state.mode === 'decisions') renderDecisions();
+        const scope = state.mode === 'territory' ? $('nav-buttons') : $('case-picker');
+        const btn = scope.querySelector(`[data-case="${prev}"]`);
+        (btn || $('modes').children[0]).focus();
+        announce('Selection cleared.');
+      }
     });
     new ResizeObserver(() => sizeGlobe()).observe($('globe-wrap'));
-    reduced.addEventListener('change', () => { if (globeReady && world.controls()) world.controls().autoRotate = false; });
+    reduced.addEventListener('change', () => { if (globeReady && world.controls()) world.controls().autoRotate = !reduced.matches; });
 
     switchMode('territory');
     renderDetail();
@@ -446,4 +530,14 @@ async function start() {
     );
   }
 }
+/* Minimal read-only hook for browser-based verification/review. No side effects. */
+window.__proto = {
+  labels: () => (typeof computeLabels === 'function' ? computeLabels(clustered) : []),
+  clustered: () => clustered,
+  mode: () => state.mode,
+  caseId: () => state.caseId,
+  globeReady: () => globeReady,
+  autoRotate: () => !!(world && world.controls && world.controls() && world.controls().autoRotate)
+};
+
 start();

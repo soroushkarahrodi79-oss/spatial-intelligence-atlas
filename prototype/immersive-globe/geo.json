@@ -2,6 +2,15 @@
   "prototype": "immersive-globe",
   "note": "Representative geographic reference points for the Immersive Globe prototype. These are approximate LOCATORS for orientation on a globe only. They are NOT the bounded study-area geometries, administrative boundaries, or route geometry used by the underlying research, and they carry no scientific meaning. FieldOS is a supporting instrument with no geographic location and is intentionally absent from this file. Per-point coordinate sources are recorded in SOURCES_AND_LICENSES.md.",
   "geometry_disclaimer": "representative_point — not study geometry, not a boundary, not a route",
+  "clusters": [
+    {
+      "id": "cl-central-spain",
+      "label": "Central Spain",
+      "members": ["c-hati-pedestrian", "c-snto-pnsg"],
+      "note": "World-scale shared locator for two nearby but INDEPENDENT cases (Madrid and the Sierra de Guadarrama, ~60 km apart). This is a proximity-only cartographic grouping, not a relationship between the cases. Zoom in to reveal each verified individual label."
+    }
+  ],
+  "cluster_altitude_threshold": 1.4,
   "reference_points": [
     {
       "entity_id": "c-hati-pedestrian",

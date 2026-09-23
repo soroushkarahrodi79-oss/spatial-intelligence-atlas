@@ -117,12 +117,12 @@ function computeLabels(isClustered) {
     const hidden = new Set();
     clusters.forEach(c => {
       if (c.members.length > 1) {
-        out.push({ kind: 'cluster', id: c.id, label: c.label, lat: c.lat, lng: c.lng });
+        out.push({ kind: 'cluster', id: c.id, label: c.label, lat: c.lat, lng: c.lng, selected: c.members.includes(state.caseId) });
         c.members.forEach(m => hidden.add(m));
       }
     });
     geo.reference_points.forEach(p => {
-      if (!hidden.has(p.entity_id)) out.push({ kind: 'point', entity_id: p.entity_id, label: p.short_label, lat: p.lat, lng: p.lng });
+      if (!hidden.has(p.entity_id)) out.push({ kind: 'point', entity_id: p.entity_id, label: p.short_label, lat: p.lat, lng: p.lng, selected: p.entity_id === state.caseId });
     });
   } else {
     geo.reference_points.forEach(p => {
@@ -132,7 +132,7 @@ function computeLabels(isClustered) {
         const selectedInCluster = c.members.includes(state.caseId);
         show = selectedInCluster ? (state.caseId === p.entity_id) : (c.members[0] === p.entity_id);
       }
-      out.push({ kind: 'point', entity_id: p.entity_id, label: show ? p.short_label : '', lat: p.lat, lng: p.lng });
+      out.push({ kind: 'point', entity_id: p.entity_id, label: show ? p.short_label : '', lat: p.lat, lng: p.lng, selected: p.entity_id === state.caseId });
     });
   }
   return out;
@@ -149,19 +149,21 @@ function initGlobe(features) {
       .showGlobe(true)
       .showGraticules(true)
       .showAtmosphere(true)
-      .atmosphereColor('#4a5a6a')
-      .atmosphereAltitude(0.16)
+      .atmosphereColor('#5b7086')
+      .atmosphereAltitude(0.18)
       .polygonsData([])
-      .polygonCapColor(() => 'rgba(28,34,40,0.65)')
+      .polygonCapColor(() => 'rgba(64,74,86,0.95)')
       .polygonSideColor(() => 'rgba(0,0,0,0)')
-      .polygonStrokeColor(() => '#3A4046')
-      .polygonAltitude(0.006)
+      .polygonStrokeColor(() => '#9aa3ad')
+      .polygonAltitude(0.008)
+      .polygonCapCurvatureResolution(3)
+      .polygonsTransitionDuration(0)
       .labelsData(computeLabels(true))
       .labelLat(d => d.lat).labelLng(d => d.lng)
       .labelText(d => d.label)
-      .labelSize(d => d.kind === 'cluster' ? 1.15 : 1.3)
-      .labelDotRadius(d => d.kind === 'cluster' ? 0.75 : 0.6)
-      .labelColor(d => d.kind === 'cluster' ? '#A7A9AD' : '#E8E6E3')
+      .labelSize(d => d.selected ? 1.75 : d.kind === 'cluster' ? 1.4 : 1.55)
+      .labelDotRadius(d => d.selected ? 1.0 : d.kind === 'cluster' ? 0.7 : 0.55)
+      .labelColor(d => d.selected ? '#FFFFFF' : d.kind === 'cluster' ? '#C9CDD3' : '#EDECE9')
       .labelResolution(2)
       .onLabelClick(d => {
         if (d.kind === 'cluster') { flyToLatLng(d.lat, d.lng, 0.6); announce(`${d.label}: zooming in to individual cases.`); }
@@ -169,7 +171,7 @@ function initGlobe(features) {
       })
       .onZoom(pov => setClustered(pov.altitude > CLUSTER_ALT()))
       .onGlobeClick(() => { /* no-op: interaction is via labels/controls */ });
-    world.globeMaterial().color.set('#12161A');
+    world.globeMaterial().color.set('#0f1a24');
     const ctrl = world.controls();
     ctrl.enableZoom = true;
     ctrl.autoRotate = !reduced.matches;
@@ -268,8 +270,11 @@ function renderDetail() {
       el('p', 'Choose a location on the globe, a “Fly to” control, or a case above to inspect its documented question, evidence, outcome, claim ceiling and sources.'));
     return;
   }
+  // Case context only. The full outcome statement and claim ceiling live in the
+  // Decisions reading area and are intentionally NOT repeated here.
   const content = el('div', null, 'detail-content');
   content.append(el('h2', e.label), el('p', e.kind === 'case' ? 'CORE CASE' : 'SUPPORTING INSTRUMENT', 'label'));
+  content.append(el('p', e.role, 'panel-role'));
   const p = geoById.get(e.id);
   const terr = territoryFor(e.id);
   if (p) {
@@ -283,16 +288,31 @@ function renderDetail() {
     content.append(el('h3', 'Territory'));
     content.append(el('p', 'No case-specific geographic location. FieldOS is a supporting instrument.', 'instrument-note'));
   }
+  content.append(el('h3', 'Research status'));
+  content.append(el('p', `${e.research_status} · reviewed ${e.reviewed_at}`, 'micro'));
   const out = outcomeFor(e.id);
   if (out) {
     content.append(el('h3', 'Documented outcome'));
     const v = el('p'); v.append(el('span', verdictLabel[out.outcome_type], 'verdict'));
     content.append(v);
-    content.append(el('p', out.statement));
+    content.append(el('p', 'Full result statement and claim ceiling are in the Decisions view.', 'micro'));
   }
   content.append(el('h3', 'Primary sources'));
   content.append(sourceList(e.source_ids));
   box.append(content);
+}
+
+/* ---------- evidence input-kind key (inline, discoverable while reading) ---------- */
+function legendInline() {
+  const box = el('div', null, 'legend-inline');
+  box.setAttribute('aria-label', 'Evidence input-kind key. Categories, not a quality ranking.');
+  atlas.meta.input_kinds.forEach(k => {
+    const entry = el('span', null, 'legend-entry');
+    entry.setAttribute('aria-label', k.label);
+    entry.append(inputKindTag(k.id));
+    box.append(entry);
+  });
+  return box;
 }
 
 /* ---------- evidence view ---------- */
@@ -302,8 +322,10 @@ function renderEvidence() {
   if (!e) { wrap.append(el('p', 'Select a case to see its documented evidence records.', 'micro')); return; }
   wrap.append(el('h2', e.label), el('p', e.kind === 'case' ? 'CORE CASE' : 'SUPPORTING INSTRUMENT', 'label'));
   wrap.append(el('p', 'What is actually documented, with the evidence input kind and how well it is substantiated. Missing or unestablished support stays visible.', 'read-note'));
+  wrap.append(legendInline());
   const records = evidenceFor(e.id);
   if (!records.length) { wrap.append(el('p', 'No evidence records declared.')); return; }
+  const grid = el('div', null, 'ev-grid');
   records.forEach(r => {
     const box = el('div', null, 'ev-record');
     box.append(el('h3', r.label));
@@ -311,15 +333,17 @@ function renderEvidence() {
     box.append(el('p', `Substantiation: ${substantiationLabel[r.substantiation]}`, 'micro'));
     box.append(el('p', r.basis));
     box.append(el('p', `Limitation: ${r.limitation}`));
-    wrap.append(box);
+    grid.append(box);
   });
+  wrap.append(grid);
 }
 
 /* ---------- decisions / reading strip (STEP 5) ---------- */
 function readStep(num, heading, kids) {
   const box = el('div', null, 'read-step');
-  box.append(el('span', num, 'read-num'));
-  box.append(el('h3', heading));
+  const head = el('div', null, 'read-head');
+  head.append(el('span', num, 'read-num'), el('h3', heading));
+  box.append(head);
   const body = el('div', null, 'read-body');
   kids.forEach(k => body.append(k));
   box.append(body);
@@ -340,18 +364,18 @@ function renderDecisions() {
   strip.append(readStep('1', e.kind === 'case' ? 'Research question' : 'Role',
     [el('p', e.research_question || e.role)]));
 
-  // 2. Documented evidence
+  // 2. Documented evidence (card grid)
   const records = evidenceFor(e.id);
-  const evNodes = [];
+  const grid = el('div', null, 'ev-grid');
   records.forEach(r => {
     const d = el('div', null, 'ev-record');
     d.append(el('h4', r.label));
     d.append(inputKindTag(r.input_kind));
     d.append(el('p', `Substantiation: ${substantiationLabel[r.substantiation]}`, 'micro'));
     d.append(el('p', r.basis));
-    evNodes.push(d);
+    grid.append(d);
   });
-  strip.append(readStep('2', 'Documented evidence', evNodes.length ? evNodes : [el('p', 'None declared.')]));
+  strip.append(readStep('2', 'Documented evidence', records.length ? [grid] : [el('p', 'None declared.')]));
 
   // 3. Limitations (per record)
   const lims = records.map(r => el('p', `${r.label}: ${r.limitation}`));
@@ -383,12 +407,7 @@ function renderLegend() {
   if (state.mode === 'territory') {
     box.append(el('p', 'Representative locators on a reference globe — conceptual anchors, not study geometry. FieldOS has no location.', 'label'));
   } else if (state.mode === 'evidence') {
-    atlas.meta.input_kinds.forEach(k => {
-      const entry = el('span', null, 'legend-entry');
-      entry.setAttribute('aria-label', k.label);
-      entry.append(inputKindTag(k.id));
-      box.append(entry);
-    });
+    box.append(el('p', 'Colour, dash and glyph encode the evidence input kind — categories, not a quality ranking. Full key sits above the records.', 'label'));
   } else {
     box.append(el('p', 'Documented results, not hypothetical uses. Every outcome carries a claim ceiling.', 'label'));
   }
@@ -456,10 +475,14 @@ function selectCase(id) {
 /* ---------- boot ---------- */
 async function start() {
   try {
+    // Lighter simplified borders by default; ?borders=full loads the original
+    // Natural Earth 110m for before/after tessellation comparison.
+    const bordersUrl = new URLSearchParams(location.search).get('borders') === 'full'
+      ? 'vendor/countries-110m.geojson' : 'vendor/countries-110m.min.geojson';
     const [aRes, gRes, cRes] = await Promise.all([
       fetch('../../data/atlas.json'),
       fetch('geo.json'),
-      fetch('vendor/countries-110m.geojson')
+      fetch(bordersUrl)
     ]);
     if (!aRes.ok) throw new Error(`atlas.json HTTP ${aRes.status}`);
     if (!gRes.ok) throw new Error(`geo.json HTTP ${gRes.status}`);

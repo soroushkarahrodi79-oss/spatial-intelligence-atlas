@@ -22,9 +22,18 @@ read-only. Verified 2026-09-22.
 
 - **Natural Earth 1:110m Admin-0 countries** — public domain
   (https://www.naturalearthdata.com/about/terms-of-use/). Vendored as
-  `vendor/countries-110m.geojson` (ready GeoJSON, 177 features), used only to
-  draw hairline country outlines and a graticule as a restrained cartographic
-  backdrop. No build step or geometry-processing library is required.
+  `vendor/countries-110m.geojson` (ready GeoJSON, 177 features), used to draw
+  hairline country outlines over a built-in graticule as a restrained
+  cartographic backdrop. No runtime build step or geometry library is required.
+- **Simplified borders (shipped default):** `vendor/countries-110m.min.geojson`
+  is a Douglas–Peucker simplification (tolerance 0.6°, coordinates rounded to 3
+  decimals) of the above, generated once at dev time by
+  `vendor/countries-simplify.mjs` (a plain Node script, **not** loaded at
+  runtime). It cuts vertices 10,654 → 2,793 (26%), features 177 → 168 (9 sub-pixel
+  islands collapse), and payload 488 KB → 63 KB, to reduce three-globe
+  tessellation cost on mobile. The app loads the simplified file by default and
+  the original via `?borders=full` (for before/after comparison). At world/mobile
+  zoom the two are visually indistinguishable.
 - Do not use this generalised 1:110m basemap for surveying, disputed-border
   claims, localor current political-boundary analysis. It is context only.
 

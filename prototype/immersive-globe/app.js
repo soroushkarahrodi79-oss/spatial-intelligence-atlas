@@ -137,8 +137,45 @@ function computeLabels(isClustered) {
   }
   return out;
 }
-function applyLabels() { if (globeReady) world.labelsData(computeLabels(clustered)); }
+function applyLabels() { if (globeReady) { world.htmlElementsData(computeLabels(clustered)); requestAnimationFrame(() => updateOcclusion()); } }
 function setClustered(next) { if (next !== clustered) { clustered = next; applyLabels(); } }
+
+/* ---------- HTML territory callouts + far-side occlusion ---------- */
+let currentPov = { ...HOME };
+function makeCallout(d) {
+  const wrap = el('div', null, 'globe-callout');
+  wrap.dataset.lat = d.lat; wrap.dataset.lng = d.lng;
+  if (d.selected) wrap.classList.add('selected');
+  if (d.kind === 'cluster') wrap.classList.add('cluster');
+  wrap.append(el('span', null, 'callout-dot'));
+  if (d.label) {
+    const chip = el('span', null, 'callout-chip');
+    chip.append(el('span', d.label, 'callout-name'));
+    // Explain the world-scale grouping WITHOUT implying any relationship.
+    if (d.kind === 'cluster') chip.append(el('span', 'Two nearby, independent cases', 'callout-note'));
+    wrap.append(chip);
+  }
+  wrap.setAttribute('aria-hidden', 'true'); // names are also on the keyboard Fly-to controls + detail panel
+  wrap.addEventListener('click', () => {
+    if (d.kind === 'cluster') { flyToLatLng(d.lat, d.lng, 1.0); announce(`${d.label}: zooming in to individual cases.`); }
+    else if (d.entity_id) { selectCase(d.entity_id); flyTo(d.entity_id); }
+  });
+  return wrap;
+}
+function angDist(aLat, aLng, bLat, bLng) {
+  const r = Math.PI / 180;
+  const dLat = (bLat - aLat) * r, dLng = (bLng - aLng) * r;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(aLat * r) * Math.cos(bLat * r) * Math.sin(dLng / 2) ** 2;
+  return 2 * Math.asin(Math.min(1, Math.sqrt(h))) / r;
+}
+function updateOcclusion(pov) {
+  if (pov) currentPov = pov;
+  const horizon = Math.acos(1 / (1 + (currentPov.altitude || 2.4))) * 180 / Math.PI;
+  document.querySelectorAll('.globe-callout').forEach(elm => {
+    const far = angDist(currentPov.lat, currentPov.lng, +elm.dataset.lat, +elm.dataset.lng) > horizon - 2;
+    elm.classList.toggle('occluded', far);
+  });
+}
 
 function initGlobe(features) {
   buildClusters();
@@ -158,23 +195,16 @@ function initGlobe(features) {
       .polygonAltitude(0.008)
       .polygonCapCurvatureResolution(3)
       .polygonsTransitionDuration(0)
-      .labelsData(computeLabels(true))
-      .labelLat(d => d.lat).labelLng(d => d.lng)
-      .labelText(d => d.label)
-      // Zoom-aware sizing: labels are larger at world view (clustered) so they
-      // stay legible over the whole Earth, and moderate once zoomed in so the
-      // selected label never dominates. Labels scale with zoom, so this pair of
-      // regimes is what keeps both views balanced.
-      .labelSize(d => clustered ? (d.kind === 'cluster' ? 2.2 : 2.0) : (d.selected ? 1.5 : 1.4))
-      .labelDotRadius(d => clustered ? 1.1 : (d.selected ? 1.1 : 0.7))
-      .labelColor(d => d.selected ? '#FFFFFF' : d.kind === 'cluster' ? '#D4D8DE' : '#EDECE9')
-      .labelResolution(2)
-      .onLabelClick(d => {
-        if (d.kind === 'cluster') { flyToLatLng(d.lat, d.lng, 1.0); announce(`${d.label}: zooming in to individual cases.`); }
-        else { selectCase(d.entity_id); flyTo(d.entity_id); }
-      })
-      .onZoom(pov => setClustered(pov.altitude > CLUSTER_ALT()))
-      .onGlobeClick(() => { /* no-op: interaction is via labels/controls */ });
+      // Territory names are rendered as real HTML callouts (Globe.GL's built-in
+      // htmlElements layer — not a new library), so full names stay crisp,
+      // constant-size and legible over any background, never fragmented by the
+      // 3D text renderer. Far-side callouts are culled in updateOcclusion().
+      .htmlElementsData(computeLabels(true))
+      .htmlLat(d => d.lat).htmlLng(d => d.lng)
+      .htmlAltitude(0.012)
+      .htmlElement(d => makeCallout(d))
+      .onZoom(pov => { setClustered(pov.altitude > CLUSTER_ALT()); updateOcclusion(pov); })
+      .onGlobeClick(() => { /* no-op: interaction is via callouts/controls */ });
     world.globeMaterial().color.set('#0f1a24');
     const ctrl = world.controls();
     ctrl.enableZoom = true;
@@ -185,6 +215,8 @@ function initGlobe(features) {
     globeReady = true;
     sizeGlobe();
     world.pointOfView({ ...HOME }, 0);
+    currentPov = { ...HOME };
+    setTimeout(() => updateOcclusion(), 350);
     // Defer the heavy country-outline tessellation off the critical path so the
     // globe and labels are interactive first; borders fade in a moment later.
     const paintBorders = () => { if (globeReady) world.polygonsData(features); };

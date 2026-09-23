@@ -161,12 +161,16 @@ function initGlobe(features) {
       .labelsData(computeLabels(true))
       .labelLat(d => d.lat).labelLng(d => d.lng)
       .labelText(d => d.label)
-      .labelSize(d => d.selected ? 1.75 : d.kind === 'cluster' ? 1.4 : 1.55)
-      .labelDotRadius(d => d.selected ? 1.0 : d.kind === 'cluster' ? 0.7 : 0.55)
-      .labelColor(d => d.selected ? '#FFFFFF' : d.kind === 'cluster' ? '#C9CDD3' : '#EDECE9')
+      // Zoom-aware sizing: labels are larger at world view (clustered) so they
+      // stay legible over the whole Earth, and moderate once zoomed in so the
+      // selected label never dominates. Labels scale with zoom, so this pair of
+      // regimes is what keeps both views balanced.
+      .labelSize(d => clustered ? (d.kind === 'cluster' ? 2.2 : 2.0) : (d.selected ? 1.5 : 1.4))
+      .labelDotRadius(d => clustered ? 1.1 : (d.selected ? 1.1 : 0.7))
+      .labelColor(d => d.selected ? '#FFFFFF' : d.kind === 'cluster' ? '#D4D8DE' : '#EDECE9')
       .labelResolution(2)
       .onLabelClick(d => {
-        if (d.kind === 'cluster') { flyToLatLng(d.lat, d.lng, 0.6); announce(`${d.label}: zooming in to individual cases.`); }
+        if (d.kind === 'cluster') { flyToLatLng(d.lat, d.lng, 1.0); announce(`${d.label}: zooming in to individual cases.`); }
         else { selectCase(d.entity_id); flyTo(d.entity_id); }
       })
       .onZoom(pov => setClustered(pov.altitude > CLUSTER_ALT()))
@@ -208,10 +212,12 @@ function flyToLatLng(lat, lng, altitude) {
 function flyTo(id) {
   const p = geoById.get(id);
   if (!p) return; // FieldOS / no location
-  // Members of a multi-point cluster get a closer altitude so nearby sibling
-  // labels separate legibly rather than overprinting.
+  // Moderate fly-in altitude keeps the selected label legible without letting it
+  // dominate the globe (labels scale with zoom). Single-label-per-cluster logic —
+  // not altitude — is what prevents sibling overprint, so members need not go as
+  // close as before.
   const inCluster = memberToCluster.has(id) && memberToCluster.get(id).members.length > 1;
-  flyToLatLng(p.lat, p.lng, inCluster ? 0.45 : 0.9);
+  flyToLatLng(p.lat, p.lng, inCluster ? 1.05 : 0.95);
 }
 function renderFallback() {
   const list = $('fallback-list'); list.replaceChildren();

@@ -1,0 +1,46 @@
+{
+  "prototype": "immersive-globe",
+  "note": "Representative geographic reference points for the Immersive Globe prototype. These are approximate LOCATORS for orientation on a globe only. They are NOT the bounded study-area geometries, administrative boundaries, or route geometry used by the underlying research, and they carry no scientific meaning. FieldOS is a supporting instrument with no geographic location and is intentionally absent from this file. Per-point coordinate sources are recorded in SOURCES_AND_LICENSES.md.",
+  "geometry_disclaimer": "representative_point — not study geometry, not a boundary, not a route",
+  "clusters": [
+    {
+      "id": "cl-central-spain",
+      "label": "Central Spain",
+      "members": ["c-hati-pedestrian", "c-snto-pnsg"],
+      "note": "World-scale shared locator for two nearby but INDEPENDENT cases (Madrid and the Sierra de Guadarrama, ~60 km apart). This is a proximity-only cartographic grouping, not a relationship between the cases. Zoom in to reveal each verified individual label."
+    }
+  ],
+  "cluster_altitude_threshold": 1.4,
+  "reference_points": [
+    {
+      "entity_id": "c-hati-pedestrian",
+      "short_label": "Madrid",
+      "label": "Madrid — Atocha–Puerta de Alcalá corridor",
+      "lat": 40.4165,
+      "lng": -3.7026,
+      "geometry_kind": "representative_point",
+      "precision": "City locator for central Madrid, in the vicinity of the Atocha–Puerta de Alcalá corridor.",
+      "source_note": "GeoNames approximate coordinates for Madrid city (ES). A city locator, not either frozen pedestrian route in the HATI source."
+    },
+    {
+      "entity_id": "c-snto-pnsg",
+      "short_label": "Sierra de Guadarrama",
+      "label": "Parque Nacional de la Sierra de Guadarrama",
+      "lat": 40.8876,
+      "lng": -3.9347,
+      "geometry_kind": "representative_point",
+      "precision": "Design-only midpoint of the national park's published coordinate extremes; a bounding-box midpoint need not lie inside the park.",
+      "source_note": "Midpoint computed from MITECO national-park coordinate extremes. NOT a validated interior point, official centroid, PRUG zoning geometry, or asset location from the SNTO source."
+    },
+    {
+      "entity_id": "c-chalus",
+      "short_label": "Western Mazandaran",
+      "label": "Western Mazandaran — Chalus, Nowshahr, Kelardasht",
+      "lat": 36.6506,
+      "lng": 51.4224,
+      "geometry_kind": "representative_point",
+      "precision": "City locator for Chalus on the Caspian coast of northern Iran, standing in for the wider Chalus/Nowshahr/Kelardasht study region.",
+      "source_note": "OpenStreetMap gazetteer coordinates for Chalus city. NOT the reconstructed road-network geometry, gateway routes, or study extent in the CHALUS source."
+    }
+  ]
+}

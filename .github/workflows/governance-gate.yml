@@ -43,7 +43,6 @@ jobs:
       - name: Evaluate gate
         env:
           BASE_REF: ${{ github.base_ref }}
-          PR_DRAFT: ${{ github.event.pull_request.draft }}
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_BODY: ${{ github.event.pull_request.body }}
           # A JSON array of label names, e.g. ["gate-approved","docs"].
@@ -56,11 +55,9 @@ jobs:
           note() { summary="${summary}\n$1"; echo "$1"; }
 
           # --- 1. "Not ready to merge" signals ------------------------------
-          if [ "${PR_DRAFT}" = "true" ]; then
-            note "BLOCK: pull request is a draft."
-            fail=1
-          fi
-
+          # Draft state is intentionally NOT blocked here: GitHub already
+          # prevents merging a draft, so flagging every draft red would only
+          # normalise a red required check during normal work-in-progress.
           if printf '%s' "${PR_LABELS}" | grep -qi '"do-not-merge"'; then
             note "BLOCK: the \`do-not-merge\` label is present."
             fail=1

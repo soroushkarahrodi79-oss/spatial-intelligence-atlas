@@ -17,11 +17,14 @@ claim ceiling. Prose alone did not stop that. This check does.
 A pull request targeting `main` fails the check when **either**:
 
 1. **It signals it is not ready to merge:**
-   - the PR is a **draft**, or
    - it carries the **`do-not-merge`** label, or
    - its title or body contains `do not merge`, `not an authorization to
      merge`, or `no merge, release` (case-insensitive, high-precision
      phrases only).
+
+   Draft state is deliberately not one of these signals: GitHub already
+   blocks merging a draft, so flagging every draft red would only normalise
+   a red required check during ordinary work in progress.
 
 2. **It changes a governed file without deliberate authorisation:** the diff
    touches any of
@@ -53,8 +56,9 @@ A pull request targeting `main` fails the check when **either**:
   `PROJECT_STATUS.md` §6 requires, then add the **`gate-approved`** label to
   the PR once the maintainer has decided. Adding the label is the deliberate
   act the governance asks for.
-- **Work in progress you do not want merged yet:** keep it a draft, or add the
-  `do-not-merge` label. The gate holds it red until you remove the signal.
+- **Work in progress you do not want merged yet:** keep it a draft (GitHub
+  blocks merging it) and/or add the `do-not-merge` label. The label holds the
+  gate red until you remove it.
 
 ## Required labels
 

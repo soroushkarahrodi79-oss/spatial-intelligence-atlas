@@ -1,0 +1,110 @@
+name: Governance gate
+
+# Purpose
+# -------
+# Turns the written governance in PROJECT_STATUS.md (sections 5-6) and the
+# claim ceiling (section 4) into a mechanical, required check. It is the control
+# that PR #10 lacked: a review-only prototype whose own body said "not an
+# authorization to merge" was merged into main anyway.
+#
+# This gate makes the merge FAIL (a red required check) when either:
+#   1. The PR signals it is not mergeable yet (draft state, a `do-not-merge`
+#      label, or an explicit "do not merge" / "not an authorization to merge"
+#      phrase in its title or body), or
+#   2. The diff touches a governed file (the runtime, the dataset, or a frozen
+#      contract) WITHOUT the deliberate `gate-approved` label that records a
+#      maintainer decision.
+#
+# It does not judge the CONTENT of a change - only that a governed change was
+# made deliberately, not by an ad hoc edit. See .github/GOVERNANCE_GATE.md.
+
+on:
+  pull_request:
+    branches: [main]
+    # `edited` and the label events matter: editing the body to remove a
+    # "do not merge" phrase, or adding the `gate-approved` label, must re-run
+    # the gate so the check reflects the current state.
+    types: [opened, edited, synchronize, reopened, ready_for_review, labeled, unlabeled]
+
+# Read-only: the gate inspects the diff and PR metadata, it changes nothing.
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Enforce governance gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR head with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Evaluate gate
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          # A JSON array of label names, e.g. ["gate-approved","docs"].
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: |
+          set -euo pipefail
+
+          fail=0
+          summary=""
+          note() { summary="${summary}\n$1"; echo "$1"; }
+
+          # --- 1. "Not ready to merge" signals ------------------------------
+          # Draft state is intentionally NOT blocked here: GitHub already
+          # prevents merging a draft, so flagging every draft red would only
+          # normalise a red required check during normal work-in-progress.
+          if printf '%s' "${PR_LABELS}" | grep -qi '"do-not-merge"'; then
+            note "BLOCK: the \`do-not-merge\` label is present."
+            fail=1
+          fi
+
+          # High-precision phrases only, to avoid false positives such as
+          # "there are no merge conflicts". Matched case-insensitively across
+          # both title and body.
+          haystack="$(printf '%s\n%s' "${PR_TITLE}" "${PR_BODY}" | tr '[:upper:]' '[:lower:]')"
+          for phrase in "do not merge" "not an authorization to merge" "no merge, release"; do
+            if printf '%s' "${haystack}" | grep -qF "${phrase}"; then
+              note "BLOCK: the PR text says \"${phrase}\"."
+              fail=1
+            fi
+          done
+
+          # --- 2. Governed files require the gate-approved label ------------
+          # These are the runtime, the dataset, and the frozen contracts named
+          # in PROJECT_STATUS.md sections 4-6. Any change to them is a gated
+          # change, not ordinary maintenance.
+          governed_regex='^(SPEC\.md|DESIGN_CONTRACT\.md|data/atlas\.json|index\.html|app\.js|styles\.css)$'
+
+          # Make sure the base branch tip is available for the diff, then use
+          # the merge-base (...) so only the PR's own changes are considered.
+          git fetch --no-tags --depth=100 origin "${BASE_REF}"
+          base_sha="$(git rev-parse FETCH_HEAD)"
+          changed="$(git diff --name-only "${base_sha}...HEAD")"
+          touched_governed="$(printf '%s\n' "${changed}" | grep -E "${governed_regex}" || true)"
+
+          if [ -n "${touched_governed}" ]; then
+            if printf '%s' "${PR_LABELS}" | grep -qi '"gate-approved"'; then
+              note "OK: governed files changed WITH the \`gate-approved\` label:"
+              note "$(printf '%s' "${touched_governed}" | sed 's/^/    - /')"
+            else
+              note "BLOCK: governed files changed WITHOUT the \`gate-approved\` label:"
+              note "$(printf '%s' "${touched_governed}" | sed 's/^/    - /')"
+              note "  Add the \`gate-approved\` label once a gated proposal authorises this change."
+              fail=1
+            fi
+          fi
+
+          # --- Report -------------------------------------------------------
+          if [ "${fail}" -eq 0 ]; then
+            note "PASS: no governance blockers found."
+          fi
+
+          # Mirror the result into the GitHub Actions run summary.
+          printf '%b\n' "### Governance gate\n${summary}" >> "${GITHUB_STEP_SUMMARY}"
+
+          exit "${fail}"

@@ -25,6 +25,10 @@ const visibleEdge = rel => mode().edge_types.includes(rel.type);
 const announce = text => { $('live').textContent = text; };
 const verdictLabel = { abstain: 'ABSTAIN', insufficient_evidence: 'INSUFFICIENT EVIDENCE', no_go: 'NO-GO', functional_test: 'FUNCTIONAL TEST' };
 const substantiationLabel = { source_stated: 'SOURCE-STATED', owner_attested: 'OWNER-ATTESTED', not_established: 'NOT ESTABLISHED' };
+const statusLabel = { active: 'Active', frozen: 'Frozen', closed: 'Closed', maintenance: 'Maintenance' };
+const typeLabel = { territory: 'TERRITORY', evidence_record: 'EVIDENCE RECORD', outcome: 'DOCUMENTED OUTCOME' };
+const roleLabel = node => node.node_type === 'entity' ? (node.kind === 'case' ? 'CORE CASE' : 'SUPPORTING INSTRUMENT') : typeLabel[node.node_type];
+const labelGap = 8, maxLabelWidth = 184;
 function glyph(kind) {
   const group = svg('g', { fill: 'none', stroke: kind.color, 'stroke-width': 1 });
   const circle = r => svg('circle', { r });
@@ -45,7 +49,10 @@ function inputKindTag(id, count = false) {
   const g = glyph(kind); g.setAttribute('transform', 'translate(8 10)');
   mark.append(g, svg('line', { x1: 20, x2: 48, y1: 10, y2: 10, stroke: kind.color, 'stroke-width': kind.stroke_width, 'stroke-dasharray': kind.dash }));
   tag.append(mark, el('span', kind.label));
-  if (count) tag.append(el('span', ` ${evidenceCount(id)}`, 'micro'));
+  if (count) {
+    const n = evidenceCount(id);
+    tag.append(el('span', String(n), 'micro count'), el('span', n === 1 ? ' evidence record' : ' evidence records', 'sr-only'));
+  }
   return tag;
 }
 function evidenceCount(kindId) { return atlas.evidence_records.filter(r => r.input_kind === kindId).length; }
@@ -77,9 +84,11 @@ function buildGraph() {
   }));
   nodeElements = new Map(ordered.map(node => {
     const group = svg('g', { class: `node ${node.node_type}`, role: 'button', tabindex: 0, 'data-node': node.id });
+    const ring = node.node_type === 'territory' ? { x: 14, y: 10 } : { x: 12.5, y: 12.5 };
     group.append(
       svg('rect', { x: -22, y: -22, width: 44, height: 44, fill: 'transparent' }),
-      svg('rect', { x: -24, y: -24, width: 48, height: 48, class: 'selection' })
+      svg('rect', { x: -ring.x, y: -ring.y, width: 2 * ring.x, height: 2 * ring.y, class: 'selection' }),
+      svg('rect', { class: 'focus-frame' })
     );
     let shape;
     if (node.node_type === 'entity' && node.kind === 'case') {
@@ -182,30 +191,64 @@ function nodeLabelText(node) {
   if (node.node_type === 'outcome') return verdictLabel[node.outcome_type];
   return node.label;
 }
+function placeLabels(group, node, labelWidth) {
+  group.querySelectorAll('.aux-label').forEach(item => item.remove());
+  const lines = wrapLabel(group.querySelector('.node-label'), nodeLabelText(node), labelWidth);
+  let bottom = 26 + (lines - 1) * 16 + 6;
+  const aux = node.node_type === 'entity' ? roleLabel(node) : node.node_type === 'evidence_record' ? kinds.get(node.input_kind).label : '';
+  if (aux) {
+    const text = svg('text', { 'text-anchor': 'middle', y: 26 + lines * 16 + 8, class: 'aux-label' });
+    group.append(text);
+    bottom = 26 + lines * 16 + 8 + (wrapLabel(text, aux, labelWidth) - 1) * 16 + 6;
+  }
+  return bottom;
+}
+function labelExtent(group) { return Math.max(...[...group.querySelectorAll('text')].map(text => text.getBBox().width)); }
+function fitFocusFrame(group) {
+  const boxes = [...group.querySelectorAll('.selection,text')].map(item => item.getBBox()).filter(box => box.width);
+  const left = Math.min(...boxes.map(b => b.x)) - 5, top = Math.min(...boxes.map(b => b.y)) - 5;
+  const right = Math.max(...boxes.map(b => b.x + b.width)) + 5, bottom = Math.max(...boxes.map(b => b.y + b.height)) + 5;
+  const frame = group.querySelector('.focus-frame');
+  [['x', left], ['y', top], ['width', right - left], ['height', bottom - top]].forEach(([key, value]) => frame.setAttribute(key, value));
+}
 function layout() {
   if (!atlas || narrow.matches) return;
   const width = $('canvas').clientWidth, height = $('canvas').clientHeight;
   const inset = innerWidth < 1024 ? 32 : 48;
   $('graph').setAttribute('viewBox', `0 0 ${width} ${height}`);
   const position = node => ({ x: inset + node.layout[state.mode].x * (width - 2 * inset), y: inset + node.layout[state.mode].y * (height - 2 * inset) });
-  ordered.forEach(node => {
-    const group = nodeElements.get(node.id);
-    group.querySelectorAll('.aux-label').forEach(item => item.remove());
-    group.style.display = visibleNode(node) ? '' : 'none';
-    if (!visibleNode(node)) return;
-    const p = position(node);
+  ordered.forEach(node => { nodeElements.get(node.id).style.display = visibleNode(node) ? '' : 'none'; });
+  const shown = ordered.filter(visibleNode);
+  const at = new Map(shown.map(node => [node.id, position(node)]));
+  // Two labels compete for horizontal room when their vertical bands (node top to label bottom) overlap.
+  // Bands depend on wrapped widths, so repeat until the set of competing pairs stops growing (deterministic, bounded).
+  const minWidth = new Map(shown.map(node => [node.id, (placeLabels(nodeElements.get(node.id), node, 0), Math.max(48, labelExtent(nodeElements.get(node.id))))]));
+  const depth = new Map(shown.map(node => [node.id, 0])), placed = new Map();
+  const band = node => [at.get(node.id).y - 14, at.get(node.id).y + depth.get(node.id)];
+  let pairs = -1;
+  for (let pass = 0; pass <= shown.length; pass++) {
+    let found = 0;
+    shown.forEach(node => {
+      const p = at.get(node.id), [top, bottom] = band(node);
+      const rivals = shown.filter(n => n.id !== node.id && band(n)[0] < bottom && top < band(n)[1]);
+      found += rivals.length;
+      // Each pair splits the room between them; a rival whose longest word exceeds its half keeps that word whole.
+      const share = rivals.map(n => {
+        const room = Math.abs(at.get(n.id).x - p.x) - labelGap;
+        return minWidth.get(n.id) > room ? 2 * room - minWidth.get(n.id) : room;
+      });
+      const labelWidth = Math.max(48, Math.min(...share, 2 * (p.x - 8), 2 * (width - p.x - 8), maxLabelWidth));
+      if (placed.get(node.id) === labelWidth) return;
+      placed.set(node.id, labelWidth);
+      depth.set(node.id, Math.max(depth.get(node.id), placeLabels(nodeElements.get(node.id), node, labelWidth)));
+    });
+    if (found === pairs) break;
+    pairs = found;
+  }
+  shown.forEach(node => {
+    const group = nodeElements.get(node.id), p = at.get(node.id);
     group.style.transform = `translate(${p.x}px,${p.y}px)`;
-    const sameRow = ordered.filter(n => n.id !== node.id && visibleNode(n) && n.layout[state.mode].y === node.layout[state.mode].y);
-    const nearest = Math.min(...sameRow.map(n => Math.abs(position(n).x - p.x)), 200);
-    const labelWidth = Math.max(48, Math.min(nearest - 8, 2 * (p.x - 8), 2 * (width - p.x - 8), 184));
-    const lines = wrapLabel(group.querySelector('.node-label'), nodeLabelText(node), labelWidth);
-    const aux = node.node_type === 'entity' ? (node.kind === 'case' ? 'CORE CASE' : 'SUPPORTING INSTRUMENT')
-      : node.node_type === 'evidence_record' ? kinds.get(node.input_kind).label
-      : '';
-    if (aux) {
-      const text = svg('text', { 'text-anchor': 'middle', y: 26 + lines * 16 + 8, class: 'aux-label' });
-      group.append(text); wrapLabel(text, aux, labelWidth);
-    }
+    fitFocusFrame(group);
   });
   atlas.relationships.forEach(rel => {
     const path = edgeElements.get(rel.id);
@@ -219,6 +262,10 @@ function layout() {
     path.setAttribute('d', `M${ax} ${ay} L${bx} ${by}`);
   });
 }
+function resultText(outcome) {
+  const verdict = verdictLabel[outcome.outcome_type];
+  return outcome.statement.includes(verdict) ? outcome.statement : `${verdict}: ${outcome.statement}`;
+}
 function detailSection(content, heading, text, inline) {
   content.append(el(inline ? 'h4' : 'h3', heading), el('p', text));
 }
@@ -228,10 +275,10 @@ function caseDetail(content, node, inline) {
   const outcomeRel = atlas.relationships.find(r => r.type === 'reports' && r.source === node.id);
   const outcome = outcomeRel && nodes.get(outcomeRel.target);
   if (outcome) {
-    detailSection(content, 'Documented result', `${verdictLabel[outcome.outcome_type]}: ${outcome.statement}`, inline);
+    detailSection(content, 'Documented result', resultText(outcome), inline);
     detailSection(content, 'Claim ceiling', outcome.claim_ceiling, inline);
   }
-  detailSection(content, 'Research status', `${node.research_status} · reviewed ${node.reviewed_at}`, inline);
+  detailSection(content, 'Research status', `${statusLabel[node.research_status]} · reviewed ${node.reviewed_at}`, inline);
   const territoryRel = atlas.relationships.find(r => r.type === 'situated_in' && r.source === node.id);
   if (territoryRel) detailSection(content, 'Territory', nodes.get(territoryRel.target).label, inline);
   appendEvidenceRecords(content, node, inline);
@@ -244,11 +291,10 @@ function instrumentDetail(content, node, inline) {
   const outcomeRel = atlas.relationships.find(r => r.type === 'reports' && r.source === node.id);
   const outcome = outcomeRel && nodes.get(outcomeRel.target);
   if (outcome) {
-    detailSection(content, 'Documented functional result', `${verdictLabel[outcome.outcome_type]}: ${outcome.statement}`, inline);
+    detailSection(content, 'Documented functional result', resultText(outcome), inline);
     detailSection(content, 'Limitations', outcome.claim_ceiling, inline);
   }
-  detailSection(content, 'Research status', `${node.research_status} · reviewed ${node.reviewed_at}`, inline);
-  detailSection(content, 'Territory', 'No case-specific territory assigned.', inline);
+  detailSection(content, 'Research status', `${statusLabel[node.research_status]} · reviewed ${node.reviewed_at}`, inline);
   appendEvidenceRecords(content, node, inline);
   content.append(el(inline ? 'h4' : 'h3', 'Primary sources'));
   content.append(sourceList(node.source_ids));
@@ -267,7 +313,7 @@ function appendEvidenceRecords(content, node, inline) {
   });
 }
 function genericDetail(content, node, inline) {
-  const kindLabel = node.node_type === 'territory' ? 'TERRITORY' : node.node_type === 'evidence_record' ? 'EVIDENCE RECORD' : 'DOCUMENTED OUTCOME';
+  const kindLabel = roleLabel(node);
   const title = node.node_type === 'outcome' ? verdictLabel[node.outcome_type] : node.label;
   content.append(el(inline ? 'h4' : 'h2', title), el('p', kindLabel, 'label'));
   const parentRel = atlas.relationships.find(r => r.target === node.id);
@@ -324,7 +370,7 @@ function renderOutline() {
   function row(node, kindId) {
     included.add(node.id);
     const button = el('button', null, 'outline-row'); button.type = 'button'; button.dataset.node = node.id;
-    button.append(el('span', nodeLabelText(node)), el('span', node.node_type.replace('_', ' '), 'micro'));
+    button.append(el('span', nodeLabelText(node)), el('span', roleLabel(node), 'label outline-role'));
     if (kindId) button.append(inputKindTag(kindId));
     wireNode(button, node); return button;
   }
@@ -354,7 +400,6 @@ function renderLegend() {
   $('legend').replaceChildren();
   if (state.mode === 'evidence') atlas.meta.input_kinds.forEach(kind => {
     const entry = el('span', null, 'legend-entry');
-    entry.setAttribute('aria-label', `${kind.label}, ${evidenceCount(kind.id)} evidence records`);
     entry.append(inputKindTag(kind.id, true));
     $('legend').append(entry);
   });

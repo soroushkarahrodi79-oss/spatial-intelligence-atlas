@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Spatial Intelligence Atlas — v0.3 experience prototype</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="rail">
+    <p class="experiment-flag">Experimental v0.3 prototype — not a release, not merged, does not represent the deployed <code>v0.2.1</code> artifact.</p>
+    <div class="identity">
+      <h1>Spatial Intelligence Atlas</h1>
+      <p id="subtitle" class="micro">Loading…</p>
+    </div>
+    <p id="notice" class="notice"></p>
+  </header>
+
+  <main id="app">
+    <div id="error" hidden role="alert"></div>
+
+    <section id="overview" aria-labelledby="overview-heading">
+      <h2 id="overview-heading">Research cases</h2>
+      <p class="body overview-intro">Four entities, documented separately. Select one to read its question, evidence, documented result and claim ceiling in full.</p>
+      <div id="overview-list"></div>
+    </section>
+
+    <article id="case" hidden aria-labelledby="case-heading">
+      <nav class="case-nav" aria-label="Case navigation">
+        <button id="back" type="button">← Overview</button>
+        <span id="case-position" class="micro" aria-live="off"></span>
+        <div class="case-pager">
+          <button id="prev-case" type="button">Previous</button>
+          <button id="next-case" type="button">Next</button>
+        </div>
+      </nav>
+      <div class="case-layout">
+        <div class="case-reading">
+          <p id="case-kind" class="label"></p>
+          <h2 id="case-heading"></h2>
+          <section id="case-question" class="case-section"></section>
+          <section id="case-territory" class="case-section"></section>
+          <section id="case-evidence" class="case-section">
+            <h3 class="label">Evidence</h3>
+            <div id="evidence-list"></div>
+          </section>
+          <section id="case-result" class="case-section"></section>
+          <section id="case-ceiling" class="case-section case-ceiling"></section>
+        </div>
+        <aside id="case-verification" aria-labelledby="verification-heading">
+          <h3 id="verification-heading" class="label">Verification</h3>
+          <ul id="verification-list" class="source-list"></ul>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <span id="dataset-counts" class="micro"></span>
+    <p class="micro">Inputs, status, and outcomes are separate. Real input does not establish validation or decision sufficiency.</p>
+    <p class="micro attribution">Soroush Karahrodi · <a href="https://github.com/soroushkarahrodi79-oss/spatial-intelligence-atlas" target="_blank" rel="noopener noreferrer">source repository, opens in a new tab</a></p>
+  </footer>
+
+  <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <noscript><p>Enable JavaScript to load the atlas from its local dataset.</p></noscript>
+</body>
+</html>

@@ -70,13 +70,20 @@ function resultText(outcome) {
 /* ---- overview ----
    Deliberately no aria-label override here: a custom aria-label replaces
    an element's ENTIRE accessible name, which would discard the role,
-   territory, verdict and evidence-kind text this row already renders
-   visually — the exact "screen-reader equivalent to the visualisation"
-   requirement (DESIGN_CONTRACT.md §8) this prototype is supposed to meet,
-   not defeat. The button's accessible name is simply its rendered text
-   content, in the same order a sighted reader scans it. The evidence-kind
-   glyphs are decorative (aria-hidden) SVGs, so their meaning is restated
-   as plain sr-only text rather than lost. */
+   territory and verdict text this row already renders visually — the
+   exact "screen-reader equivalent to the visualisation" requirement
+   (DESIGN_CONTRACT.md §8) this prototype is supposed to meet, not defeat.
+   The button's accessible name is simply its rendered text content, in
+   the same order a sighted reader scans it.
+
+   No evidence-input-kind summary is rendered here (a prior draft showed
+   unlabelled colour/shape glyphs with only an sr-only text equivalent —
+   visually undecodable, so sighted and non-visual readers received
+   different information, which is the opposite of the goal). The
+   Overview's job is the 10/30-second orientation question — which entity,
+   where, what was the result — not evidence-kind detail; that detail is
+   fully labelled (kind name, substantiation, glyph, dash) inside the Case
+   reader, where it belongs. See SPEC_PROPOSAL.md §3.1. */
 function overviewRow(entity) {
   const button = el('button', null, `overview-row${entity.kind === 'instrument' ? ' overview-row--instrument' : ''}`);
   button.type = 'button';
@@ -90,14 +97,6 @@ function overviewRow(entity) {
   meta.append(el('span', territory ? territory.label : 'No case-specific territory assigned.', 'micro'));
   const outcome = outcomeOf(entity.id);
   if (outcome) meta.append(el('span', verdictLabel[outcome.outcome_type], 'overview-verdict'));
-
-  const glyphRow = el('div', null, 'overview-glyphs');
-  const present = [...new Set(evidenceOf(entity.id).map(e => e.input_kind))];
-  present.forEach(id => glyphRow.append(glyphIcon(kinds.get(id))));
-  if (present.length) {
-    glyphRow.append(el('span', `Evidence recorded: ${present.map(id => kinds.get(id).label.toLowerCase()).join(', ')}.`, 'sr-only'));
-  }
-  meta.append(glyphRow);
 
   button.append(meta);
   button.addEventListener('click', () => openCase(entity.id));
@@ -303,7 +302,15 @@ async function start() {
     document.querySelector('h1').textContent = atlas.meta.title;
     $('subtitle').textContent = atlas.meta.subtitle;
     $('notice').textContent = atlas.meta.notice;
-    $('dataset-counts').textContent = `v${atlas.schema_version} · reviewed ${atlas.meta.reviewed_at} · ${atlas.entities.length} entities · ${atlas.evidence_records.length} evidence records · ${atlas.outcomes.length} outcomes`;
+    /* "dataset schema", not "v0.2.1" or a release tag — data/atlas.json's
+       schema_version (0.2.0) has not changed since v0.2.0 shipped, and
+       still reads 0.2.0 in the deployed v0.2.1 release too (v0.2.1 was
+       accessibility polish, not a schema change). Rendering this bare as
+       "v0.2.0" reads as a release-version claim and visually contradicts
+       both the "v0.3 prototype" banner above and the actual v0.2.1
+       deployed release. Naming it explicitly as the dataset schema removes
+       that ambiguity without altering the dataset. */
+    $('dataset-counts').textContent = `Dataset schema v${atlas.schema_version} · reviewed ${atlas.meta.reviewed_at} · ${atlas.entities.length} entities · ${atlas.evidence_records.length} evidence records · ${atlas.outcomes.length} outcomes`;
 
     renderOverview();
 

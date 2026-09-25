@@ -39,7 +39,7 @@ a 4px vertical rhythm.
 ├────────────────────────────────────────────────────────────────┤
 │  OVERVIEW LIST                                                  │
 │  ── HATI ──────────────────────────────────────────────────     │
-│     role · territory · outcome verdict · evidence glyph row     │
+│     role · territory · outcome verdict                          │
 │  ── SNTO ──────────────────────────────────────────────────     │
 │  ── CHALUS ────────────────────────────────────────────────     │
 │  ┄┄ FieldOS (SUPPORTING INSTRUMENT — visually discontinuous) ┄┄ │
@@ -121,12 +121,20 @@ darker than `--ink-3`.
 
 Same six values, same hex, same dash pattern, same glyph, same contrast
 ratios as `DESIGN_CONTRACT.md` §3.3 (`OBSERVED` `#3FA98C` through
-`UNESTABLISHED` `#C46A78`). In v0.3, colour applies to: (a) the glyph
-preceding each evidence record's `input_kind` label in the case reader, and
-(b) the small evidence-glyph row on each Overview entry, which shows which
-input kinds are present for that entity — never a count, never a bar, never
-sized by proportion (sizing by proportion would let colour area imply a
-comparative measure v0.3 does not intend, per `SPEC_PROPOSAL.md` §5).
+`UNESTABLISHED` `#C46A78`). In v0.3, colour applies in exactly one place:
+the glyph preceding each evidence record's `input_kind` label in the case
+reader — always paired there with the dash-rule (§5 below) and the
+`label`-step text name, satisfying the colour-independence rule in full.
+
+**Colour does not appear on the Overview at all** (a corrected decision —
+an earlier draft added a compact evidence-glyph row to each Overview
+entry; it carried colour and shape with no adjacent text label at that
+size, which is exactly the "colour/shape without a text label" pattern
+§3.4 and `DESIGN_CONTRACT.md` §8.4 forbid. Rather than shrink the six
+input-kind labels to fit a compact row — which would either violate the
+five-type-size/one-uppercase-context scale in §4.1 or be illegibly small —
+the field was removed from the Overview entirely; see
+`SPEC_PROPOSAL.md` §3.1 for the full reasoning).
 
 `substantiation` remains text-only (`SOURCE-STATED`, `OWNER-ATTESTED`,
 `NOT ESTABLISHED`); outcomes remain fully achromatic. No new colour is
@@ -352,7 +360,8 @@ measured against it.
 - [ ] Basis disclosure uses native `<details>`/`<summary>`; collapsed
   content is absent from the accessibility tree and tab order
 - [ ] Overview row accessible names are not truncated by an `aria-label`
-  override; evidence-kind glyphs have an `sr-only` text equivalent
+  override, and carry no visual-only information (the Overview has no
+  evidence-kind glyphs to keep in parity, by design — §3.2)
 - [ ] Every interactive control (Overview rows, Back, Previous, Next, basis
   disclosure, source links) measures ≥44×44px — measured in
   `VERIFICATION_REPORT.md`, not assumed

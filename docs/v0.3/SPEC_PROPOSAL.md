@@ -76,12 +76,27 @@ mode visits (`UX_DIRECTION.md` §1.4).
 
 1. **Overview** — a list of the four entities (three core cases, then
    FieldOS, visually separated as `SUPPORTING INSTRUMENT`), each showing:
-   label, one-line role, territory (text), outcome verdict (text,
-   achromatic), and an evidence-input-kind summary (the distinct glyphs
-   present, not a count or bar — no quantity comparison across cases). This
-   is orientation and navigation, not a comparison grid; it is presented as
-   an ordered list (dataset order), never sortable, filterable, or
-   re-rankable.
+   label, one-line role, territory (text), and outcome verdict (text,
+   achromatic). This is orientation and navigation, not a comparison grid;
+   it is presented as an ordered list (dataset order), never sortable,
+   filterable, or re-rankable.
+
+   **No evidence-input-kind summary appears on the Overview** (a corrected
+   decision — an earlier draft specified one here, rendered as unlabelled
+   colour/shape glyphs with only an `sr-only` text equivalent, which meant
+   a sighted reader could not decode ACQUIRED/DERIVED/UNESTABLISHED etc.
+   from the row at all while a screen-reader user received the full list —
+   visual and non-visual readers were not receiving equivalent
+   information, which is the opposite of what `DESIGN_CONTRACT.md` §8
+   requires). The choice made here is to drop the field from the Overview
+   rather than add visible per-kind labels to it: the Overview's stated
+   job is the 10/30-second orientation question (which entity, where, what
+   was the result — brief §6), not evidence-kind detail, and that detail
+   is already fully and correctly labelled (name, substantiation, glyph,
+   dash) inside the Case reader, one click away. Adding labelled glyphs to
+   every Overview row instead would also have reintroduced per-row visual
+   weight this proposal's list-not-grid restraint (§6 below,
+   `UX_DIRECTION.md` §2) is deliberately trying to avoid.
 2. **Case reader** — opened by selecting an entity from the Overview. A
    single continuous, ordered document per entity:
    `question → territory → result → claim ceiling → evidence →
@@ -147,7 +162,7 @@ a footnote reached only after reading every evidence record.
 |---|---|---|---|
 | 1 | Open a case/instrument | Overview → Case reader | Replaces "select a node"; same cost, clearer destination |
 | 2 | Return to Overview | Case reader → Overview | Replaces "reset view"; always returns to the same ordered list, no state retained |
-| 3 | Expand/collapse an evidence record's full basis + limitation | Case reader | Records show statement + input-kind + substantiation by default; "limitation" text is always visible (§0 forbids hiding it), only the verbatim `basis` quotation collapses for prose length. Implemented as a native `<details>`/`<summary>` disclosure — instant, not animated (`MOTION_CONTRACT.md` #3) — so the browser, not custom script, governs whether the quotation is exposed to assistive technology |
+| 3 | Expand/collapse an evidence record's full basis quotation | Case reader | Records show statement + input-kind + substantiation + `limitation` by default — `limitation` is always visible, never behind the disclosure (§0 forbids hiding it); only the verbatim `basis` quotation collapses for prose length. Implemented as a native `<details>`/`<summary>` disclosure — instant, not animated (`MOTION_CONTRACT.md` #3) — so the browser, not custom script, governs whether the quotation is exposed to assistive technology |
 | 4 | Open a declared source | Case reader | Identical contract to `SPEC.md` §6.4 — explicit activation, `target="_blank"`, `rel="noopener noreferrer"`, declared source only |
 | 5 | Move focus between cases from within a case reader | Case reader | A lightweight "previous/next in Overview order" pair — **not** a cross-case relationship; it is list navigation, and is announced as such ("2 of 4"), never drawn as a connector |
 
@@ -302,10 +317,9 @@ HTML documents:
   limitation as ordinary text and its full basis quotation behind a native
   `<details>`/`<summary>` disclosure.
 - An Overview row's accessible name is its own rendered text content — no
-  `aria-label` override truncates it to identity-only. The evidence-kind
-  glyphs beside each row are decorative (`aria-hidden`); their meaning is
-  restated as adjacent `sr-only` text ("Evidence recorded: acquired,
-  derived…") so nothing visible is invisible to assistive technology.
+  `aria-label` override truncates it to identity-only, and the row carries
+  no information (such as an evidence-kind summary) that isn't also
+  visible as plain text — see the correction noted in §3.1.
 - Source links are real `<a>` elements, `target="_blank"` +
   `rel="noopener noreferrer"`, accessible name states the source label and
   "opens in a new tab" — unchanged from `SPEC.md` §6.

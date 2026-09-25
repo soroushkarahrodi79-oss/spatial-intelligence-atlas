@@ -96,8 +96,6 @@ main { max-width: 1280px; margin: 0 auto; padding: 24px; }
 .overview-role { color: var(--ink-2); max-width: 68ch; margin-bottom: 8px; }
 .overview-meta { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; color: var(--ink-3); }
 .overview-verdict { font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-2); }
-.overview-glyphs { display: flex; gap: 6px; align-items: center; }
-.overview-glyphs svg { display: block; }
 
 /* ---- case reader ---- */
 .case-nav {

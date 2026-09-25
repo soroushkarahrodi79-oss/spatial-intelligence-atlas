@@ -1,12 +1,16 @@
 # VERIFICATION_REPORT.md — Spatial Intelligence Atlas v0.3 prototype
 
-**Revision 2** — re-run in full after the coherence-correction pass (see the
-PR #14 review comment this responds to). Supersedes the original report;
-kept as one file, not two, since the original findings no longer describe
-the current code. Tooling: **Playwright 1.63.0** driving a real headless
-**Chromium** (Chrome for Testing 153.0.8010.12), and **axe-core 4.x**
-injected into the running page. Screenshots are in
-`docs/v0.3/review/screenshots/`.
+**Revision 3** — targeted re-verification after three further coherence
+fixes (Overview evidence-kind glyphs removed, footer schema wording
+disambiguated, `SPEC_PROPOSAL.md` §4 disclosure wording corrected). This
+was a narrow pass, not a repeat of the full audit: §1–§14 below are
+Revision 2's findings, left as they were where unaffected; §15 records what
+was actually re-run for Revision 3 and why the rest wasn't. Tooling:
+**Playwright 1.63.0** driving a real headless **Chromium** (Chrome for
+Testing 153.0.8010.12), and **axe-core 4.x** injected into the running
+page. Screenshots are in `docs/v0.3/review/screenshots/` (all 14
+regenerated for Revision 3, since the footer wording change is visible on
+every screen).
 
 Every claim below is scoped to what was actually run. Nothing here implies
 Safari, Firefox, a physical device, or a real screen reader (NVDA/JAWS/
@@ -117,18 +121,25 @@ measurement genuinely did fail.
 
 ## 7. Overview accessible names (finding #6 from the review)
 
-**FIXED**, verified two ways:
+**FIXED**, verified two ways. **Superseded by Revision 3 (§15.1):** the
+evidence-kind glyphs and their `sr-only` text equivalent quoted below no
+longer exist at all — removed, not just relabelled, because they were
+visually undecodable in the first place (Revision 3, finding A). The
+underlying fix this section verifies (no `aria-label` override) still
+stands; only the quoted example text is now stale.
 
 1. **DOM inspection** — every Overview row has `hasAriaLabel: false` (the
    overriding `aria-label` was removed) and its full `textContent` includes
-   kind, label, role, territory-or-fallback text, outcome verdict, and the
-   `sr-only` evidence-kind summary — e.g. for SNTO: *"CORE CASE SNTO — PNSG
-   Decision Evidence Bounded destination-management case using
-   environmental and governance evidence. Parque Nacional de la Sierra de
-   Guadarrama INSUFFICIENT EVIDENCE Evidence recorded: acquired, derived,
-   unestablished."* Nothing visible is missing from what a non-visual
-   reader would receive, and nothing is duplicated beyond what's already
-   visually redundant (e.g. "CORE CASE" appearing once as intended).
+   kind, label, role, territory-or-fallback text, and outcome verdict — as
+   of Revision 2, this also included an `sr-only` evidence-kind summary
+   (e.g. for SNTO: *"CORE CASE SNTO — PNSG Decision Evidence Bounded
+   destination-management case using environmental and governance
+   evidence. Parque Nacional de la Sierra de Guadarrama INSUFFICIENT
+   EVIDENCE Evidence recorded: acquired, derived, unestablished."*); as of
+   Revision 3 that clause is gone and the row ends after the verdict — see
+   §15.1 for why. Nothing visible is missing from what a non-visual reader
+   receives, and nothing is duplicated beyond what's already visually
+   redundant (e.g. "CORE CASE" appearing once as intended).
 2. **Accessibility-tree snapshot** — attempted via `page.accessibility.
    snapshot()`. **NOT VERIFIED**: this Playwright version (1.63.0) no
    longer exposes that API (`Cannot read properties of undefined (reading
@@ -246,7 +257,105 @@ Re-run after the evidence-record refactor to confirm the earlier fix
 
 ---
 
-## 14. Reproducing this verification
+## 15. Revision 3 — targeted re-verification
+
+Three fixes, none structural (§0 of the PR review that requested them: "do
+not redesign," "do not start another broad audit"). What was re-run was
+scoped to what each fix could plausibly affect — not the full matrix in
+§1–§12.
+
+### 15.1 Overview evidence-kind glyphs removed
+
+**Finding, Revision 3:** the Overview's evidence-kind summary (added in
+Revision 1/2) rendered coloured, shaped SVG glyphs with **no adjacent
+visible text label** — a sighted reader could not decode which glyph meant
+ACQUIRED vs. DERIVED vs. UNESTABLISHED, while a screen-reader user received
+the full breakdown via `sr-only` text. Visual and non-visual readers were
+receiving different information, which is the defect
+`DESIGN_CONTRACT.md` §8.4's colour-independence rule (colour + dash + glyph
++ **text label**, always together) exists to prevent, and which this
+proposal's own carried-forward version of that rule
+(`DESIGN_CONTRACT_PROPOSAL.md` §3.2) also requires.
+
+**Fix chosen:** remove the field from the Overview entirely, rather than
+add visible per-kind text labels to it. Rationale recorded in
+`SPEC_PROPOSAL.md` §3.1 and `DESIGN_CONTRACT_PROPOSAL.md` §3.2: the
+Overview's job is the 10/30-second orientation question (brief §6), which
+does not require evidence-kind detail; that detail is already fully and
+correctly labelled inside the Case reader (§3–§4 of this report). Adding
+six possible labelled glyphs to every Overview row was also rejected as
+disproportionate visual weight for a screen whose restraint (single-column
+list, not a grid) is itself load-bearing (`UX_DIRECTION.md` §2).
+
+**Verified:**
+- **PASS** — `hasGlyphSvg: false` on every Overview row (DOM inspection,
+  all 4 entities).
+- **PASS** — Overview row `textContent` now ends after the outcome verdict,
+  with no evidence-kind clause left over, sighted-visible and
+  screen-reader-visible content now identical by construction (there is
+  nothing left that could diverge).
+- **PASS** — 0 axe-core violations, re-run at all 5 widths × 2 screens
+  after the removal.
+- **PASS (spot-check)** — Overview row touch target re-measured after
+  removing the glyph row: `1232×133px` (was `1232×135px`) — still well
+  over the 44×44px floor. A single spot-check, not a re-run of the full
+  touch-target matrix from §6, since only the Overview row's height could
+  plausibly have been affected by this change and every other measured
+  control is untouched by it.
+
+### 15.2 Footer dataset-schema wording
+
+**Finding, Revision 3:** the footer rendered the bare dataset
+`schema_version` as `"v0.2.0 · reviewed …"`, which reads as a release-tag
+claim and visually contradicts both the "v0.3 prototype" banner above it
+and the actual deployed `v0.2.1` release. The dataset itself was not
+changed (its `schema_version` has correctly stayed `"0.2.0"` since v0.2.0,
+including through the v0.2.1 accessibility-only maintenance release) — only
+the rendered wording was ambiguous.
+
+**Fix:** `app.js` now renders `"Dataset schema v0.2.0 · reviewed …"`,
+naming the field explicitly rather than presenting a bare version number.
+
+**Verified:** **PASS** — footer text on both the Overview and an open Case
+reader reads `"Dataset schema v0.2.0 · reviewed 2026-09-22 · 4 entities ·
+10 evidence records · 4 outcomes"`, confirmed via `textContent` on both
+screens (the footer is shared chrome, present on every screen, so both
+were checked).
+
+### 15.3 `SPEC_PROPOSAL.md` §4 interaction wording
+
+**Finding, Revision 3:** interaction 3's description still read "expand/
+collapse an evidence record's full basis **+ limitation**," implying both
+fields are gated behind the disclosure. `limitation` has never been
+gated — it is always visible; only the verbatim `basis` quotation
+collapses. This was a documentation-only error (the prototype's behaviour
+was already correct; Revision 2 §11's own keyboard-pass narrative already
+described `limitation` as always-visible).
+
+**Fix:** row 3's interaction name and notes corrected to name `basis`
+alone as what the disclosure gates.
+
+**Verified:** documentation-only change; no runtime behaviour to
+re-verify. Confirmed by re-reading the corrected row against the actual
+`evidenceRecordBlock()` implementation, which has never gated
+`limitation`.
+
+### 15.4 What was deliberately not re-run
+
+Per the request's own scope limit: the full touch-target matrix (§6, only
+Overview row spot-checked — §15.1), source-ordering verification (§8,
+unrelated to these three fixes), the keyboard pass (§12, unrelated —
+`Tab` order through evidence records and Escape behaviour are unaffected
+by removing an Overview-only field), the rapid open/Escape regression
+(§11, unrelated), and the reduced-motion check (§10, unrelated) were **not**
+re-run, because none of the three fixes touches the code paths those
+checks exercise. Screenshots were regenerated for all 5 widths × 2
+screens plus the expanded/greyscale/zoom200 variants (14 images total)
+because the footer wording change is visible on every one of them.
+
+---
+
+## 16. Reproducing this verification
 
 From the repository root, with a local static server running:
 
@@ -259,4 +368,5 @@ project-level dependency was added — `IMPLEMENTATION_PLAN.md` §1–§2), driv
 headless Chromium against
 `http://localhost:8000/prototype/v0.3-experience/` for each required
 viewport, injecting `axe-core/axe.min.js` and calling `axe.run()`, and
-exercising the interactions and measurements described in §1–§12 above.
+exercising the interactions and measurements described in §1–§12 and §15
+above.

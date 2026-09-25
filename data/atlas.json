@@ -190,7 +190,7 @@
       "limitation": "Zoning is not evidence of visitor volume, condition, or impact.",
       "source_ids": ["s-snto-brief"],
       "layout": {
-        "evidence": { "x": 0.30, "y": 0.80 }
+        "evidence": { "x": 0.28, "y": 0.80 }
       }
     },
     {
@@ -214,7 +214,7 @@
       "limitation": "OSM-attested network state is not independent confirmation that decisive motorway sections were operational at the historical cutoff.",
       "source_ids": ["s-chalus-closeout"],
       "layout": {
-        "evidence": { "x": 0.56, "y": 0.44 }
+        "evidence": { "x": 0.57, "y": 0.44 }
       }
     },
     {
@@ -226,7 +226,7 @@
       "limitation": "Numeric stability alone does not satisfy the pre-registered historical-verification standard.",
       "source_ids": ["s-chalus-closeout"],
       "layout": {
-        "evidence": { "x": 0.68, "y": 0.44 }
+        "evidence": { "x": 0.72, "y": 0.44 }
       }
     },
     {
@@ -238,7 +238,7 @@
       "limitation": "These gaps trigger the frozen no-go rule regardless of the stable modelled distances.",
       "source_ids": ["s-chalus-closeout"],
       "layout": {
-        "evidence": { "x": 0.62, "y": 0.80 }
+        "evidence": { "x": 0.63, "y": 0.80 }
       }
     },
     {
@@ -250,7 +250,7 @@
       "limitation": "The result is one first-party session without independent audit; observation counts, exact duration, device/OS details, timing metrics, and storage-pressure results were not recorded.",
       "source_ids": ["s-fieldos-run", "s-fieldos-readme"],
       "layout": {
-        "evidence": { "x": 0.85, "y": 0.44 }
+        "evidence": { "x": 0.87, "y": 0.44 }
       }
     },
     {

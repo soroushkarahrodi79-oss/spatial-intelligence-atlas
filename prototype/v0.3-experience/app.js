@@ -25,6 +25,7 @@ const statusLabel = { active: 'Active', frozen: 'Frozen', closed: 'Closed', main
 
 let atlas, kinds, sourcesById, entities;
 let currentIndex = -1;
+const pageTitle = document.title;
 
 /* ---- evidence glyphs — same path data as the deployed v0.2.1 glyphs (DESIGN_CONTRACT.md §3.3) ---- */
 function glyph(kind) {
@@ -66,7 +67,16 @@ function resultText(outcome) {
   return outcome.statement.includes(verdict) ? outcome.statement : `${verdict}: ${outcome.statement}`;
 }
 
-/* ---- overview ---- */
+/* ---- overview ----
+   Deliberately no aria-label override here: a custom aria-label replaces
+   an element's ENTIRE accessible name, which would discard the role,
+   territory, verdict and evidence-kind text this row already renders
+   visually — the exact "screen-reader equivalent to the visualisation"
+   requirement (DESIGN_CONTRACT.md §8) this prototype is supposed to meet,
+   not defeat. The button's accessible name is simply its rendered text
+   content, in the same order a sighted reader scans it. The evidence-kind
+   glyphs are decorative (aria-hidden) SVGs, so their meaning is restated
+   as plain sr-only text rather than lost. */
 function overviewRow(entity) {
   const button = el('button', null, `overview-row${entity.kind === 'instrument' ? ' overview-row--instrument' : ''}`);
   button.type = 'button';
@@ -82,12 +92,14 @@ function overviewRow(entity) {
   if (outcome) meta.append(el('span', verdictLabel[outcome.outcome_type], 'overview-verdict'));
 
   const glyphRow = el('div', null, 'overview-glyphs');
-  const present = new Set(evidenceOf(entity.id).map(e => e.input_kind));
+  const present = [...new Set(evidenceOf(entity.id).map(e => e.input_kind))];
   present.forEach(id => glyphRow.append(glyphIcon(kinds.get(id))));
+  if (present.length) {
+    glyphRow.append(el('span', `Evidence recorded: ${present.map(id => kinds.get(id).label.toLowerCase()).join(', ')}.`, 'sr-only'));
+  }
   meta.append(glyphRow);
 
   button.append(meta);
-  button.setAttribute('aria-label', `${entity.label}, ${kindLabel.toLowerCase()}. Open case.`);
   button.addEventListener('click', () => openCase(entity.id));
   return button;
 }
@@ -108,9 +120,17 @@ function sectionBlock(container, heading, bodyText) {
   container.append(section);
 }
 
+/* Evidence records are a real <ol> of <li>s (SPEC_PROPOSAL.md §10) — not a
+   div soup — so a screen reader announces list semantics (list, position,
+   size) the way it would for any other list of records. The basis
+   disclosure uses native <details>/<summary>: the browser removes its
+   content from the accessibility tree and tab order while closed, and
+   restores both when open, which a custom button+ARIA toggle has to
+   reimplement by hand and can get wrong. The open/close text swap is pure
+   CSS (details[open] ...), so no click handler is needed for it at all. */
 function evidenceRecordBlock(record) {
   const kind = kinds.get(record.input_kind);
-  const item = el('div', null, 'evidence-record');
+  const item = el('li', null, 'evidence-record');
   const head = el('div', null, 'evidence-head');
   head.append(glyphIcon(kind), el('span', kind.label, 'label'), el('span', record.label, 'evidence-label body'));
   item.append(head);
@@ -120,18 +140,12 @@ function evidenceRecordBlock(record) {
   limitation.append(document.createTextNode(record.limitation));
   item.append(limitation);
 
-  const toggle = el('button', 'Full basis', 'disclosure');
-  toggle.type = 'button';
-  toggle.setAttribute('aria-expanded', 'false');
+  const details = el('details', null, 'basis-disclosure');
+  const summary = el('summary', null, 'disclosure');
+  summary.append(el('span', 'Full basis', 'disclosure-closed-text'), el('span', 'Hide full basis', 'disclosure-open-text'));
   const quote = el('p', record.basis, 'basis-quote body');
-  quote.dataset.open = 'false';
-  toggle.addEventListener('click', () => {
-    const open = quote.dataset.open === 'true';
-    quote.dataset.open = String(!open);
-    toggle.setAttribute('aria-expanded', String(!open));
-    toggle.textContent = open ? 'Full basis' : 'Hide full basis';
-  });
-  item.append(toggle, quote);
+  details.append(summary, quote);
+  item.append(details);
   return item;
 }
 
@@ -147,10 +161,23 @@ function verificationEntry(sourceId) {
   return li;
 }
 
+/* Section order is question -> territory -> result -> claim ceiling ->
+   evidence, matching SPEC_PROPOSAL.md §3.1/§3.3: the audience's 30-second
+   need (SPEC.md §2) is the headline result and its boundary, not the
+   supporting detail, so the result and its claim ceiling now come before
+   the itemised evidence records rather than after them.
+
+   Verification-rail source order follows the same reading order exactly
+   (SPEC_PROPOSAL.md §9): identity/question sources, then territory, then
+   result+ceiling, then each evidence record in listed order — first
+   citation wins, a Set preserves that insertion order, and nothing is
+   re-sorted afterward. */
 function renderCase(entity) {
   const isCase = entity.kind === 'case';
   $('case-kind').textContent = isCase ? 'CORE CASE' : 'SUPPORTING INSTRUMENT';
   $('case-heading').textContent = entity.label;
+  const sourceIds = new Set();
+  (entity.source_ids || []).forEach(id => sourceIds.add(id));
 
   const questionSection = $('case-question'); questionSection.replaceChildren();
   sectionBlock(questionSection, isCase ? 'Research question' : 'Role', isCase ? entity.research_question : entity.role);
@@ -162,26 +189,30 @@ function renderCase(entity) {
   if (isCase) {
     sectionBlock(territorySection, 'Territory', territory ? territory.label : 'No territory declared.');
     territorySection.hidden = false;
+    (territory ? territory.source_ids || [] : []).forEach(id => sourceIds.add(id));
   } else {
     territorySection.hidden = true;
   }
 
-  const evidenceList = $('evidence-list'); evidenceList.replaceChildren();
-  const records = evidenceOf(entity.id);
-  if (records.length) records.forEach(r => evidenceList.append(evidenceRecordBlock(r)));
-  else evidenceList.append(el('p', 'No evidence records declared.', 'body'));
-
   const resultSection = $('case-result'); resultSection.replaceChildren();
   const ceilingSection = $('case-ceiling'); ceilingSection.replaceChildren();
   const outcome = outcomeOf(entity.id);
-  const sourceIds = new Set(entity.source_ids || []);
   if (outcome) {
     sectionBlock(resultSection, isCase ? 'Documented result' : 'Documented functional result', resultText(outcome));
     sectionBlock(ceilingSection, isCase ? 'Claim ceiling' : 'Limitations', outcome.claim_ceiling);
     (outcome.source_ids || []).forEach(id => sourceIds.add(id));
   }
-  (territory ? territory.source_ids || [] : []).forEach(id => sourceIds.add(id));
-  records.forEach(r => (r.source_ids || []).forEach(id => sourceIds.add(id)));
+
+  const evidenceList = $('evidence-list'); evidenceList.replaceChildren();
+  const records = evidenceOf(entity.id);
+  if (records.length) {
+    records.forEach(r => {
+      evidenceList.append(evidenceRecordBlock(r));
+      (r.source_ids || []).forEach(id => sourceIds.add(id));
+    });
+  } else {
+    evidenceList.append(el('li', 'No evidence records declared.', 'body'));
+  }
 
   const verificationList = $('verification-list'); verificationList.replaceChildren();
   [...sourceIds].forEach(id => verificationList.append(verificationEntry(id)));
@@ -191,7 +222,7 @@ function renderCase(entity) {
   $('prev-case').disabled = currentIndex <= 0;
   $('next-case').disabled = currentIndex >= entities.length - 1;
 
-  document.title = `${entity.label} — Spatial Intelligence Atlas v0.3 prototype`;
+  document.title = `${entity.label} — ${pageTitle}`;
 }
 
 /* ---- screen transitions — see docs/v0.3/MOTION_CONTRACT.md #1/#2/#4 ----
@@ -243,6 +274,7 @@ function closeCase() {
   crossFade($('case'), $('overview'));
   const row = [...$('overview-list').children].find(r => r.textContent.includes($('case-heading').textContent));
   (row || $('overview-list').firstElementChild)?.focus();
+  document.title = pageTitle;
   announce('Returned to overview.');
 }
 
@@ -280,11 +312,10 @@ async function start() {
     $('next-case').addEventListener('click', () => stepCase(1));
     document.addEventListener('keydown', event => {
       if (event.key !== 'Escape') return;
-      const openBasis = document.querySelector('.basis-quote[data-open="true"]');
-      if (openBasis) {
-        openBasis.dataset.open = 'false';
-        openBasis.previousElementSibling?.setAttribute('aria-expanded', 'false');
-        if (openBasis.previousElementSibling) openBasis.previousElementSibling.textContent = 'Full basis';
+      const openDetails = document.querySelector('#case details[open]');
+      if (openDetails) {
+        openDetails.open = false;
+        openDetails.querySelector('summary')?.focus();
       } else if (!$('case').hidden) {
         closeCase();
       }

@@ -107,7 +107,10 @@ main { max-width: 1280px; margin: 0 auto; padding: 24px; }
 .case-nav button {
   background: none; border: none; color: var(--ink-2); font-family: inherit;
   font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase;
-  cursor: pointer; padding: 8px 0;
+  cursor: pointer; padding: 0 12px;
+  min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center;
+  /* touch target floor, DESIGN_CONTRACT_PROPOSAL.md §14 — min-width matters here because
+     "Next" is short enough that text width + prior 4px padding measured under 44px */
 }
 .case-nav button:hover, .case-nav button:focus-visible { color: var(--ink); }
 .case-nav button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
@@ -130,6 +133,7 @@ main { max-width: 1280px; margin: 0 auto; padding: 24px; }
 }
 .case-ceiling h3 { color: var(--ink-2); }
 
+.evidence-list { list-style: none; margin: 0; padding: 0; }
 .evidence-record { padding: 16px 0 16px 16px; border-left: 1px solid var(--edge); margin-bottom: 16px; }
 .evidence-record:last-child { margin-bottom: 0; }
 .evidence-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
@@ -139,27 +143,39 @@ main { max-width: 1280px; margin: 0 auto; padding: 24px; }
 .evidence-limitation { margin-bottom: 8px; }
 .evidence-limitation .label-inline { color: var(--ink-2); }
 
-.disclosure {
-  background: none; border: none; color: var(--ink-2); font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; padding: 0;
+/* Basis disclosure: native <details>/<summary> — the browser handles
+   removing/restoring the quote from the accessibility tree and tab order,
+   and keyboard (Enter/Space) operation, natively. The open/closed text
+   swap is pure CSS; deliberately instant, not animated — see
+   MOTION_CONTRACT.md #3 for why. */
+.basis-disclosure summary {
+  list-style: none; cursor: pointer;
+  color: var(--ink-2); font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
+  min-height: 44px; display: inline-flex; align-items: center; /* touch target floor */
 }
-.disclosure:hover, .disclosure:focus-visible { color: var(--ink); }
-.disclosure:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.basis-disclosure summary::-webkit-details-marker { display: none; }
+.basis-disclosure summary::marker { content: ""; }
+.basis-disclosure summary:hover, .basis-disclosure summary:focus-visible { color: var(--ink); }
+.basis-disclosure summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.basis-disclosure .disclosure-open-text { display: none; }
+.basis-disclosure[open] .disclosure-closed-text { display: none; }
+.basis-disclosure[open] .disclosure-open-text { display: inline; }
 .basis-quote {
-  margin-top: 8px; padding-left: 16px; border-left: 1px solid var(--ink-3);
-  color: var(--ink-2); overflow: hidden;
-  opacity: 0; transform: scaleY(0); transform-origin: top; height: 0;
-  transition: opacity 200ms var(--ease), transform 200ms var(--ease);
+  margin-top: 4px; padding-left: 16px; border-left: 1px solid var(--ink-3);
+  color: var(--ink-2);
 }
-.basis-quote[data-open="true"] { opacity: 1; transform: scaleY(1); height: auto; }
 
 #case-verification { border-left: 1px solid var(--rule); padding-left: 24px; }
 .source-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
 .source-list li { padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .source-list li:last-child { border-bottom: none; }
-.source-link { display: block; text-decoration: underline; margin-bottom: 4px; }
+.source-link {
+  display: flex; align-items: center; text-decoration: underline;
+  min-height: 44px; /* touch target floor, DESIGN_CONTRACT_PROPOSAL.md §14 */
+}
 .source-link:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-.source-meta { color: var(--ink-3); }
+.source-meta { color: var(--ink-3); margin-top: 4px; }
 
 /* ---- view transition (overview <-> case) ---- */
 #overview, #case {

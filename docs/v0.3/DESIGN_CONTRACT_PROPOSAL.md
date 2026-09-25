@@ -62,13 +62,18 @@ never merely fourth-in-a-list.
 │  READING COLUMN (max-measure 68ch)     │  VERIFICATION RAIL    │
 │  research question                     │  fixed 280px          │
 │  territory                             │  hairline left        │
-│  evidence records (§4)                 │  every cited source,  │
-│  documented result                     │  deduplicated, in     │
-│  claim ceiling (directly after result) │  reading order        │
+│  documented result                     │  every cited source,  │
+│  claim ceiling (directly after result) │  deduplicated, in     │
+│  evidence records (§4)                 │  first-cited reading  │
+│                                         │  order (§12)          │
 ├───────────────────────────────────────┴──────────────────────┤
 │  PROVENANCE FOOTER                                               │
 └────────────────────────────────────────────────────────────────┘
 ```
+
+Section order is `question → territory → result → claim ceiling →
+evidence`, matching `SPEC_PROPOSAL.md` §3.1 exactly — the result and its
+ceiling read before the itemised evidence, not after it.
 
 The verification rail is **always present**, never a modal or accordion —
 same non-negotiable v0.2 carried forward for the detail panel
@@ -87,7 +92,7 @@ document-chrome rule (§2.6 below).
 ### 2.5 Reading rhythm
 
 - Section spacing inside a case reader: 48px between major sections
-  (question / territory / evidence / result+ceiling / verification is a
+  (question / territory / result+ceiling / evidence — verification is a
   separate rail, not a section).
 - Evidence records: 24px between records, 8px between a record's
   statement and its limitation.
@@ -187,8 +192,8 @@ introduced for outcomes.
 | Overview row, default | `--ink-2` label, `--rule` bottom hairline |
 | Overview row, hover/focus | Label brightens to `--ink`; 2px achromatic focus ring on keyboard focus; no background fill change (fill would be a "card hover" SaaS-register cue, forbidden by §1) |
 | Overview row, FieldOS | Dashed top rule (8% opacity) + `SUPPORTING INSTRUMENT` label always visible in `label` step next to its name — never only on hover |
-| Evidence record, collapsed basis | A `label`-step "Full basis" disclosure affordance; text, not an icon-only chevron-in-a-circle |
-| Evidence record, expanded | Basis quotation shown in `body` step, indented 16px, `--ink-3` left rule |
+| Evidence record, collapsed basis | A native `<summary>` reading "Full basis," `micro` mono step; text, not an icon-only chevron-in-a-circle. Closed content is absent from the accessibility tree and tab order (browser-native `<details>` behaviour, not scripted) |
+| Evidence record, expanded | `<details open>`; basis quotation shown in `body` step, indented 16px, `--ink-3` left rule; summary text swaps to "Hide full basis" via CSS, not a click handler. The reveal is **instant**, not animated — see `MOTION_CONTRACT.md` #3 for why |
 | Source link | Underlined `body`-step text, `--ink` colour, focus ring on keyboard focus; accessible name states "opens in a new tab" per `SPEC_PROPOSAL.md` §9 |
 | Previous/next control | Text button, `label` step, states position as "2 of 4" — never an arrow-only control |
 
@@ -203,7 +208,8 @@ completeness of this document's checklist (§10):
 |---|---|---|
 | Overview → Case reader | ≤ 400ms | `opacity`, `transform` |
 | Case reader → Overview | ≤ 400ms | `opacity`, `transform` |
-| Evidence record expand/collapse | ≤ 240ms | `opacity`, `transform` (height via `grid-template-rows` trick or `transform: scaleY` substitute is forbidden — see `MOTION_CONTRACT.md` §2) |
+| Case reader → Case reader (previous/next) | ≤ 240ms | `opacity` only |
+| Evidence record expand/collapse | **0ms — instant, not animated** | — (native `<details>`; see `MOTION_CONTRACT.md` #3 for why this is deliberately not in the animated inventory) |
 | Focus ring appearance | 0ms (no transition on focus ring itself) | — |
 
 Easing: `cubic-bezier(0.4, 0, 0.2, 1)` or `ease-out`, nothing else, unchanged
@@ -221,16 +227,27 @@ substitute.
 
 ## 9. Responsive transformations
 
+Two breakpoints, not four — a correction from an earlier draft of this
+document, which described a ≥1280px two-column Overview, a narrowed
+240px rail at 1024–1279px, and a mobile type-scale step-down. None of
+those three was ever implemented; they are removed here rather than kept
+as aspirational behaviour presented as built. What is actually
+implemented, confirmed against the shipped CSS:
+
 | Breakpoint | Overview | Case reader |
 |---|---|---|
-| ≥1280px | Two visual groups (unchanged order — not re-sorted) with generous 32px row padding | Reading column + 280px verification rail, side by side |
-| 1024–1279px | Single column, 24px row padding | Reading column + rail, rail narrows to 240px |
-| 640–1023px | Single column, 16px row padding | Verification rail moves below the reading column (not a bottom sheet — an ordinary in-flow section, since it is document content, not a floating panel) |
-| 360–639px | Single column, 12px row padding, evidence-glyph row wraps | Same document order; evidence-record "table" (§2.5) becomes stacked; type steps down one 4px increment only where `body` text would otherwise exceed the 68-character measure |
+| ≥1024px | Single-column list, full row padding (24px, 32px above FieldOS's dashed rule) | Reading column + 280px verification rail, side by side |
+| 640–1023px | Single-column list, same padding as ≥1024px | Verification rail moves below the reading column (not a bottom sheet — an ordinary in-flow section, since it is document content, not a floating panel) |
+| 360–639px | Single-column list, reduced row padding (16px) | Same document order, verification rail in-flow below; type scale is **unchanged** at this width — the 68-character measure already keeps `body` prose readable down to 360px without a smaller step, confirmed in `VERIFICATION_REPORT.md` |
 
-No representation swap at any width — only spacing, column count, and
-in-flow ordering change. This is the direct implementation of
-`SPEC_PROPOSAL.md` §6.
+The Overview is a single column at **every** width, not only at narrow
+ones — this is a deliberate choice, not an unfinished wide-viewport
+treatment: a populated multi-column grid is exactly the "scan and compare"
+affordance `UX_DIRECTION.md` §2 rejected Direction A's plate-as-primary-
+interface for, and a wide viewport does not change that risk.
+
+No representation swap at any width — only spacing and in-flow ordering
+change. This is the direct implementation of `SPEC_PROPOSAL.md` §6.
 
 ---
 
@@ -250,25 +267,31 @@ width.
 - Visible focus ring: 2px solid `--ink`, 2px offset, on every focusable
   element — unchanged from `DESIGN_CONTRACT.md` §8.3.
 - Focus order is document order: header → Overview rows (or, in a case
-  reader, previous/next → question → evidence records → result → claim
-  ceiling → verification links → footer). No synthetic reordering, because
-  there is no coordinate-derived node order to reconcile (contrast
-  `DESIGN_CONTRACT.md` §8.2's "documented, stable order" workaround, which
-  v0.3 does not need).
-- `Esc` closes an open evidence-record disclosure if one is expanded,
-  otherwise returns from Case reader to Overview, otherwise does nothing —
-  a single, predictable escape hatch, mirroring `DESIGN_CONTRACT.md` §5.3's
-  intent with a document-shaped implementation.
+  reader, previous/next → question → territory → result → claim ceiling →
+  each evidence record's `<summary>` → verification source links →
+  footer). No synthetic reordering, because there is no coordinate-derived
+  node order to reconcile (contrast `DESIGN_CONTRACT.md` §8.2's
+  "documented, stable order" workaround, which v0.3 does not need). A
+  collapsed evidence record's basis quotation is not itself a tab stop —
+  native `<details>` semantics, not a custom rule.
+- `Esc` closes an open evidence-record disclosure (sets `<details>.open =
+  false`, returns focus to its `<summary>`) if one is expanded, otherwise
+  returns from Case reader to Overview, otherwise does nothing — a single,
+  predictable escape hatch, mirroring `DESIGN_CONTRACT.md` §5.3's intent
+  with a document-shaped implementation.
 
 ---
 
 ## 12. Source / provenance presentation
 
 Every source cited anywhere in a case reader appears once in the
-verification rail, in first-cited order, with: label, kind (`micro` step,
-mono), `pinned_ref` (truncated to 8 characters + full value in `title`
-attribute, mono, tabular), and `accessed_at`. This is a strict superset of
-what `DESIGN_CONTRACT.md` requires of the v0.2 detail panel's source list —
+verification rail, in first-cited reading order as defined precisely in
+`SPEC_PROPOSAL.md` §9.1 (identity/question → territory → result/ceiling →
+evidence records, in listed order — not dataset order, not grouped by
+source kind), with: label, kind (`micro` step, mono), `pinned_ref`
+(truncated to 8 characters + full value in `title` attribute, mono,
+tabular), and `accessed_at`. This is a strict superset of what
+`DESIGN_CONTRACT.md` requires of the v0.2 detail panel's source list —
 nothing is demoted, only relocated into an always-visible rail instead of
 the last section of a panel.
 
@@ -324,3 +347,14 @@ measured against it.
 - [ ] Zero dependencies, zero network requests beyond local files and
   user-initiated source links
 - [ ] `data/atlas.json` unmodified in content; no scientific meaning altered
+- [ ] Evidence records are a real `<ol>`/`<li>` list, not a generic `<div>`
+  collection
+- [ ] Basis disclosure uses native `<details>`/`<summary>`; collapsed
+  content is absent from the accessibility tree and tab order
+- [ ] Overview row accessible names are not truncated by an `aria-label`
+  override; evidence-kind glyphs have an `sr-only` text equivalent
+- [ ] Every interactive control (Overview rows, Back, Previous, Next, basis
+  disclosure, source links) measures ≥44×44px — measured in
+  `VERIFICATION_REPORT.md`, not assumed
+- [ ] Verification-rail source order matches `SPEC_PROPOSAL.md` §9.1
+  exactly at every case reader

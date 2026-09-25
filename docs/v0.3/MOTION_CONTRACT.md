@@ -11,29 +11,42 @@ moves" column does not ship.
 
 | # | Trigger | What moves | Why it moves | Duration | Properties |
 |---|---|---|---|---|---|
-| 1 | Selecting a case/instrument from Overview | The selected row's identity block (label, kind marker) transitions into the case reader's header position; the rest of the page cross-fades | Preserves the reader's sense of *which* entity they just opened — spatial continuity between "the row I clicked" and "the document I'm now reading" is the one piece of orientation state worth animating, per the brief's own motion criteria (§11: prefer continuity) | ≤ 400ms | `opacity`, `transform` |
-| 2 | Returning to Overview | Reverse of #1 | Same reasoning, reversed — confirms the reader is back where they started, not on a new unrelated screen | ≤ 400ms | `opacity`, `transform` |
-| 3 | Expanding an evidence record's full basis quotation | The quotation block reveals; the disclosure affordance's text changes ("Full basis" → "Hide full basis") | Makes clear that new content appeared as a direct result of the user's own action, not a layout jump with no cause | ≤ 240ms | `opacity`, `transform` (`transform-origin: top`, no height animation — see §2) |
+| 1 | Selecting a case/instrument from Overview | **Screen-level cross-fade, honestly described:** the whole Overview screen fades out while translating down 8px; the whole Case reader fades in while translating up from 8px below its resting position. No element morphs or travels between the two screens — this is not a shared-element/identity transition, and an earlier draft of this document described it as one. That was wrong and is corrected here to match what `app.js`'s `crossFade()` actually does. | Signals cause-and-effect (this screen change was caused by the click) and gives the two screens a consistent spatial relationship — Case readers consistently arrive "from below," Overview consistently arrives "from above" — without claiming a continuity guarantee (e.g. "you can see your selection carry over") the implementation does not provide. The Case reader's own heading, set from the clicked entity's label the instant `renderCase()` runs, is what actually confirms *which* entity opened — not the motion. | ≤ 400ms | `opacity`, `transform` |
+| 2 | Returning to Overview | Reverse of #1 — same screen-level cross-fade, same honesty correction | Same reasoning, reversed — confirms the reader is back on a different screen, not that anything continues visually between them | ≤ 400ms | `opacity`, `transform` |
+| 3 | Expanding an evidence record's full basis quotation | **Instant — not animated.** The quotation appears or disappears in the same frame as the click/keypress; only the summary's visible text swaps ("Full basis" ↔ "Hide full basis"), via CSS attribute selectors, not a transition. | This was originally specified as an animated reveal. It is deliberately downgraded to instant here because the implementation uses a native `<details>`/`<summary>` element specifically so the browser — not custom script — governs whether the collapsed content is exposed to assistive technology and the tab order. Animating a `<details>` element's open/close state reliably across browsers, while it is also changing what is and isn't in the accessibility tree, is not a solved problem without JS hacks that reintroduce exactly the AT-exposure risk this choice exists to avoid. Semantic correctness wins over motion here, per instruction, not by default. | 0ms | — |
 | 4 | Previous/next navigation within a case reader | Cross-fade between case readers | Signals "this is a different document," without implying a filmstrip or sequence between independent entities (explicitly not a slide/push transition, which would read as "next chapter") | ≤ 240ms | `opacity` only |
 | 5 | Focus ring appearing on an element | Nothing animates; the ring is present or absent | A focus ring that fades in is a focus ring that is briefly invisible — never acceptable | 0ms | — |
 
-That is the entire motion budget. No sixth entry.
+That is the entire motion budget. No sixth entry. Item #3 is listed for
+completeness even though it has no duration — the inventory's job is to
+account for every state change a reader can trigger, not only the animated
+ones.
 
 ---
 
-## 2. Why height is never animated
+## 2. Why the basis disclosure (#3) is instant, not animated
 
-Two entries above (#3) reveal new content without animating `height`,
-`max-height`, or `grid-template-rows`. This is deliberate: animating layout
-properties causes reflow on every frame, is the single most common source
-of jank on lower-end devices, and is explicitly forbidden by
-`DESIGN_CONTRACT.md` §6.2 ("No transitions on `width`, `height`, `top`,
-`left`, `margin`, or `filter`") — a v0.2 rule this proposal carries forward
-without exception. The v0.3 implementation uses a fixed-content technique
-(the disclosure region is always in the layout; `opacity`/`transform:
-scaleY` combined with `visibility` toggling, or a CSS `interpolate-size`
-progressive enhancement where supported, falling back to instant reveal) so
-the animated properties stay within `opacity`/`transform` in every browser.
+An earlier draft of this prototype animated the basis-quotation reveal with
+`opacity`/`transform: scaleY`, driven by a custom button and a hand-rolled
+`data-open` attribute. That version had two problems: first, it kept the
+collapsed quotation in the DOM at all times (`height: 0; overflow: hidden`)
+so a screen reader's virtual cursor or "read all" mode could still reach
+text a sighted user could not see — the reviewer's finding #3 was correct.
+Second, `DESIGN_CONTRACT.md` §6.2 already forbids animating `height` for
+performance reasons, and the scaleY substitute was itself a workaround for
+that rule, not a clean solution to it.
+
+The fix is the native `<details>`/`<summary>` element (§7 of
+`DESIGN_CONTRACT_PROPOSAL.md`, item 4): the browser removes closed content
+from the accessibility tree and tab order by default, with no custom ARIA
+and no risk of the two staying out of sync. The tradeoff, accepted
+deliberately: a native `<details>` element's open/close transition is not
+reliably animatable across browsers without reintroducing custom
+open-state tracking — the exact hack being removed. So the reveal is
+instant. This is not a limitation quietly accepted; it is the direct
+consequence of prioritising "collapsed text is actually hidden from
+assistive technology" over "the reveal has a transition," which is the
+priority order the reviewer asked for, not an incidental corner cut.
 
 ---
 
@@ -69,7 +82,8 @@ modification. Under reduced motion:
 
 - Overview → Case reader (#1) and the reverse (#2) become instant swaps —
   no cross-fade substitute, no "gentler" version.
-- Evidence-record expansion (#3) becomes an instant reveal.
+- Evidence-record expansion (#3) is already instant regardless of this
+  setting — it has nothing left to reduce.
 - Previous/next navigation (#4) becomes an instant document swap.
 
 This is a complete equivalent experience, not a degraded one: every state
@@ -99,5 +113,6 @@ a browser with the media feature forced.
 - **Keyboard navigation:** `Tab` order is document order (no coordinate
   reordering to animate around, unlike v0.2's SVG focus-order problem);
   `Esc` behavior is specified in `DESIGN_CONTRACT_PROPOSAL.md` §11 and
-  triggers whichever of #2/#3 is applicable, with identical timing to its
-  pointer-triggered equivalent.
+  triggers whichever of #2 (close an open case reader, animated) or #3
+  (close an open disclosure, instant) applies — identical to what pressing
+  the equivalent pointer control would do, in both cases.

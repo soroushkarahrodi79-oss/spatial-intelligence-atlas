@@ -49,9 +49,14 @@ instruction here, not a formality.
 
 What is salvaged from it into this proposal: the instinct that TERRITORY
 deserves a stronger sense of place than an abstract SVG rectangle, and the
-case-by-case "reading strip" structure (question → evidence → outcome →
-claim ceiling), which this proposal adopts in a dependency-free, non-WebGL,
-no-real-coordinates form (§3, Direction C).
+case-by-case "reading strip" *structure* — one continuous document per
+case rather than a graph — in a dependency-free, non-WebGL,
+no-real-coordinates form (§3, Direction C). The globe prototype's own
+section order (question → evidence → limitations → outcome → claim
+ceiling) is not carried over unchanged: `SPEC_PROPOSAL.md` §3.1 resolves the
+final v0.3 order as question → territory → result → claim ceiling →
+evidence, front-loading the headline result and its boundary ahead of the
+itemised evidence, for the reason given there.
 
 ---
 
@@ -196,8 +201,8 @@ diagnosed problem.
 **IA.** The organizing unit becomes the case (or instrument), not the
 projection. An overview index lists all four; selecting one opens a
 single-case reader that answers all three SPEC §5 questions in one
-continuous, ordered view: question → evidence → result → claim ceiling →
-verification.
+continuous, ordered view (final order resolved in `SPEC_PROPOSAL.md` §3.1:
+question → territory → result → claim ceiling → evidence → verification).
 
 **Form.** Structured HTML (headings, `<dl>`/`<ol>`, real prose), typeset
 with the same restrained editorial register as v0.2, no graph, no canvas.

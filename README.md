@@ -33,8 +33,8 @@ complete.
 
 | File | Role | State |
 |------|------|-------|
-| `SPEC.md` | **v0.3.0 target:** meaning, content model (schema `0.3.0`), views, dossier contract | Gate 1 in review |
-| `DESIGN_CONTRACT.md` | **v0.3.0 target:** visual identity, layout, tokens, components, plates, figures, print | Gate 1 in review |
+| `SPEC.md` | **v0.3.0 target:** meaning, content model (schema `0.3.0`), views, dossier contract; §12 content freeze | Gate 1 approved; §12 (Gate 2) in review |
+| `DESIGN_CONTRACT.md` | **v0.3.0 target:** visual identity, layout, tokens, components, plates, figures, print | Gate 1 approved |
 | `data/atlas.json` | Deployed `v0.2.1` content, schema `0.2.0` | Released |
 | `index.html` / `styles.css` / `app.js` | Deployed `v0.2.1` runtime | Released |
 | `docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md` | Approved v0.3 direction (Gate 0, PR #15) | Approved |

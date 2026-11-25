@@ -1,7 +1,8 @@
 # PROJECT_STATUS.md
 
 **Audit date:** 2026-09-22 · **Updated:** 2026-11-25 (records the `v0.2.1`
-maintenance release; no content-model change)
+maintenance release, the approved v0.3 Gate 0 and the v0.3 Gate 1 in review;
+no change to the deployed content)
 
 ---
 
@@ -19,11 +20,12 @@ which superseded v0.1.1 as the live artifact. `v0.2.0`, `v0.1.1` and
 deterministic label layout only (`index.html`, `styles.css`, `app.js`).
 Its one dataset change is five non-semantic `layout.evidence.x` coordinates
 in `data/atlas.json`, approved by the maintainer as presentation-only
-(PR #13, `gate-approved`; `SPEC.md` §12.8). Scientific statements, claim
+(PR #13, `gate-approved`; `SPEC.md` §12.8 at tag `v0.2.1`). Scientific statements, claim
 ceilings, sources and relationships are unchanged from `v0.2.0`, and the
-dataset schema remains `0.2.0`. `SPEC.md` and `DESIGN_CONTRACT.md` were kept
-byte-identical in `v0.2.1`, so their headers still name `v0.2.0`; their
-content applies to `v0.2.1` unchanged.
+dataset schema remains `0.2.0`. The specification and design contract of
+the deployed `v0.2.1` are `SPEC.md` and `DESIGN_CONTRACT.md` **at tag
+`v0.2.1`**. On `main`, those two files now describe the v0.3.0 target
+(§6.1), which is not deployed.
 
 All four v0.2 gates are complete:
 
@@ -82,13 +84,14 @@ entity-to-entity relationships.
 Each evidence record carries a separate `input_kind` (`observed` / `acquired`
 / `derived` / `simulated` / `reported` / `unestablished`) and `substantiation`
 (`source_stated` / `owner_attested` / `not_established`); the two axes are
-never collapsed. Full content is frozen in `SPEC.md` §12 and was reviewed
+never collapsed. Full content is frozen in `SPEC.md` §12 (at tag `v0.2.1`) and was reviewed
 against the pinned commits listed in §2.6 of the same document before this
 release.
 
 FIRSTLOOK-MAD and FAB, and the five-system all-pairs graph they were part of,
 remain preserved as immutable v0.1 history (`v0.1.0`, `v0.1.1`) but are not
-primary v0.2 entities. See `SPEC.md` §1.1 for the selection principle.
+primary v0.2 entities. See `SPEC.md` §1.1 at tag `v0.2.1` for the selection
+principle.
 
 ## 4. Claim ceiling
 
@@ -133,11 +136,18 @@ With all four v0.2 gates complete, ordinary maintenance applies:
   content model, design contract, or claim ceiling.
 - Re-triggering deployment (e.g. GitHub Pages) with no content change.
 
-Any change to the v0.2 content model (`SPEC.md` §4), design contract
-(`DESIGN_CONTRACT.md`), or the semantic payload in `SPEC.md` §12 (adding an
-entity, an entity-to-entity relationship, or a new claim) requires a new,
-separately gated proposal — the same discipline that produced v0.2, not an
-ad hoc edit.
+Any change to the deployed content model, design contract or semantic
+payload requires a gated proposal, not an ad hoc edit. That covers adding an
+entity, an entity-to-entity relationship or a new claim.
+
+This discipline is now enforced mechanically:
+
+- `Enforce governance gate` is a required status check on `main` (ruleset
+  `23958517`);
+- release tags `v*` cannot be deleted, moved or force-pushed (ruleset
+  `28098449`).
+
+Both were applied by the maintainer on 2026-11-25 (Gate 0, M3).
 
 ## 6. v0.2 gate sequence
 
@@ -149,8 +159,29 @@ ad hoc edit.
 | Gate 4 — verification and release | **APPROVED, RELEASED** | Issue #5, tag `v0.2.0`, 2026-09-22 |
 
 All four gates are complete for `v0.2.0`. `v0.2.1` (PR #13) was ordinary
-maintenance under §5 and did not reopen the sequence. A future v0.3 (or any
-content-model change) restarts this sequence from Gate 0.
+maintenance under §5 and did not reopen the sequence.
+
+### 6.1 v0.3 gate sequence (Research Explorer)
+
+| Gate | State | Authority |
+|---|---|---|
+| Gate 0 — audit and direction | **APPROVED, MERGED** | PR #15 / `ea93956` (`docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md`) |
+| Gate 1 — specification and design (`SPEC.md`, `DESIGN_CONTRACT.md`) | **IN REVIEW** | Gate 1 PR; `gate-approved` by the maintainer only |
+| Gate 2 — content freeze (seven items, pins, methodology, outputs, figures, geometry) | not started | — |
+| Gate 3 — runtime and dataset implementation | not started | — |
+| Gate 4 — verification and release `v0.3.0` (licence approval, `CITATION.cff`, DOI only with authorisation) | not started | — |
+
+The v0.3.0 scope is closed at seven items (`SPEC.md` §3):
+
+- documented research: HATI-Madrid pilot, HATI pedestrian heat extension,
+  SNTO — PNSG, Pedestrian Network Accessibility Pilot;
+- research platforms: SNTO observatory, Madrid Urban Evidence Lens;
+- instrument: FieldOS.
+
+CHALUS is excluded because its repository is private; it stays preserved
+in the `v0.2.x` tags. MCP, Transit Graph and Isovist are deferred to v0.3.x.
+Until `v0.3.0` is released, the deployed `v0.2.1` keeps two CHALUS source
+links that return 404 to the public.
 
 ## 7. Open issues and pull requests
 
@@ -171,6 +202,17 @@ open ambiguity for the maintainer to resolve deliberately (including
 separately for code vs. data, since the evidence-provenance discipline in
 §3 may warrant a different license for `data/atlas.json` than for the
 rendering code); it is not something this audit will guess at.
+
+**v0.3 direction (Gate 0, D4).** The preferred licences are **MIT for
+original code** and **CC BY 4.0 for original data and text**. Both are
+subject to a compatibility review and final maintainer approval before
+Gate 4. The review covers:
+
+- third-party quotations;
+- reused research figures;
+- geometry derived from OpenStreetMap, which keeps ODbL on its own file.
+
+No `LICENSE` file is added before that approval.
 
 ## 9. Publication identifiers and versioning
 

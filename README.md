@@ -33,16 +33,44 @@ complete.
 
 | File | Role | State |
 |------|------|-------|
-| `SPEC.md` | v0.2 meaning, behaviour, and the frozen content (§12) | All gates approved |
-| `DESIGN_CONTRACT.md` | v0.2 form and limits | All gates approved |
+| `SPEC.md` | **v0.3.0 target:** meaning, content model (schema `0.3.0`), views, dossier contract | Gate 1 in review |
+| `DESIGN_CONTRACT.md` | **v0.3.0 target:** visual identity, layout, tokens, components, plates, figures, print | Gate 1 in review |
 | `data/atlas.json` | Deployed `v0.2.1` content, schema `0.2.0` | Released |
 | `index.html` / `styles.css` / `app.js` | Deployed `v0.2.1` runtime | Released |
+| `docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md` | Approved v0.3 direction (Gate 0, PR #15) | Approved |
 | `README.md` | Orientation (this file) | Current |
 
-> `SPEC.md` and `DESIGN_CONTRACT.md` still name `v0.2.0` in their headers.
-> Both are governed files; their wording was deliberately left byte-identical
-> in `v0.2.1` and is not changed by this documentation update. Their content
-> applies to `v0.2.1` unchanged.
+> **Two specifications, one deployed.** On `main`, `SPEC.md` and
+> `DESIGN_CONTRACT.md` now describe the **v0.3.0 Research Explorer**, which is
+> not yet implemented. The deployed `v0.2.1` stays governed by those two files
+> **at tag `v0.2.1`**. Every reference to `SPEC.md` or `DESIGN_CONTRACT.md` in
+> the sections below that describe the deployed runtime means that tagged
+> version.
+
+### v0.3.0 Research Explorer (in progress)
+
+The v0.3.0 target is a document-first research explorer. It covers seven
+items:
+
+- four documented research items: HATI-Madrid pilot, HATI pedestrian heat
+  extension, SNTO — PNSG, and the Pedestrian Network Accessibility Pilot;
+- two research platforms: the SNTO observatory and Madrid Urban Evidence
+  Lens;
+- one instrument: FieldOS.
+
+It offers:
+
+- academic dossiers with sourced methodology, findings and uncertainty;
+- cartographic plates drawn only from published, licensed geometry;
+- verified research figures;
+- an Evidence Explorer;
+- Publications & Datasets;
+- a Timeline;
+- light, dark and print presentation.
+
+CHALUS is excluded because its repository is private. MCP, Transit Graph
+and Isovist are deferred to v0.3.x. Nothing of v0.3 is deployed. The gate
+state is in `PROJECT_STATUS.md` §6.1.
 
 Any further change to the content model, design contract, or semantic payload
 requires a new, separately gated proposal (see `PROJECT_STATUS.md` §5–§6) —
@@ -163,29 +191,30 @@ activation.
 
 ---
 
-## Constraints on any future implementation
+## Constraints on the v0.3.0 implementation
 
-Read `DESIGN_CONTRACT.md` before writing a line. In brief:
+Read `SPEC.md` and `DESIGN_CONTRACT.md` on `main` before writing a line.
+Implementation starts only after Gate 2 (content freeze). In brief:
 
-- **Four files only:** `index.html`, `styles.css`, `app.js`, `data/atlas.json`
-- **No** backend, auth, database, API, runtime AI, or persistence (including
-  `localStorage`)
-- **No** framework, library, bundler, package manager, or build step
-- **No** external research or repository integration
-- Inline **SVG** rendering, vanilla ES2020, a single stylesheet
-- Colour is a semantic: only the six evidence input kinds carry colour, and
-  every colour distinction is duplicated by a dash pattern, a glyph, and a
-  text label
-- Five type sizes, two weights, one uppercase context
-- Five interactions — no pan, zoom, drag, filter, or search
-- No looping or ambient motion; all transitions ≤ 400ms;
-  `prefers-reduced-motion` yields instant repositioning
-- WCAG 2.2 AA, fully keyboard operable, legible in greyscale
-- Readable at 360px via a structured outline fallback
+- **Static and same-origin only.** One `index.html`, one `styles.css`, at
+  most 8 native ES modules in `js/`, `data/atlas.json`, offline-prepared
+  `data/geometry/`, and verified `assets/figures/`.
+- **No** backend, framework, library, bundler, web font, map tiles,
+  basemap, WebGL, analytics, cookies, `localStorage` or runtime AI.
+- **Development-only tooling:** `tools/validate_atlas.py` (invariants
+  I1–I18) and validation and link-check workflows. The page never loads
+  them.
+- **Colour:** only the six evidence input kinds carry colour, each with a
+  dash pattern, a glyph and a text label. Outcomes, classes and plates are
+  achromatic.
+- **Interactions:** eight, from a closed list (`SPEC.md` §6). No search,
+  sorting, ranking, pan or zoom.
+- **Accessibility and layout:** WCAG 2.2 AA; light, dark and print; no
+  horizontal scroll from 360 px.
 
-The one-additional-asset exception in `DESIGN_CONTRACT.md` §9.2 is **not
-invoked** in v0.2. If a future implementer invokes it, the file and its
-justification must be recorded here.
+For the deployed `v0.2.1`, the constraints are those of
+`DESIGN_CONTRACT.md` at tag `v0.2.1`: four files only, five interactions,
+and the structured outline below 640 px.
 
 ---
 
@@ -204,13 +233,20 @@ that release as originally published.
 
 ## Reading order
 
-1. `README.md` — orientation (you are here)
-2. `SPEC.md` — purpose, content model, modes, interaction, non-goals, gate
-   history, and the frozen §12 semantic content
-3. `DESIGN_CONTRACT.md` — visual philosophy, layout, type, colour, motion,
-   accessibility, responsive behaviour, scope ceiling
-4. `data/atlas.json` — the dataset, with a pinned source on every claim
+1. `README.md`: orientation (you are here).
+2. `PROJECT_STATUS.md`: release state, gate history, claim ceiling,
+   licensing.
+3. `docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md`: the approved v0.3
+   direction.
+4. `SPEC.md`: v0.3.0 purpose, scope, content model, views, interactions,
+   dossier contract, non-goals and acceptance criteria. For v0.2.1, read it
+   at tag `v0.2.1`.
+5. `DESIGN_CONTRACT.md`: v0.3.0 visual identity, layout, tokens,
+   typography, components, plates, figures, print and accessibility. For
+   v0.2.1, read it at tag `v0.2.1`.
+6. `data/atlas.json`: the deployed dataset, with a pinned source on every
+   claim.
 
-The Gate 1 acceptance criteria (`SPEC.md` §10) and the contract checklist
-(`DESIGN_CONTRACT.md` §10) are together sufficient to review the artifact
-without re-reading the prose.
+Two lists are together sufficient to review the v0.3.0 artifact without
+re-reading the prose: the acceptance criteria (`SPEC.md` §10) and the
+contract checklist (`DESIGN_CONTRACT.md` §16).

@@ -1,0 +1,3 @@
+# Geometry files are hashed (SPEC.md §4.2, I12). Commit and check out their
+# exact bytes on every platform: no line-ending conversion.
+data/geometry/*.json -text

@@ -51,7 +51,12 @@ def warn(msg):
 
 
 def frozen_pins():
-    """Gate 2 frozen pins from SPEC.md §12.1 (source id -> pinned_ref)."""
+    """Gate 2 frozen pins from SPEC.md §12.1 (source id -> pinned_ref).
+
+    The table cell is Markdown. Its only formatting is inline code (backticks),
+    which is removed; the DOI convention `DOI x` -> `doi:x` is the dataset's
+    canonical form. Nothing else is rewritten: the remaining text must equal
+    the dataset's pinned_ref exactly (I18)."""
     try:
         spec = open(os.path.join(ROOT, 'SPEC.md'), encoding='utf-8').read()
     except OSError:
@@ -60,9 +65,9 @@ def frozen_pins():
     pins = {}
     if m:
         for sid, ref in re.findall(r'^\| `(s-[a-z0-9-]+)` \|[^|]*\|[^|]*\| ([^|]+) \|', m.group(1), re.M):
-            ref = ref.strip()
-            ref = re.sub(r'^DOI `', 'doi:', ref)
-            pins[sid] = ref.strip('`').strip()
+            ref = ref.replace('`', '').strip()
+            ref = re.sub(r'^DOI ', 'doi:', ref)
+            pins[sid] = ref
     return pins
 
 
@@ -285,8 +290,7 @@ def main():
         if fz is None:
             warn(f"{s['id']}: no frozen pin in SPEC.md §12.1 (I18 not applicable)")
             continue
-        same = cur == fz or cur.startswith(fz) or fz.startswith(cur) or fz in cur
-        if not same and not s.get('pin_change'):
+        if cur != fz and not s.get('pin_change'):
             err('I18', f"{s['id']}: pinned_ref {cur!r} differs from frozen {fz!r} without pin_change")
 
     for base in ('index.html', 'styles.css'):

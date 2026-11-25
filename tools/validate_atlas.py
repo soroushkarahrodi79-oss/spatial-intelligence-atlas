@@ -342,7 +342,7 @@ def check_links(cols):
     for u in urls:
         doi = 'doi.org/' in u
         opener = urllib.request.build_opener(_NoRedirect) if doi else urllib.request.build_opener()
-        req = urllib.request.Request(u, headers={'User-Agent': 'atlas-link-check/0.3 (+https://github.com/soroushkarahrodi79-oss/spatial-intelligence-atlas)'})
+        req = urllib.request.Request(u, headers={'User-Agent': 'atlas-link-check/0.3'})
         try:
             code = opener.open(req, timeout=60).status
         except urllib.error.HTTPError as e:

@@ -1,0 +1,27 @@
+name: Validate atlas metadata
+
+# Development-only (DESIGN_CONTRACT.md §14.2). Runs the standard-library
+# validator on every pull request: SPEC.md §4.11 invariants I1–I13 and
+# I15–I18 (including class-aware I11 linkage) plus the runtime file budget.
+# A pass means the metadata is well-formed and linked. It never means a claim
+# is scientifically supported; that is the human review of SPEC.md §12.10.
+# The page never loads anything from this workflow.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Mechanical validation (I1–I13, I15–I18)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run tools/validate_atlas.py
+        run: python tools/validate_atlas.py

@@ -31,26 +31,27 @@ unchanged; the only dataset change is five maintainer-approved,
 non-semantic `layout.evidence.x` coordinates. All four v0.2 gates are
 complete.
 
-| File | Role | State |
+| Path | Role | State |
 |------|------|-------|
-| `SPEC.md` | **v0.3.0 target:** meaning, content model (schema `0.3.0`), views, dossier contract; §12 content freeze | Gate 1 approved; §12 (Gate 2) in review |
-| `DESIGN_CONTRACT.md` | **v0.3.0 target:** visual identity, layout, tokens, components, plates, figures, print | Gate 1 approved |
-| `data/atlas.json` | Deployed `v0.2.1` content, schema `0.2.0` | Released |
-| `index.html` / `styles.css` / `app.js` | Deployed `v0.2.1` runtime | Released |
+| `SPEC.md` | **v0.3.0:** meaning, content model (schema `0.3.0`), views, dossier contract; §12 content freeze | Gate 1 approved; Gate 2 freeze merged (PR #18); human verification (§12.10) pending |
+| `DESIGN_CONTRACT.md` | **v0.3.0:** visual identity, layout, tokens, components, plates, figures, print | Gate 1 approved |
+| `data/atlas.json` | v0.3.0 dataset, schema `0.3.0` (seven items) | Gate 3, in review |
+| `data/geometry/*.json` | Offline-prepared plate geometry (EPSG:25830, hashed) | Gate 3, in review |
+| `assets/figures/*.webp` | Research figures, format conversion only | Gate 3, in review |
+| `index.html` · `styles.css` · `js/*.js` | v0.3.0 runtime (seven native ES modules, no build step) | Gate 3, in review |
+| `tools/validate_atlas.py` | Development-only metadata validator (I1–I13, I15–I18, file budget) | Gate 3, in review |
+| `.github/workflows/validate.yml`, `link-check.yml` | Development-only CI: validator on every PR; weekly link check | Gate 3, in review |
 | `docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md` | Approved v0.3 direction (Gate 0, PR #15) | Approved |
-| `README.md` | Orientation (this file) | Current |
 
-> **Two specifications, one deployed.** On `main`, `SPEC.md` and
-> `DESIGN_CONTRACT.md` now describe the **v0.3.0 Research Explorer**, which is
-> not yet implemented. The deployed `v0.2.1` stays governed by those two files
-> **at tag `v0.2.1`**. Every reference to `SPEC.md` or `DESIGN_CONTRACT.md` in
-> the sections below that describe the deployed runtime means that tagged
-> version.
+> **The deployed site is still `v0.2.1`.** It is governed by `SPEC.md` and
+> `DESIGN_CONTRACT.md` **at tag `v0.2.1`**, and its runtime (`app.js`,
+> schema `0.2.0`) is preserved at that tag. The files above describe the
+> unreleased v0.3.0 implementation under review at Gate 3. Nothing of v0.3 is
+> released, and no DOI or licence has been issued for it.
 
-### v0.3.0 Research Explorer (in progress)
+### v0.3.0 Research Explorer (Gate 3, in review)
 
-The v0.3.0 target is a document-first research explorer. It covers seven
-items:
+A document-first research explorer over seven items:
 
 - four documented research items: HATI-Madrid pilot, HATI pedestrian heat
   extension, SNTO — PNSG, and the Pedestrian Network Accessibility Pilot;
@@ -58,29 +59,33 @@ items:
   Lens;
 - one instrument: FieldOS.
 
-It offers:
+Views (hash routes, each deep-linkable): Overview `#/`, Research `#/research`,
+dossiers `#/research/<id>`, Atlas `#/atlas` with plates `#/atlas/<territory>`,
+Evidence Explorer `#/evidence` (facets in the route query), Publications &
+Datasets `#/outputs`, Timeline `#/timeline`, About `#/about`.
 
-- academic dossiers with sourced methodology, findings and uncertainty;
-- cartographic plates drawn only from published, licensed geometry;
-- verified research figures;
-- an Evidence Explorer;
-- Publications & Datasets;
-- a Timeline;
-- light, dark and print presentation.
+What the reader should know:
+
+- **Scientific content** is the Gate 2 freeze (`SPEC.md` §12). It was
+  checked against the pinned sources with AI assistance. **Per-claim human
+  verification by the maintainer (`SPEC.md` §12.10) has not been recorded**,
+  and the interface says so.
+- **Plates** are drawn only from declared, licensed, hashed geometry:
+  San Isidro and the Madrid municipality (CC BY 4.0, Ayuntamiento de Madrid)
+  and the PNSG boundary (OAPN reuse terms). The HATI route geometry is **not
+  drawn**: its publication needs the maintainer approval A-Q1
+  (`SPEC.md` §12.10), which has not been given. That territory is shown as
+  text with the reason.
+- **Figures** are the four HATI preprint figures (CC BY 4.0, from the
+  deposited PDF) and the network-pilot figure (MIT repository, embedded
+  attribution), converted to WebP without edits.
 
 CHALUS is excluded because its repository is private. MCP, Transit Graph
-and Isovist are deferred to v0.3.x. Nothing of v0.3 is deployed. The gate
-state is in `PROJECT_STATUS.md` §6.1.
+and Isovist are deferred to v0.3.x. Gate state: `PROJECT_STATUS.md` §6.1.
 
-Any further change to the content model, design contract, or semantic payload
-requires a new, separately gated proposal (see `PROJECT_STATUS.md` §5–§6) —
-not an ad hoc edit.
-
-> The interface footer shows `schema_version: "0.2.0"` directly, matching the
-> dataset shape. It is the dataset schema, not the release tag: the deployed
-> release is `v0.2.1`. (In the preserved `v0.1.1` release, the footer's
-> `v0.1.0` was the dataset schema, not the release tag — see that release's
-> own `PROJECT_STATUS.md` note for the distinction.)
+Any further change to the content model, design contract or semantic payload
+requires a new, separately gated proposal (`PROJECT_STATUS.md` §5–§6), not an
+ad hoc edit.
 
 ---
 
@@ -141,7 +146,7 @@ evidence record, and pinned source — is frozen in `SPEC.md` §12.
 
 ## Dataset shape (schema `0.2.0`, deployed in `v0.2.1`)
 
-`data/atlas.json`, schema `0.2.0`:
+`data/atlas.json` at tag `v0.2.1`, schema `0.2.0`:
 
 **4 entities** (3 core cases, 1 supporting instrument) · **3 territories** ·
 **10 evidence records** · **4 outcomes** · **8 commit-pinned sources** ·
@@ -171,30 +176,43 @@ are forbidden (`SPEC.md` §4.5–§4.6).
 
 ## Running it locally
 
-The artifact is fully static, but `app.js` fetches `data/atlas.json` at
-runtime and browsers block `fetch` over `file://`. Serve the directory:
+The artifact is static, but the page fetches `data/atlas.json` and the
+geometry files at runtime, and browsers block `fetch` over `file://`. Serve
+the repository folder:
 
 ```
 python -m http.server 8000
 ```
 
-Then open `http://localhost:8000`.
+Then open `http://localhost:8000`. If the data cannot be loaded, the page
+says so and shows this command; it never renders blank.
 
-The data is **not** inlined into `index.html` or `app.js` — one source of
-truth. If the fetch fails, the page renders a clear, styled explanation with
-this command, never a blank page.
-
-Beyond the four local files there are **zero** network requests. No CDN, no
-webfont, no external image, no remote JSON, no telemetry. Source links in the
-detail panel are ordinary user-initiated navigation, opened only on explicit
+All runtime requests are same-origin: no CDN, web font, tile, external image,
+remote JSON or telemetry. Source links open in a new tab only on explicit
 activation.
+
+### Development checks (never loaded by the page)
+
+```
+python tools/validate_atlas.py           # invariants I1–I13, I15–I18 and the file budget
+python tools/validate_atlas.py --links   # also checks every declared URL (reports only)
+```
+
+A passing validator means the metadata is well-formed and linked. It does
+**not** mean a claim is scientifically supported; that is the human review
+recorded in `SPEC.md` §12.10. CI runs the validator on every pull request
+(`validate.yml`) and the link check weekly and on demand (`link-check.yml`);
+neither edits `data/atlas.json`.
+
+`data/geometry/*.json` is committed byte-exact (`.gitattributes`: `-text`), so
+its SHA-256 hashes hold on Windows and Linux checkouts alike.
 
 ---
 
 ## Constraints on the v0.3.0 implementation
 
-Read `SPEC.md` and `DESIGN_CONTRACT.md` on `main` before writing a line.
-Implementation starts only after Gate 2 (content freeze). In brief:
+The implementation follows `SPEC.md` and `DESIGN_CONTRACT.md` on `main`. In
+brief:
 
 - **Static and same-origin only.** One `index.html`, one `styles.css`, at
   most 8 native ES modules in `js/`, `data/atlas.json`, offline-prepared
@@ -202,8 +220,8 @@ Implementation starts only after Gate 2 (content freeze). In brief:
 - **No** backend, framework, library, bundler, web font, map tiles,
   basemap, WebGL, analytics, cookies, `localStorage` or runtime AI.
 - **Development-only tooling:** `tools/validate_atlas.py` (invariants
-  I1–I18) and validation and link-check workflows. The page never loads
-  them.
+  I1–I13 and I15–I18; I14 was checked at Gate 2) and the validation and
+  link-check workflows. The page never loads them.
 - **Colour:** only the six evidence input kinds carry colour, each with a
   dash pattern, a glyph and a text label. Outcomes, classes and plates are
   achromatic.
@@ -244,8 +262,9 @@ that release as originally published.
 5. `DESIGN_CONTRACT.md`: v0.3.0 visual identity, layout, tokens,
    typography, components, plates, figures, print and accessibility. For
    v0.2.1, read it at tag `v0.2.1`.
-6. `data/atlas.json`: the deployed dataset, with a pinned source on every
-   claim.
+6. `data/atlas.json`: the v0.3.0 dataset (schema `0.3.0`), with a pinned
+   public source on every claim. The deployed v0.2.1 dataset is at tag
+   `v0.2.1`.
 
 Two lists are together sufficient to review the v0.3.0 artifact without
 re-reading the prose: the acceptance criteria (`SPEC.md` §10) and the

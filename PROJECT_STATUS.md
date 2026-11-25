@@ -1,8 +1,9 @@
 # PROJECT_STATUS.md
 
 **Audit date:** 2026-09-22 · **Updated:** 2026-11-25 (records the `v0.2.1`
-maintenance release, the approved v0.3 Gates 0 and 1, and the v0.3 Gate 2 in review;
-no change to the deployed content)
+maintenance release, the approved v0.3 Gates 0 and 1, the merged Gate 2
+content freeze with its human verification still pending, and the v0.3 Gate 3
+implementation in review; no change to the deployed content)
 
 ---
 
@@ -149,6 +150,11 @@ This discipline is now enforced mechanically:
 
 Both were applied by the maintainer on 2026-11-25 (Gate 0, M3).
 
+From v0.3.0 the governed files also include the new runtime modules
+`js/*.js`, `data/geometry/*` and `assets/figures/*` (governance gate regex and
+`.github/GOVERNANCE_GATE.md`, updated at Gate 3). `app.js` stays listed for
+the v0.2.x history.
+
 ## 6. v0.2 gate sequence
 
 | Gate | State | Authority |
@@ -167,8 +173,8 @@ maintenance under §5 and did not reopen the sequence.
 |---|---|---|
 | Gate 0 — audit and direction | **APPROVED, MERGED** | PR #15 / `ea93956` (`docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md`) |
 | Gate 1 — specification and design (`SPEC.md`, `DESIGN_CONTRACT.md`) | **APPROVED, MERGED** | PR #17 / `326d98f` |
-| Gate 2 — content freeze (seven items, pins, methodology, outputs, figures, geometry) | **IN REVIEW**; maintainer human verification pending (`SPEC.md` §12.10) | Gate 2 PR; `gate-approved` by the maintainer only |
-| Gate 3 — runtime and dataset implementation | not started | — |
+| Gate 2 — content freeze (seven items, pins, methodology, outputs, figures, geometry) | **MERGED**; per-claim human verification by the maintainer **pending** (`SPEC.md` §12.10, all rows unchecked); approval A-Q1 (HATI route geometry) **not given** | PR #18 / `23297cd` |
+| Gate 3 — runtime and dataset implementation (`js/*.js`, schema `0.3.0` dataset, geometry, figures, validator, CI) | **IN REVIEW** | Gate 3 PR, branch `impl/v0.3-gate3`; `gate-approved` by the maintainer only |
 | Gate 4 — verification and release `v0.3.0` (licence approval, `CITATION.cff`, DOI only with authorisation) | not started | — |
 
 The v0.3.0 scope is closed at seven items (`SPEC.md` §3):
@@ -177,6 +183,21 @@ The v0.3.0 scope is closed at seven items (`SPEC.md` §3):
   SNTO — PNSG, Pedestrian Network Accessibility Pilot;
 - research platforms: SNTO observatory, Madrid Urban Evidence Lens;
 - instrument: FieldOS.
+
+Gate 3 state, as implemented on `impl/v0.3-gate3`:
+
+- `tools/validate_atlas.py` passes I1–I13 and I15–I18 with zero errors. That
+  is mechanical validation of metadata only; it does not establish
+  scientific support (`SPEC.md` §4.11).
+- The scientific support of every claim (I11 support, I14) still rests on
+  the maintainer's §12.10 record, which is not yet completed. The interface
+  states this in the footer, in every dossier's verification section and in
+  About.
+- The HATI route geometry is excluded until A-Q1 is approved; the territory
+  is shown as text with the reason. No plate, file or hash for it exists.
+- Merging Gate 3 into `main` replaces the runtime that GitHub Pages serves
+  from `main`. The maintainer decides whether to merge it before or together
+  with Gate 4.
 
 CHALUS is excluded because its repository is private; it stays preserved
 in the `v0.2.x` tags. MCP, Transit Graph and Isovist are deferred to v0.3.x.

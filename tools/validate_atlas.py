@@ -343,12 +343,15 @@ def check_links(cols):
         doi = 'doi.org/' in u
         opener = urllib.request.build_opener(_NoRedirect) if doi else urllib.request.build_opener()
         req = urllib.request.Request(u, headers={'User-Agent': 'atlas-link-check/0.3'})
-        try:
-            code = opener.open(req, timeout=60).status
-        except urllib.error.HTTPError as e:
-            code = e.code
-        except Exception as e:  # noqa: BLE001 — report any network failure
-            code = f'ERR {type(e).__name__}'
+        for attempt in (1, 2):  # one retry for a dropped connection; HTTP statuses are final
+            try:
+                code = opener.open(req, timeout=90).status
+                break
+            except urllib.error.HTTPError as e:
+                code = e.code
+                break
+            except Exception as e:  # noqa: BLE001 — report any network failure
+                code = f'ERR {type(e).__name__}'
         ok = code == 200 or (doi and code in (301, 302, 303))
         print(f"  {'ok ' if ok else 'BAD'} {code} {u}")
         if not ok:

@@ -19,7 +19,7 @@ let entry = 0;
 
 function announce(text) {
   live.textContent = '';
-  requestAnimationFrame(() => { live.textContent = text; });
+  setTimeout(() => { live.textContent = text; }, 60); // re-set so repeated text is announced
 }
 
 function viewHead(title, question, lede) {

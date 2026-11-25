@@ -1,347 +1,1738 @@
 {
-  "schema_version": "0.2.0",
-  "meta": {
-    "title": "Spatial Intelligence Atlas",
-    "subtitle": "Tourism, Risk & Decision Systems",
-    "notice": "Three research cases and one supporting instrument. Documented separately — never integrated, combined, or ranked.",
-    "provenance": "Every field below is drawn from the pinned, commit-referenced primary sources listed in the sources section, reviewed on the recorded reviewed_at dates. Inputs, status, and outcomes are separate: real input does not establish validation or decision sufficiency.",
-    "reviewed_at": "2026-09-22",
-    "modes": [
-      {
-        "id": "territory",
-        "label": "Territory",
-        "question": "Where was the work situated?",
-        "anchor_type": "territory",
-        "node_types": ["entity", "territory"],
-        "edge_types": ["situated_in"]
-      },
-      {
-        "id": "evidence",
-        "label": "Evidence",
-        "question": "What is actually documented?",
-        "anchor_type": "entity",
-        "node_types": ["entity", "evidence_record"],
-        "edge_types": ["documents"]
-      },
-      {
-        "id": "decisions",
-        "label": "Decisions",
-        "question": "What result was documented?",
-        "anchor_type": "outcome",
-        "node_types": ["entity", "outcome"],
-        "edge_types": ["reports"]
-      }
-    ],
-    "input_kinds": [
-      { "id": "observed", "label": "OBSERVED", "color": "#3FA98C", "dash": "none", "stroke_width": 1, "glyph": "filled-circle", "definition": "Direct observation recorded for the bounded study or test." },
-      { "id": "acquired", "label": "ACQUIRED", "color": "#5B9BD5", "dash": "6 3", "stroke_width": 1, "glyph": "half-circle", "definition": "Existing real-world data obtained from a declared external source." },
-      { "id": "derived", "label": "DERIVED", "color": "#C9A227", "dash": "2 3", "stroke_width": 1, "glyph": "ringed-circle", "definition": "Produced from other records through a declared transformation." },
-      { "id": "simulated", "label": "SIMULATED", "color": "#D98B3A", "dash": "8 3 2 3", "stroke_width": 1, "glyph": "diamond", "definition": "Produced by a model under stated assumptions or conditions." },
-      { "id": "reported", "label": "REPORTED", "color": "#8B9099", "dash": "1 3", "stroke_width": 1, "glyph": "open-circle", "definition": "Supplied as a report or assertion rather than directly observed by the project." },
-      { "id": "unestablished", "label": "UNESTABLISHED", "color": "#C46A78", "dash": "3 3", "stroke_width": 0.5, "glyph": "slashed-circle", "definition": "The reviewed sources do not establish an input kind." }
-    ]
-  },
-
-  "entities": [
-    {
-      "id": "c-hati-pedestrian",
-      "kind": "case",
-      "label": "HATI — Pedestrian Heat Extension",
-      "role": "Frozen robustness case for evidence-first pedestrian heat comparison.",
-      "research_question": "Across the two frozen Atocha–Puerta de Alcalá routes and tested departure times, does the modelled thermal evidence remain strong enough under justified canopy-vintage and side-of-street perturbations to establish either route as robustly cooler?",
-      "research_status": "frozen",
-      "reviewed_at": "2026-09-22",
-      "source_ids": ["s-hati-gate3b", "s-hati-status"],
-      "layout": {
-        "territory": { "x": 0.15, "y": 0.50 },
-        "evidence": { "x": 0.15, "y": 0.10 },
-        "decisions": { "x": 0.15, "y": 0.50 }
-      }
-    },
-    {
-      "id": "c-snto-pnsg",
-      "kind": "case",
-      "label": "SNTO — PNSG Decision Evidence",
-      "role": "Bounded destination-management case using environmental and governance evidence.",
-      "research_question": "With the evidence currently ingested, which PNSG public-use units, if any, justify priority management review or monitoring for the 2027 planning cycle, and where is evidence insufficient to establish priority?",
-      "research_status": "active",
-      "reviewed_at": "2026-09-22",
-      "source_ids": ["s-snto-brief", "s-snto-readme"],
-      "layout": {
-        "territory": { "x": 0.38, "y": 0.50 },
-        "evidence": { "x": 0.38, "y": 0.10 },
-        "decisions": { "x": 0.38, "y": 0.50 }
-      }
-    },
-    {
-      "id": "c-chalus",
-      "kind": "case",
-      "label": "CHALUS — Western Mazandaran Pilot",
-      "role": "Closed historical road-accessibility verification case.",
-      "research_question": "Do paired January and route-bounded June 2024 historical-network reconstructions meet the pre-registered verification standard required before Earth-observation processing and any later tourism-accessibility claim?",
-      "research_status": "closed",
-      "reviewed_at": "2026-09-22",
-      "source_ids": ["s-chalus-closeout", "s-chalus-readme"],
-      "layout": {
-        "territory": { "x": 0.62, "y": 0.50 },
-        "evidence": { "x": 0.62, "y": 0.10 },
-        "decisions": { "x": 0.62, "y": 0.50 }
-      }
-    },
-    {
-      "id": "i-fieldos",
-      "kind": "instrument",
-      "label": "FieldOS",
-      "role": "Offline-first supporting instrument for structured tourism field evidence capture.",
-      "research_question": null,
-      "research_status": "active",
-      "reviewed_at": "2026-09-22",
-      "source_ids": ["s-fieldos-run", "s-fieldos-readme"],
-      "layout": {
-        "territory": { "x": 0.85, "y": 0.86 },
-        "evidence": { "x": 0.85, "y": 0.10 },
-        "decisions": { "x": 0.85, "y": 0.86 }
-      }
-    }
+ "schema_version": "0.3.0",
+ "meta": {
+  "title": "Spatial Intelligence Atlas",
+  "subtitle": "Research Explorer",
+  "release": "0.3.0",
+  "release_status": "unreleased — Gate 3 implementation, in review",
+  "reviewed_at": "2026-11-25",
+  "notice": "Separate research items. Relations appear only when documented and typed; none exist in this release.",
+  "provenance_statement": "Inputs, status, and outcomes are separate. Real input does not establish validation or decision sufficiency.",
+  "citation": "Karahrodi, S. (2026). Spatial Intelligence Atlas — Research Explorer (Version 0.3.0) [Software and dataset]. GitHub. https://github.com/soroushkarahrodi79-oss/spatial-intelligence-atlas/tree/v0.3.0",
+  "license": "Licence pending maintainer approval (preferred: MIT for code, CC BY 4.0 for original data and text).",
+  "verification": "Content frozen at Gate 2 (SPEC.md §12, PR #18) with an AI-assisted source check and maintainer approval of the freeze. Per-claim human verification is recorded in SPEC.md §12.10; it is not claimed here beyond what that record shows.",
+  "repository": "https://github.com/soroushkarahrodi79-oss/spatial-intelligence-atlas",
+  "input_kinds": [
+   {
+    "id": "observed",
+    "label": "OBSERVED",
+    "color": "#3FA98C",
+    "dash": "none",
+    "stroke_width": 1,
+    "glyph": "filled-circle",
+    "definition": "Direct observation recorded for the bounded study or test."
+   },
+   {
+    "id": "acquired",
+    "label": "ACQUIRED",
+    "color": "#5B9BD5",
+    "dash": "6 3",
+    "stroke_width": 1,
+    "glyph": "half-circle",
+    "definition": "Existing real-world data obtained from a declared external source."
+   },
+   {
+    "id": "derived",
+    "label": "DERIVED",
+    "color": "#C9A227",
+    "dash": "2 3",
+    "stroke_width": 1,
+    "glyph": "ringed-circle",
+    "definition": "Produced from other records through a declared transformation."
+   },
+   {
+    "id": "simulated",
+    "label": "SIMULATED",
+    "color": "#D98B3A",
+    "dash": "8 3 2 3",
+    "stroke_width": 1,
+    "glyph": "diamond",
+    "definition": "Produced by a model under stated assumptions or conditions."
+   },
+   {
+    "id": "reported",
+    "label": "REPORTED",
+    "color": "#8B9099",
+    "dash": "1 3",
+    "stroke_width": 1,
+    "glyph": "open-circle",
+    "definition": "Supplied as a report or assertion rather than directly observed by the project."
+   },
+   {
+    "id": "unestablished",
+    "label": "UNESTABLISHED",
+    "color": "#C46A78",
+    "dash": "3 3",
+    "stroke_width": 0.5,
+    "glyph": "slashed-circle",
+    "definition": "The reviewed sources do not establish an input kind."
+   }
   ],
-
-  "territories": [
-    {
-      "id": "t-madrid",
-      "label": "Madrid — Atocha to Puerta de Alcalá",
-      "kind": "bounded urban route-comparison context",
-      "basis": "The HATI extension freezes two candidate pedestrian routes between Atocha and Puerta de Alcalá.",
-      "source_ids": ["s-hati-gate3b"],
-      "layout": {
-        "territory": { "x": 0.15, "y": 0.14 },
-        "evidence": { "x": 0.15, "y": 0.14 },
-        "decisions": { "x": 0.15, "y": 0.14 }
-      }
-    },
-    {
-      "id": "t-pnsg",
-      "label": "Parque Nacional de la Sierra de Guadarrama",
-      "kind": "protected-area destination",
-      "basis": "The SNTO decision brief concerns PNSG public-use units and the 2027 planning cycle.",
-      "source_ids": ["s-snto-brief"],
-      "layout": {
-        "territory": { "x": 0.38, "y": 0.14 },
-        "evidence": { "x": 0.38, "y": 0.14 },
-        "decisions": { "x": 0.38, "y": 0.14 }
-      }
-    },
-    {
-      "id": "t-western-mazandaran",
-      "label": "Western Mazandaran — Chalus, Nowshahr and Kelardasht",
-      "kind": "bounded regional accessibility study area",
-      "basis": "CHALUS evaluates three destinations from south, east and west gateways for the June 2024 event context.",
-      "source_ids": ["s-chalus-readme", "s-chalus-closeout"],
-      "layout": {
-        "territory": { "x": 0.62, "y": 0.14 },
-        "evidence": { "x": 0.62, "y": 0.14 },
-        "decisions": { "x": 0.62, "y": 0.14 }
-      }
-    }
+  "substantiation": [
+   {
+    "id": "source_stated",
+    "label": "SOURCE-STATED",
+    "definition": "A pinned source documents the record, and it is not represented specifically as an unverified owner attestation."
+   },
+   {
+    "id": "owner_attested",
+    "label": "OWNER-ATTESTED",
+    "definition": "A first-party action or observation claimed by the owner but not independently verified."
+   },
+   {
+    "id": "not_established",
+    "label": "NOT ESTABLISHED",
+    "definition": "The reviewed source set does not establish the record."
+   }
   ],
-
-  "evidence_records": [
-    {
-      "id": "ev-hati-modelled-routes",
-      "label": "Modelled two-route thermal comparison",
-      "input_kind": "simulated",
-      "substantiation": "source_stated",
-      "basis": "A modelled two-route thermal comparison was stress-tested at two departure times against justified canopy-source-vintage and side-of-street perturbations.",
-      "limitation": "The ensemble does not establish observed pedestrian exposure, health, safety, preference, or a robust route winner.",
-      "source_ids": ["s-hati-gate3b", "s-hati-status"],
-      "layout": {
-        "evidence": { "x": 0.15, "y": 0.55 }
-      }
-    },
-    {
-      "id": "ev-snto-s2-inputs",
-      "label": "Sentinel-2 campaign coverage",
-      "input_kind": "acquired",
-      "substantiation": "source_stated",
-      "basis": "Real Sentinel-2 observations cover 21 PNSG campaign assets from January 2021 through June 2026.",
-      "limitation": "Satellite vegetation signal is environmental context, not visitor pressure, tourism impact, or causal attribution.",
-      "source_ids": ["s-snto-brief"],
-      "layout": {
-        "evidence": { "x": 0.30, "y": 0.44 }
-      }
-    },
-    {
-      "id": "ev-snto-trends",
-      "label": "Derived vegetation trends",
-      "input_kind": "derived",
-      "substantiation": "source_stated",
-      "basis": "NDVI/NDMI/EVI series and Mann–Kendall/Sen results are derived per asset; six assets green, fourteen show no trend, and one declines significantly.",
-      "limitation": "Derived environmental trends do not establish trail condition, ecological impact, or cause.",
-      "source_ids": ["s-snto-brief"],
-      "layout": {
-        "evidence": { "x": 0.44, "y": 0.44 }
-      }
-    },
-    {
-      "id": "ev-snto-prug",
-      "label": "PRUG protection zoning",
-      "input_kind": "acquired",
-      "substantiation": "source_stated",
-      "basis": "Official PNSG PRUG protection zoning is available as a real management layer.",
-      "limitation": "Zoning is not evidence of visitor volume, condition, or impact.",
-      "source_ids": ["s-snto-brief"],
-      "layout": {
-        "evidence": { "x": 0.28, "y": 0.80 }
-      }
-    },
-    {
-      "id": "ev-snto-visitor-gap",
-      "label": "No visitor-use evidence",
-      "input_kind": "unestablished",
-      "substantiation": "not_established",
-      "basis": "No visitor-use evidence exists at asset or trail scale in the reviewed source set.",
-      "limitation": "Without a matching use denominator, a physical-intervention priority cannot be established.",
-      "source_ids": ["s-snto-brief"],
-      "layout": {
-        "evidence": { "x": 0.44, "y": 0.80 }
-      }
-    },
-    {
-      "id": "ev-chalus-osm-source",
-      "label": "January OSM source recovery",
-      "input_kind": "acquired",
-      "substantiation": "source_stated",
-      "basis": "The January OSM binary source was recovered by recorded SHA-256 and used with the bounded June reconstruction inputs.",
-      "limitation": "OSM-attested network state is not independent confirmation that decisive motorway sections were operational at the historical cutoff.",
-      "source_ids": ["s-chalus-closeout"],
-      "layout": {
-        "evidence": { "x": 0.57, "y": 0.44 }
-      }
-    },
-    {
-      "id": "ev-chalus-routes",
-      "label": "Paired retrospective route reconstruction",
-      "input_kind": "derived",
-      "substantiation": "source_stated",
-      "basis": "Paired retrospective networks produced reproducible modelled distances for nine gateway–destination pairs and eighteen route states; the maximum January–June difference was 0.011%.",
-      "limitation": "Numeric stability alone does not satisfy the pre-registered historical-verification standard.",
-      "source_ids": ["s-chalus-closeout"],
-      "layout": {
-        "evidence": { "x": 0.72, "y": 0.44 }
-      }
-    },
-    {
-      "id": "ev-chalus-verification-gap",
-      "label": "Unresolved historical verification",
-      "input_kind": "unestablished",
-      "substantiation": "not_established",
-      "basis": "Full Haraz correspondence, complete June turn restrictions, and independent decisive-motorway operational status were not established.",
-      "limitation": "These gaps trigger the frozen no-go rule regardless of the stable modelled distances.",
-      "source_ids": ["s-chalus-closeout"],
-      "layout": {
-        "evidence": { "x": 0.63, "y": 0.80 }
-      }
-    },
-    {
-      "id": "ev-fieldos-iphone-run",
-      "label": "First iPhone field run",
-      "input_kind": "observed",
-      "substantiation": "owner_attested",
-      "basis": "One 60–120 minute offline field workflow on a physical iPhone completed on 2026-08-31; tested capture, close/reopen persistence, export, and backup passed with no intended data loss reported.",
-      "limitation": "The result is one first-party session without independent audit; observation counts, exact duration, device/OS details, timing metrics, and storage-pressure results were not recorded.",
-      "source_ids": ["s-fieldos-run", "s-fieldos-readme"],
-      "layout": {
-        "evidence": { "x": 0.87, "y": 0.44 }
-      }
-    },
-    {
-      "id": "ev-fieldos-android-gap",
-      "label": "No Android test run",
-      "input_kind": "unestablished",
-      "substantiation": "not_established",
-      "basis": "No physical Android test had been run at the reviewed commit.",
-      "limitation": "Cross-platform reliability is not established.",
-      "source_ids": ["s-fieldos-readme"],
-      "layout": {
-        "evidence": { "x": 0.85, "y": 0.80 }
-      }
-    }
+  "outcome_types": [
+   {
+    "id": "bounded_finding",
+    "label": "Bounded finding"
+   },
+   {
+    "id": "abstain",
+    "label": "Abstain"
+   },
+   {
+    "id": "insufficient_evidence",
+    "label": "Insufficient evidence"
+   },
+   {
+    "id": "conditional",
+    "label": "Conditional (e.g. MODIFY)"
+   },
+   {
+    "id": "hold",
+    "label": "Hold"
+   },
+   {
+    "id": "mixed",
+    "label": "Mixed"
+   },
+   {
+    "id": "no_go",
+    "label": "No-go"
+   },
+   {
+    "id": "functional_test",
+    "label": "Functional test"
+   }
   ],
-
-  "outcomes": [
-    {
-      "id": "o-hati-abstain",
-      "outcome_type": "abstain",
-      "statement": "ABSTAIN / NO ROBUST DIFFERENCE: the route-difference sign reversed under at least one justified perturbation at both tested departure times and the ensemble spanned zero.",
-      "claim_ceiling": "Neither route is established as cooler, preferred, accurate, comfortable, behaviourally superior, physiologically safer, lower-dose, or healthier; the result does not mean the routes are thermally identical.",
-      "reviewed_at": "2026-09-22",
-      "source_ids": ["s-hati-gate3b", "s-hati-status"],
-      "layout": {
-        "decisions": { "x": 0.15, "y": 0.12 }
-      }
-    },
-    {
-      "id": "o-snto-insufficient",
-      "outcome_type": "insufficient_evidence",
-      "statement": "Evidence is insufficient to prioritise any physical intervention, closure, quota, restoration, or budget commitment; monitoring and improved data collection are the proportionate actions.",
-      "claim_ceiling": "No asset/trail visitor volume, tourism causality, ground condition, ecological impact, monetary allocation, closure, or restriction claim is supported.",
-      "reviewed_at": "2026-09-22",
-      "source_ids": ["s-snto-brief"],
-      "layout": {
-        "decisions": { "x": 0.38, "y": 0.12 }
-      }
-    },
-    {
-      "id": "o-chalus-no-go",
-      "outcome_type": "no_go",
-      "statement": "GATE 2A-R CLOSED — NO-GO: the historical-verification standard was not met, so Earth-observation processing and Gate 2B remain unauthorised.",
-      "claim_ceiling": "The case does not establish tourist delay, cancellations, demand, revenue loss, destination resilience, infrastructure investment need, or a verified historical motorway-operability claim.",
-      "reviewed_at": "2026-09-22",
-      "source_ids": ["s-chalus-closeout", "s-chalus-readme"],
-      "layout": {
-        "decisions": { "x": 0.62, "y": 0.12 }
-      }
-    },
-    {
-      "id": "o-fieldos-functional",
-      "outcome_type": "functional_test",
-      "statement": "One owner-attested iPhone field workflow passed the executed offline capture-to-backup checks with no intended data loss reported.",
-      "claim_ceiling": "FieldOS is not thereby validated, production-ready, field-proven across conditions, independently audited, or cross-platform verified.",
-      "reviewed_at": "2026-09-22",
-      "source_ids": ["s-fieldos-run", "s-fieldos-readme"],
-      "layout": {
-        "decisions": { "x": 0.85, "y": 0.12 }
-      }
-    }
-  ],
-
-  "sources": [
-    { "id": "s-hati-gate3b", "kind": "closeout", "label": "HATI Gate 3B evidence-sufficiency decision", "pinned_ref": "c69688e7827f1faaf855fdb58a8e80a497d73830", "accessed_at": "2026-09-22", "url": "https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/docs/research/pedestrian-heat/gate3b/GATE3B_DECISION.md" },
-    { "id": "s-hati-status", "kind": "closeout", "label": "HATI canonical project status", "pinned_ref": "c69688e7827f1faaf855fdb58a8e80a497d73830", "accessed_at": "2026-09-22", "url": "https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/PROJECT_STATUS.md" },
-    { "id": "s-snto-brief", "kind": "brief", "label": "SNTO PNSG Public-Use Decision Evidence Brief 2026/27", "pinned_ref": "2c65fe2ac9a09662cddef4cfa68290e0cd6e1278", "accessed_at": "2026-09-22", "url": "https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/docs/PNSG_DECISION_EVIDENCE_BRIEF.md" },
-    { "id": "s-snto-readme", "kind": "repository", "label": "SNTO repository status snapshot", "pinned_ref": "2c65fe2ac9a09662cddef4cfa68290e0cd6e1278", "accessed_at": "2026-09-22", "url": "https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/README.md" },
-    { "id": "s-chalus-closeout", "kind": "closeout", "label": "CHALUS Gate 2A-R final closeout report", "pinned_ref": "eaa50dccd499b85204982d838ccf340d4d499992", "accessed_at": "2026-09-22", "url": "https://github.com/soroushkarahrodi79-oss/CHALUS/blob/eaa50dccd499b85204982d838ccf340d4d499992/docs/GATE2AR_FINAL_REPORT.md" },
-    { "id": "s-chalus-readme", "kind": "repository", "label": "CHALUS repository status snapshot", "pinned_ref": "eaa50dccd499b85204982d838ccf340d4d499992", "accessed_at": "2026-09-22", "url": "https://github.com/soroushkarahrodi79-oss/CHALUS/blob/eaa50dccd499b85204982d838ccf340d4d499992/README.md" },
-    { "id": "s-fieldos-run", "kind": "closeout", "label": "First FieldOS field run", "pinned_ref": "271d3a77c58361f43459d068f4e8a100611a87fd", "accessed_at": "2026-09-22", "url": "https://github.com/soroushkarahrodi79-oss/fieldos/blob/271d3a77c58361f43459d068f4e8a100611a87fd/docs/FIRST_FIELD_RUN.md" },
-    { "id": "s-fieldos-readme", "kind": "repository", "label": "FieldOS repository status snapshot", "pinned_ref": "271d3a77c58361f43459d068f4e8a100611a87fd", "accessed_at": "2026-09-22", "url": "https://github.com/soroushkarahrodi79-oss/fieldos/blob/271d3a77c58361f43459d068f4e8a100611a87fd/README.md" }
-  ],
-
-  "relationships": [
-    { "id": "r-hati-territory", "type": "situated_in", "source": "c-hati-pedestrian", "target": "t-madrid" },
-    { "id": "r-hati-evidence", "type": "documents", "source": "c-hati-pedestrian", "target": "ev-hati-modelled-routes" },
-    { "id": "r-hati-outcome", "type": "reports", "source": "c-hati-pedestrian", "target": "o-hati-abstain" },
-    { "id": "r-snto-territory", "type": "situated_in", "source": "c-snto-pnsg", "target": "t-pnsg" },
-    { "id": "r-snto-s2", "type": "documents", "source": "c-snto-pnsg", "target": "ev-snto-s2-inputs" },
-    { "id": "r-snto-trends", "type": "documents", "source": "c-snto-pnsg", "target": "ev-snto-trends" },
-    { "id": "r-snto-prug", "type": "documents", "source": "c-snto-pnsg", "target": "ev-snto-prug" },
-    { "id": "r-snto-gap", "type": "documents", "source": "c-snto-pnsg", "target": "ev-snto-visitor-gap" },
-    { "id": "r-snto-outcome", "type": "reports", "source": "c-snto-pnsg", "target": "o-snto-insufficient" },
-    { "id": "r-chalus-territory", "type": "situated_in", "source": "c-chalus", "target": "t-western-mazandaran" },
-    { "id": "r-chalus-source", "type": "documents", "source": "c-chalus", "target": "ev-chalus-osm-source" },
-    { "id": "r-chalus-routes", "type": "documents", "source": "c-chalus", "target": "ev-chalus-routes" },
-    { "id": "r-chalus-gap", "type": "documents", "source": "c-chalus", "target": "ev-chalus-verification-gap" },
-    { "id": "r-chalus-outcome", "type": "reports", "source": "c-chalus", "target": "o-chalus-no-go" },
-    { "id": "r-fieldos-run", "type": "documents", "source": "i-fieldos", "target": "ev-fieldos-iphone-run" },
-    { "id": "r-fieldos-gap", "type": "documents", "source": "i-fieldos", "target": "ev-fieldos-android-gap" },
-    { "id": "r-fieldos-outcome", "type": "reports", "source": "i-fieldos", "target": "o-fieldos-functional" }
+  "versions": [
+   {
+    "tag": "v0.3.0",
+    "date": null,
+    "note": "Research Explorer (this implementation; unreleased)."
+   },
+   {
+    "tag": "v0.2.1",
+    "date": "2026-09-25",
+    "note": "Accessibility and readability maintenance of v0.2.0."
+   },
+   {
+    "tag": "v0.2.0",
+    "date": "2026-09-22",
+    "note": "Selective, evidence-informed research map of three cases and one instrument."
+   },
+   {
+    "tag": "v0.1.1",
+    "date": "2026-09-22",
+    "note": "Five conceptually related systems (historical)."
+   },
+   {
+    "tag": "v0.1.0",
+    "date": "2026-09-05",
+    "note": "Original release (historical)."
+   }
   ]
+ },
+ "research": [
+  {
+   "id": "r-hati-pilot",
+   "code": "HATI-P",
+   "title": "HATI-Madrid — Heat-Adaptive Tourism Opportunity Screening (Madrid pilot)",
+   "short_title": "HATI-Madrid pilot",
+   "class": "documented_research",
+   "summary": "Published preprint testing whether the choice of thermal representation changes heat-adaptive tourism screening decisions.",
+   "research_question": "Does physically based (SOLWEIG/UTCI) thermal modelling materially alter tourism-feasibility classifications relative to the simple air-temperature-and-tree-presence proxy, and is any difference physically interpretable?",
+   "research_question_note": "RQ1, verbatim (preprint §1). RQ2 addresses decision-support value; RQ3 robustness and traceability.",
+   "lifecycle_status": "frozen",
+   "lifecycle_note": "Source status RELEASE_LOCKED.",
+   "territory_ids": [
+    "t-madrid-central"
+   ],
+   "territory_note": null,
+   "methodology": {
+    "summary": [
+     "A single-city, single-day pilot of a constraint-first, uncertainty-aware screening architecture.",
+     "Study area: the Prado–Retiro–Atocha box (≈3.5 km²); 27 tourism assets curated from OpenStreetMap (13 indoor, 14 outdoor) — a purposive selection, not a representative sample.",
+     "Time: 21 August 2023, inside an AEMET-designated extreme-heat episode (20–25 August 2023), at 12:00, 15:00 and 18:00 CEST.",
+     "Two thermal representations — an operational proxy (ambient air-temperature hazard band plus nearby tree presence) and SOLWEIG → Tmrt → UTCI — feed one ordered gate chain: open? → reachable? → thermally feasible? → evidence sufficient? → meaningful improvement?",
+     "Compared with a nearest-open baseline over eight pre-registered decision scenarios."
+    ],
+    "source_ids": [
+     "s-hati-preprint"
+    ]
+   },
+   "version": {
+    "ref": "10.5281/zenodo.22707470",
+    "kind": "doi",
+    "label": "Preprint v1.0"
+   },
+   "license": {
+    "code": {
+     "value": "MIT",
+     "source_id": "s-hati-pilot-status",
+     "note": "src/, tests/ and app/ only, since 2026-11-11"
+    },
+    "data": {
+     "value": "not_stated",
+     "source_id": "s-hati-pilot-status",
+     "note": "Third-party data keeps its licences; derived outputs \"all rights reserved\"."
+    },
+    "text": {
+     "value": "CC BY 4.0",
+     "source_id": "s-hati-preprint",
+     "note": "The deposited preprint; repository documents are not_stated."
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-hati-pilot-status",
+    "note": "Code, outputs and REPRODUCIBILITY.md are public; the Atlas did not re-run them."
+   },
+   "verification_note": "Checked against the deposited preprint: abstract, §1 research questions, §2.1, licence statement (p. 18) and Figure 1–4 captions. No other part of the full text was verified.",
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-hati-preprint",
+    "s-hati-pilot-status"
+   ],
+   "output_ids": [
+    "out-hati-preprint",
+    "out-hati-code"
+   ],
+   "figure_ids": [
+    "fig-hati-1",
+    "fig-hati-2",
+    "fig-hati-3",
+    "fig-hati-4"
+   ]
+  },
+  {
+   "id": "r-hati-pedestrian",
+   "code": "HATI-X",
+   "title": "HATI — Pedestrian Heat Extension",
+   "short_title": "HATI pedestrian heat extension",
+   "class": "documented_research",
+   "summary": "Frozen robustness case for evidence-first pedestrian heat comparison.",
+   "research_question": "Across the two frozen Atocha–Puerta de Alcalá routes and tested departure times, does the modelled thermal evidence remain strong enough under justified canopy-vintage and side-of-street perturbations to establish either route as robustly cooler?",
+   "research_question_note": "Carried forward unchanged from v0.2.",
+   "lifecycle_status": "frozen",
+   "lifecycle_note": "RESEARCH_FROZEN_AFTER_GATE_3B.",
+   "territory_ids": [
+    "t-madrid-atocha-alcala"
+   ],
+   "territory_note": null,
+   "methodology": {
+    "summary": [
+     "Modelled comparison of two frozen, hashed routes for OD1 (Atocha → Puerta de Alcalá): Route A, the Paseo del Prado / Recoletos axis (2,657.8 m); Route B, the Alfonso XII park-edge (2,365.7 m).",
+     "Frozen study day 2023-08-24, departures 14:00 and 17:00.",
+     "Thermal model: stateful single-call SOLWEIG producing UTCI, as a continuous 72-step, 15-minute sequence.",
+     "Five frozen perturbations, including canopy source and vintage, and side-of-street; pre-registered negative controls.",
+     "Frozen decision rule: a sign reversal under a justified perturbation, or an ensemble spanning zero, yields ABSTAIN."
+    ],
+    "source_ids": [
+     "s-hati-gate3b",
+     "s-hati-routes"
+    ]
+   },
+   "version": {
+    "ref": "c69688e7827f1faaf855fdb58a8e80a497d73830",
+    "kind": "commit",
+    "label": "commit c69688e"
+   },
+   "license": {
+    "code": {
+     "value": "none",
+     "source_id": "s-hati-pilot-status",
+     "note": "None at the pin; MIT added for src/, tests/ and app/ on 2026-11-11, after the pin."
+    },
+    "data": {
+     "value": "not_stated",
+     "source_id": "s-hati-pilot-status",
+     "note": "Route geometry is OpenStreetMap-derived (ODbL 1.0); other derived data not_stated."
+    },
+    "text": {
+     "value": "not_stated",
+     "source_id": "s-hati-pilot-status",
+     "note": null
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-hati-gate3b",
+    "note": "Frozen inputs, hashes and the perturbation results CSV are committed; the Atlas did not re-run them."
+   },
+   "verification_note": null,
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-hati-gate3b",
+    "s-hati-status"
+   ],
+   "output_ids": [],
+   "figure_ids": []
+  },
+  {
+   "id": "r-snto-pnsg",
+   "code": "SNTO",
+   "title": "SNTO — PNSG Decision Evidence",
+   "short_title": "SNTO — PNSG",
+   "class": "documented_research",
+   "summary": "Bounded destination-management case using environmental and governance evidence.",
+   "research_question": "With the evidence currently ingested, which PNSG public-use units, if any, justify priority management review or monitoring for the 2027 planning cycle, and where is evidence insufficient to establish priority?",
+   "research_question_note": "Carried forward unchanged from v0.2; matches the brief §1 decision question.",
+   "lifecycle_status": "active",
+   "lifecycle_note": null,
+   "territory_ids": [
+    "t-pnsg"
+   ],
+   "territory_note": null,
+   "methodology": {
+    "summary": [
+     "Monthly Sentinel-2 (S2_SR_HARMONIZED) NDVI, NDMI and EVI for 21 PNSG campaign assets, 2021-01 to 2026-06 (66 months).",
+     "Trend tests: Mann-Kendall on the deseasonalised series with tie correction; Sen slope with a non-parametric confidence interval; Yue-Pilon pre-whitening robustness check.",
+     "Combined with official PRUG zoning and a two-scene ΔEHS reading of 218 OAPN trails.",
+     "Governing rules: a claim may not be finer than its evidence; environmental change is not tourism impact; each unit receives a decision status (priority / monitor / insufficient)."
+    ],
+    "source_ids": [
+     "s-snto-brief",
+     "s-snto-readme"
+    ]
+   },
+   "version": {
+    "ref": "2c65fe2ac9a09662cddef4cfa68290e0cd6e1278",
+    "kind": "commit",
+    "label": "commit 2c65fe2"
+   },
+   "license": {
+    "code": {
+     "value": "custom",
+     "source_id": "s-snto-license",
+     "note": "Academic and research use; commercial use needs written permission. The Zenodo software record states CC BY 4.0 — an unresolved discrepancy (Q4). Public source availability is not an open-source licence."
+    },
+    "data": {
+     "value": "provider licences",
+     "source_id": "s-snto-readme",
+     "note": "Copernicus, OAPN, INE, ALMUDENA, OSM (README §11)."
+    },
+    "text": {
+     "value": "not_stated",
+     "source_id": "s-snto-readme",
+     "note": null
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-snto-readme",
+    "note": "The time series and Mann-Kendall results are committed; the Atlas did not re-run them."
+   },
+   "verification_note": null,
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-snto-brief",
+    "s-snto-readme"
+   ],
+   "output_ids": [],
+   "figure_ids": []
+  },
+  {
+   "id": "r-network-pilot",
+   "code": "NET",
+   "title": "Pedestrian Network Accessibility Pilot (San Isidro, Madrid)",
+   "short_title": "Network accessibility pilot",
+   "class": "documented_research",
+   "summary": "Isolated, bounded experiment measuring how far straight-line distance departs from pedestrian-network distance to municipal sports facilities.",
+   "research_question": "For official address portals in one Madrid barrio, how far does the straight-line distance to the nearest official municipal basic sports facility depart from the shortest distance along the OpenStreetMap pedestrian network, and does the choice of metric change which facility is nearest?",
+   "research_question_note": "Verbatim from the pilot README (the source's bold emphasis removed).",
+   "lifecycle_status": "closed",
+   "lifecycle_note": "Verdict issued; follow-up audit closed with HOLD.",
+   "territory_ids": [
+    "t-san-isidro"
+   ],
+   "territory_note": null,
+   "methodology": {
+    "summary": [
+     "Origins: 2,651 official address portals (TIPO_NDP = PORTAL, callejero 213605) in barrio 113.",
+     "Destinations: 38 access points of municipal basic sports facilities (dataset 200215) within 1,000 m of the barrio.",
+     "Network: an OpenStreetMap pedestrian graph from an Overpass extract (the barrio plus 1,600 m), 16,715 ways retained.",
+     "Measurement in EPSG:25830: for each origin, the nearest facility by straight line and by shortest network path; four quantities — detour ratio, understatement, discordance and false inclusion.",
+     "Four acceptance criteria (A1–A4), documented retrospectively and stated by the source as not pre-registered; seven sensitivity variants."
+    ],
+    "source_ids": [
+     "s-net-readme",
+     "s-net-results"
+    ]
+   },
+   "version": {
+    "ref": "ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f",
+    "kind": "commit",
+    "label": "commit ad7ed9b"
+   },
+   "license": {
+    "code": {
+     "value": "MIT",
+     "source_id": "s-net-readme",
+     "note": null
+    },
+    "data": {
+     "value": "CC BY 4.0 + ODbL 1.0",
+     "source_id": "s-net-attribution",
+     "note": "Ayuntamiento de Madrid data CC BY 4.0; the OSM extract and derived network values ODbL 1.0."
+    },
+    "text": {
+     "value": "MIT",
+     "source_id": "s-net-readme",
+     "note": "Repository licence."
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-net-readme",
+    "note": "Pipeline, tests and query are public and the OSM extract is archived; municipal inputs are mutable at source. The follow-up audit reproduced the input selection, not a byte-identical rerun. The Atlas did not re-run it."
+   },
+   "verification_note": null,
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-net-readme",
+    "s-net-results"
+   ],
+   "output_ids": [
+    "out-net-dataset"
+   ],
+   "figure_ids": [
+    "fig-net-1"
+   ]
+  },
+  {
+   "id": "p-lens",
+   "code": "LENS",
+   "title": "Madrid Urban Evidence Lens",
+   "short_title": "Madrid Urban Evidence Lens",
+   "class": "research_platform",
+   "summary": "A place-first, static web application for reading what official sources document about urban development in Madrid, and what that evidence does not let you conclude.",
+   "documents": "Descriptive counts and official context for a chosen place in Madrid — barrio, registered residents, licensed tourist dwellings (VUT), registered unemployment and planning ámbito — plus place-to-place comparison and city-level INE hotel-demand context. Each source carries provenance, licence and an interpretation ceiling.",
+   "claim_limits": "It does not establish tourist pressure, carrying capacity, tourist behaviour or footfall, safety outcomes, tourism quality, rankings or composite scores, economic impact, causal effects of heat, real-time conditions, or city-wide heat coverage.",
+   "hosts": [
+    "r-network-pilot"
+   ],
+   "hosts_note": "Hosted as an isolated research package; the source states that nothing in the application references it.",
+   "research_question": null,
+   "lifecycle_status": "active",
+   "lifecycle_note": null,
+   "territory_ids": [
+    "t-madrid"
+   ],
+   "territory_note": null,
+   "methodology": null,
+   "version": {
+    "ref": "3035323a233e5fa83b6b4babe8a2ccf3ac7e4196",
+    "kind": "commit",
+    "label": "commit 3035323 · release v0.1.0"
+   },
+   "license": {
+    "code": {
+     "value": "MIT",
+     "source_id": "s-lens-readme",
+     "note": null
+    },
+    "data": {
+     "value": "per-source official licences",
+     "source_id": "s-lens-readme",
+     "note": null
+    },
+    "text": {
+     "value": "MIT",
+     "source_id": "s-lens-readme",
+     "note": "Repository licence."
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-lens-readme",
+    "note": "Static application; source public."
+   },
+   "verification_note": null,
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-lens-readme",
+    "s-lens-claims",
+    "s-lens-release"
+   ],
+   "output_ids": [
+    "out-lens-release"
+   ],
+   "figure_ids": []
+  },
+  {
+   "id": "p-snto",
+   "code": "SNTO-OBS",
+   "title": "SNTO — Smart Nature Tourism Observatory",
+   "short_title": "SNTO observatory",
+   "class": "research_platform",
+   "summary": "Public research observatory turning Sentinel-2 and official OAPN cartography into environmental-change evidence for protected-area public-use management, with explicit limits on tourism attribution. Its source code is publicly available under a custom academic-use licence, which is not an open-source licence.",
+   "documents": "Pipeline A: real Sentinel-2 indicators for the PNSG, including the 21-asset 2021–2026 trend layer and 218 OAPN trails, with official PRUG zoning. Pipeline B: a governance demonstration on 20 synthetic assets.",
+   "claim_limits": "Field validation (#26) has not run; the three v2.2 real-data paths (MITMA mobility, SCM zones, SVI series) are built but not ingested; the economic layer consists of conditional scenarios; there is no causal attribution of change to tourism. The causal rationale in the README (trampling → compaction → spectral signal) is a design hypothesis of the platform and is not presented here as an established finding.",
+   "hosts": [
+    "r-snto-pnsg"
+   ],
+   "hosts_note": null,
+   "research_question": null,
+   "lifecycle_status": "active",
+   "lifecycle_note": null,
+   "territory_ids": [
+    "t-pnsg"
+   ],
+   "territory_note": null,
+   "methodology": null,
+   "version": {
+    "ref": "2c65fe2ac9a09662cddef4cfa68290e0cd6e1278",
+    "kind": "commit",
+    "label": "commit 2c65fe2"
+   },
+   "license": {
+    "code": {
+     "value": "custom",
+     "source_id": "s-snto-license",
+     "note": "Academic and research use. The Zenodo record states CC BY 4.0 — discrepancy preserved (Q4)."
+    },
+    "data": {
+     "value": "provider licences",
+     "source_id": "s-snto-readme",
+     "note": null
+    },
+    "text": {
+     "value": "not_stated",
+     "source_id": "s-snto-readme",
+     "note": null
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-snto-readme",
+    "note": null
+   },
+   "verification_note": null,
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-snto-readme",
+    "s-snto-zenodo"
+   ],
+   "output_ids": [
+    "out-snto-software"
+   ],
+   "figure_ids": []
+  },
+  {
+   "id": "i-fieldos",
+   "code": "FIELDOS",
+   "title": "FieldOS",
+   "short_title": "FieldOS",
+   "class": "instrument",
+   "summary": "Offline-first supporting instrument for structured tourism field evidence capture.",
+   "research_question": null,
+   "lifecycle_status": "active",
+   "lifecycle_note": null,
+   "territory_ids": [],
+   "territory_note": "No case-specific territory.",
+   "methodology": {
+    "summary": [
+     "The owner executed the documented 60–120 minute offline validation workflow on a physical device: preparation and preflight checks, an offline campaign, a mid-campaign close and reopen, offline verification, and export and backup validation.",
+     "The protocol targets (20–40 observations, photographs and so on) were not recorded as met."
+    ],
+    "source_ids": [
+     "s-fieldos-run"
+    ]
+   },
+   "version": {
+    "ref": "271d3a77c58361f43459d068f4e8a100611a87fd",
+    "kind": "commit",
+    "label": "commit 271d3a7"
+   },
+   "license": {
+    "code": {
+     "value": "Apache-2.0",
+     "source_id": "s-fieldos-readme",
+     "note": null
+    },
+    "data": {
+     "value": "none",
+     "source_id": "s-fieldos-readme",
+     "note": null
+    },
+    "text": {
+     "value": "Apache-2.0",
+     "source_id": "s-fieldos-readme",
+     "note": "Repository licence."
+    }
+   },
+   "reproducibility": {
+    "level": "documented_only",
+    "instructions_source_id": "s-fieldos-run",
+    "note": "The validation protocol is published; the run is owner-attested and not reproducible by a third party."
+   },
+   "verification_note": null,
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-fieldos-run",
+    "s-fieldos-readme"
+   ],
+   "output_ids": [],
+   "figure_ids": []
+  }
+ ],
+ "territories": [
+  {
+   "id": "t-madrid-central",
+   "label": "Madrid — Prado–Retiro–Atocha pilot box (≈3.5 km²)",
+   "basis": "The HATI-Madrid pilot's rectangular study area, pinned to named landmarks (preprint §2.1).",
+   "geometry_id": null,
+   "territory_note": "Described in text only: the repository's study-area outputs carry no assigned licence. Figure HATI-P·1(a) shows the area as published in the CC BY 4.0 preprint.",
+   "source_ids": [
+    "s-hati-preprint",
+    "s-hati-pilot-status"
+   ]
+  },
+  {
+   "id": "t-madrid-atocha-alcala",
+   "label": "Madrid — Atocha to Puerta de Alcalá",
+   "basis": "Two frozen, hashed pedestrian routes for OD1 (Route A, Paseo del Prado / Recoletos, 2,657.8 m; Route B, Alfonso XII park-edge, 2,365.7 m).",
+   "geometry_id": null,
+   "territory_note": "No plate in this release. The OpenStreetMap-derived route geometry is authorised only after the maintainer records approval A-Q1 (SPEC.md §12.10), which has not been recorded.",
+   "source_ids": [
+    "s-hati-routes",
+    "s-hati-gate3b"
+   ]
+  },
+  {
+   "id": "t-pnsg",
+   "label": "Parque Nacional de la Sierra de Guadarrama",
+   "basis": "The PNSG public-use units and the 2027 planning cycle.",
+   "geometry_id": "g-pnsg-boundary",
+   "territory_note": null,
+   "source_ids": [
+    "s-snto-brief",
+    "s-snto-oapn-boundary"
+   ]
+  },
+  {
+   "id": "t-san-isidro",
+   "label": "Madrid — barrio 113 San Isidro (Carabanchel)",
+   "basis": "Study area of the Network Accessibility Pilot (1.8993 km²).",
+   "geometry_id": "g-san-isidro",
+   "territory_note": null,
+   "source_ids": [
+    "s-net-results",
+    "s-lens-geography"
+   ]
+  },
+  {
+   "id": "t-madrid",
+   "label": "Madrid (municipality)",
+   "basis": "Area documented by Madrid Urban Evidence Lens.",
+   "geometry_id": "g-madrid-municipality",
+   "territory_note": null,
+   "source_ids": [
+    "s-lens-readme",
+    "s-lens-geography"
+   ]
+  }
+ ],
+ "geometries": [
+  {
+   "id": "g-san-isidro",
+   "file": "data/geometry/g-san-isidro.json",
+   "source_id": "s-lens-geography",
+   "publisher": "Ayuntamiento de Madrid — IDEAM",
+   "license": "CC BY 4.0",
+   "attribution": "© Ayuntamiento de Madrid (CC BY 4.0)",
+   "crs": "EPSG:4326 (CRS84) at source; projected offline to EPSG:25830",
+   "simplification_m": 2,
+   "sha256": "f594aa63f4ce896efea4ee3eb005dc957d8a8a5daf04ea3167db8859affd0a93",
+   "role": "study_area",
+   "display": {
+    "crs": "EPSG:25830",
+    "bbox": [
+     436901.5,
+     4470917.0,
+     439554.5,
+     4473241.4
+    ],
+    "centroid_wgs84": [
+     40.3966,
+     -3.7283
+    ],
+    "area_km2": 1.8992,
+    "ticks": {
+     "left": [
+      {
+       "y": 4472420.2,
+       "label": "40°24′N"
+      }
+     ],
+     "bottom": [
+      {
+       "x": 437757.0,
+       "label": "3°44′W"
+      },
+      {
+       "x": 439171.7,
+       "label": "3°43′W"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "g-madrid-municipality",
+   "file": "data/geometry/g-madrid-municipality.json",
+   "source_id": "s-lens-geography",
+   "publisher": "Ayuntamiento de Madrid — IDEAM",
+   "license": "CC BY 4.0",
+   "attribution": "© Ayuntamiento de Madrid (CC BY 4.0)",
+   "crs": "EPSG:4326 (CRS84) at source; projected offline to EPSG:25830",
+   "simplification_m": 30,
+   "sha256": "6851f85c29aaf013acb208cd52765e7bba3b7edea9fafd57031524cae7624fcc",
+   "role": "context_boundary",
+   "display": {
+    "crs": "EPSG:25830",
+    "bbox": [
+     423281.5,
+     4461094.0,
+     457505.3,
+     4500837.6
+    ],
+    "centroid_wgs84": [
+     40.4655,
+     -3.6965
+    ],
+    "area_km2": 604.0251,
+    "ticks": {
+     "left": [
+      {
+       "y": 4465146.4,
+       "label": "40°20′N"
+      },
+      {
+       "y": 4474397.4,
+       "label": "40°25′N"
+      },
+      {
+       "y": 4483648.4,
+       "label": "40°30′N"
+      },
+      {
+       "y": 4492899.6,
+       "label": "40°35′N"
+      }
+     ],
+     "bottom": [
+      {
+       "x": 429176.0,
+       "label": "3°50′W"
+      },
+      {
+       "x": 436259.0,
+       "label": "3°45′W"
+      },
+      {
+       "x": 443341.8,
+       "label": "3°40′W"
+      },
+      {
+       "x": 450424.5,
+       "label": "3°35′W"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "g-pnsg-boundary",
+   "file": "data/geometry/g-pnsg-boundary.json",
+   "source_id": "s-snto-oapn-boundary",
+   "publisher": "Organismo Autónomo Parques Nacionales",
+   "license": "OAPN reuse terms (Ley 37/2007, RD 1495/2011; MITECO aviso legal; datos.gob.es record ea0043369). No Creative Commons licence.",
+   "attribution": "Fuente: Organismo Autónomo Parques Nacionales",
+   "crs": "EPSG:4326 (CRS84) at source; projected offline to EPSG:25830",
+   "simplification_m": 20,
+   "sha256": "d31ffe33c38d914e90bc91cf99a4aae0dcf2cb097d89c08fb63ee1fda7ab3b2f",
+   "role": "study_area",
+   "display": {
+    "crs": "EPSG:25830",
+    "bbox": [
+     402137.2,
+     4508272.2,
+     440344.7,
+     4545080.1
+    ],
+    "centroid_wgs84": [
+     40.8582,
+     -3.9239
+    ],
+    "area_km2": 339.5762,
+    "ticks": {
+     "left": [
+      {
+       "y": 4511651.6,
+       "label": "40°45′N"
+      },
+      {
+       "y": 4520903.9,
+       "label": "40°50′N"
+      },
+      {
+       "y": 4530156.5,
+       "label": "40°55′N"
+      },
+      {
+       "y": 4539409.1,
+       "label": "41°00′N"
+      }
+     ],
+     "bottom": [
+      {
+       "x": 415544.2,
+       "label": "4°00′W"
+      },
+      {
+       "x": 429621.8,
+       "label": "3°50′W"
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "evidence": [
+  {
+   "id": "ev-hati-pilot-solweig",
+   "research_id": "r-hati-pilot",
+   "label": "Physically based thermal modelling",
+   "input_kind": "simulated",
+   "substantiation": "source_stated",
+   "statement": "Physically based SOLWEIG/UTCI modelling of outdoor thermal conditions for the pilot day and times.",
+   "basis": "with physically based SOLWEIG/UTCI modelling",
+   "limitation": "Modelled; there is no direct field validation of Tmrt/UTCI.",
+   "provenance": null,
+   "source_ids": [
+    "s-hati-preprint"
+   ]
+  },
+  {
+   "id": "ev-hati-pilot-proxy",
+   "research_id": "r-hati-pilot",
+   "label": "Operational screening proxy",
+   "input_kind": "derived",
+   "substantiation": "source_stated",
+   "statement": "An operational proxy combining ambient air-temperature hazard thresholds with nearby tree-presence information.",
+   "basis": "a simple operational proxy combining ambient air-temperature hazard thresholds and nearby tree-presence information",
+   "limitation": "A screening proxy, not a thermal measurement.",
+   "provenance": null,
+   "source_ids": [
+    "s-hati-preprint"
+   ]
+  },
+  {
+   "id": "ev-hati-pilot-validation-gap",
+   "research_id": "r-hati-pilot",
+   "label": "No field validation or behavioural data",
+   "input_kind": "unestablished",
+   "substantiation": "not_established",
+   "statement": "No direct field validation of Tmrt/UTCI and no observed tourist behaviour.",
+   "basis": "Results are limited to a single Madrid pilot without direct field validation of Tmrt/UTCI or observed tourist behaviour.",
+   "limitation": "Neither method's accuracy against ground truth is established.",
+   "provenance": null,
+   "source_ids": [
+    "s-hati-preprint"
+   ]
+  },
+  {
+   "id": "ev-hati-modelled-routes",
+   "research_id": "r-hati-pedestrian",
+   "label": "Modelled two-route thermal comparison",
+   "input_kind": "simulated",
+   "substantiation": "source_stated",
+   "statement": "A modelled two-route thermal comparison was stress-tested at two departure times against justified canopy-source-vintage and side-of-street perturbations.",
+   "basis": "The Route A − Route B mean-UTCI difference reverses sign under ≥1 frozen perturbation at both departures",
+   "limitation": "The ensemble does not establish observed pedestrian exposure, health, safety, preference, or a robust route winner.",
+   "provenance": null,
+   "source_ids": [
+    "s-hati-gate3b",
+    "s-hati-status"
+   ]
+  },
+  {
+   "id": "ev-snto-s2-inputs",
+   "research_id": "r-snto-pnsg",
+   "label": "Sentinel-2 campaign coverage",
+   "input_kind": "acquired",
+   "substantiation": "source_stated",
+   "statement": "Real Sentinel-2 observations cover 21 PNSG campaign assets from January 2021 through June 2026.",
+   "basis": "Real monthly Sentinel-2 (S2_SR_HARMONIZED) NDVI/NDMI/EVI + Mann-Kendall/Sen trend per asset",
+   "limitation": "Satellite vegetation signal is environmental context, not visitor pressure, tourism impact, or causal attribution.",
+   "provenance": {
+    "publisher": "ESA / Copernicus",
+    "dataset_ref": "Sentinel-2 S2_SR_HARMONIZED",
+    "license": "Copernicus open data — \"Contiene datos Copernicus Sentinel-2 modificados\"",
+    "retrieved_at": null,
+    "checksum": null
+   },
+   "source_ids": [
+    "s-snto-brief"
+   ]
+  },
+  {
+   "id": "ev-snto-trends",
+   "research_id": "r-snto-pnsg",
+   "label": "Derived vegetation trends",
+   "input_kind": "derived",
+   "substantiation": "source_stated",
+   "statement": "NDVI/NDMI/EVI series and Mann–Kendall/Sen results are derived per asset; six assets green, fourteen show no trend, and one declines significantly.",
+   "basis": "across the 21 assets with a real time series, 6 show significant greening, 14 no trend, 1 significant decline",
+   "limitation": "Derived environmental trends do not establish trail condition, ecological impact, or cause.",
+   "provenance": null,
+   "source_ids": [
+    "s-snto-brief"
+   ]
+  },
+  {
+   "id": "ev-snto-prug",
+   "research_id": "r-snto-pnsg",
+   "label": "PRUG protection zoning",
+   "input_kind": "acquired",
+   "substantiation": "source_stated",
+   "statement": "Official PNSG PRUG protection zoning is available as a real management layer.",
+   "basis": "Official OAPN protection zoning (Uso Restringido / Moderado / Especial / fuera)",
+   "limitation": "Zoning is not evidence of visitor volume, condition, or impact.",
+   "provenance": {
+    "publisher": "Organismo Autónomo Parques Nacionales",
+    "dataset_ref": "PRUG zoning (embedded in the 218-trail layer)",
+    "license": "Institutional reuse with citation (SNTO README §11)",
+    "retrieved_at": null,
+    "checksum": null
+   },
+   "source_ids": [
+    "s-snto-brief"
+   ]
+  },
+  {
+   "id": "ev-snto-visitor-gap",
+   "research_id": "r-snto-pnsg",
+   "label": "No visitor-use evidence",
+   "input_kind": "unestablished",
+   "substantiation": "not_established",
+   "statement": "No visitor-use evidence exists at asset or trail scale in the reviewed source set.",
+   "basis": "Visitor / public-use evidence: effectively none at asset or trail scale.",
+   "limitation": "Without a matching use denominator, a physical-intervention priority cannot be established.",
+   "provenance": null,
+   "source_ids": [
+    "s-snto-brief"
+   ]
+  },
+  {
+   "id": "ev-net-origins",
+   "research_id": "r-network-pilot",
+   "label": "Official address portals",
+   "input_kind": "acquired",
+   "substantiation": "source_stated",
+   "statement": "2,651 official address portals in barrio 113; all 2,651 agree with the official barrio polygon.",
+   "basis": "Portals whose callejero barrio code names the study barrio and fall inside the official barrio polygon: 2 651 / 2 651",
+   "limitation": "Portals are addresses, not residents or the population denominator.",
+   "provenance": {
+    "publisher": "Ayuntamiento de Madrid",
+    "dataset_ref": "callejero 213605 (direcciones vigentes)",
+    "license": "CC BY 4.0",
+    "retrieved_at": "recorded in the pilot report; not re-verified at Gate 2",
+    "checksum": null
+   },
+   "source_ids": [
+    "s-net-results"
+   ]
+  },
+  {
+   "id": "ev-net-facilities",
+   "research_id": "r-network-pilot",
+   "label": "Municipal basic sports facilities",
+   "input_kind": "acquired",
+   "substantiation": "source_stated",
+   "statement": "38 access points of municipal basic sports facilities, from 606 citywide records (dataset 200215).",
+   "basis": "38 distinct access points of Instalaciones Deportivas Básicas Municipales within 1 000 m of the barrio boundary (10 of them inside it), from 606 citywide records",
+   "limitation": "Catalogue coordinates, not verified physical entrances. One facility category only.",
+   "provenance": {
+    "publisher": "Ayuntamiento de Madrid",
+    "dataset_ref": "Instalaciones Deportivas Básicas Municipales 200215",
+    "license": "CC BY 4.0",
+    "retrieved_at": "recorded in the pilot report; not re-verified at Gate 2",
+    "checksum": null
+   },
+   "source_ids": [
+    "s-net-results",
+    "s-net-audit"
+   ]
+  },
+  {
+   "id": "ev-net-osm",
+   "research_id": "r-network-pilot",
+   "label": "OpenStreetMap pedestrian network extract",
+   "input_kind": "acquired",
+   "substantiation": "source_stated",
+   "statement": "OSM Overpass extract of 87,364 elements, data vintage 2026-11-16T17:20:19Z, archived unmodified.",
+   "basis": "The archived extract contains 87,364 OSM elements",
+   "limitation": "OSM pedestrian-way completeness is unaudited and uneven; it is the binding constraint.",
+   "provenance": {
+    "publisher": "OpenStreetMap contributors (Overpass API)",
+    "dataset_ref": "DOI 10.5281/zenodo.24288645",
+    "license": "ODbL 1.0",
+    "retrieved_at": "2026-11-16T17:21:14Z",
+    "checksum": "SHA-256 74416526312589d95fc5857c9469850545ec0649abbb197c49faca548d085edf"
+   },
+   "source_ids": [
+    "s-net-dataset",
+    "s-net-results"
+   ]
+  },
+  {
+   "id": "ev-net-distances",
+   "research_id": "r-network-pilot",
+   "label": "Straight-line and network distances",
+   "input_kind": "derived",
+   "substantiation": "source_stated",
+   "statement": "Per-portal straight-line and shortest-network distances, and the four reported quantities.",
+   "basis": "Over the 2 636 measured portals",
+   "limitation": "Modelled walking distance, not observed walking or accessibility.",
+   "provenance": null,
+   "source_ids": [
+    "s-net-results"
+   ]
+  },
+  {
+   "id": "ev-net-municipal-gap",
+   "research_id": "r-network-pilot",
+   "label": "Municipal indicator calculation not located",
+   "input_kind": "unestablished",
+   "substantiation": "not_established",
+   "statement": "The municipal indicator's executed calculation, inventory and population denominator were not located in public documentation.",
+   "basis": "Faltan el cálculo ejecutado, su inventario, su denominador poblacional y el valor de referencia.",
+   "limitation": "No comparison with the municipal indicator is possible.",
+   "provenance": null,
+   "source_ids": [
+    "s-net-audit"
+   ]
+  },
+  {
+   "id": "ev-fieldos-iphone-run",
+   "research_id": "i-fieldos",
+   "label": "First iPhone field run",
+   "input_kind": "observed",
+   "substantiation": "owner_attested",
+   "statement": "One 60–120 minute offline field workflow on a physical iPhone completed on 2026-08-31; tested capture, close/reopen persistence, export, and backup passed with no intended data loss reported.",
+   "basis": "FieldOS completed its first real 60–120 minute field run on 2026-08-31, on a physical iPhone",
+   "limitation": "The result is one first-party session without independent audit; observation counts, exact duration, device/OS details, timing metrics, and storage-pressure results were not recorded.",
+   "provenance": null,
+   "source_ids": [
+    "s-fieldos-run",
+    "s-fieldos-readme"
+   ]
+  },
+  {
+   "id": "ev-fieldos-android-gap",
+   "research_id": "i-fieldos",
+   "label": "No Android test run",
+   "input_kind": "unestablished",
+   "substantiation": "not_established",
+   "statement": "No physical Android test had been run at the reviewed commit.",
+   "basis": "Not yet run on a physical Android device.",
+   "limitation": "Cross-platform reliability is not established.",
+   "provenance": null,
+   "source_ids": [
+    "s-fieldos-readme"
+   ]
+  }
+ ],
+ "findings": [
+  {
+   "id": "f-hati-pilot-reclass",
+   "research_id": "r-hati-pilot",
+   "statement": "Changing the thermal representation reclassified one third of outdoor asset-time observations (33.3 %, 14 of 42), in both directions: in 9 the physical model was more restrictive, in 5 less restrictive.",
+   "uncertainty": "Reclassification differs by hour: 64.3 % at 12:00, 0.0 % at 15:00, 35.7 % at 18:00. Neither method is field-validated, so the direction of divergence says nothing about correctness.",
+   "source_ids": [
+    "s-hati-preprint"
+   ]
+  },
+  {
+   "id": "f-hati-pilot-scenarios",
+   "research_id": "r-hati-pilot",
+   "statement": "Relative to the nearest-open baseline, constraint-first screening changed the feasible-alternative set in 7 of 8 scenarios. The nearest-open option failed screening in 3 of 8, and one scenario (S8) returned an explicit no-defensible-alternative outcome.",
+   "uncertainty": null,
+   "source_ids": [
+    "s-hati-preprint"
+   ]
+  },
+  {
+   "id": "f-hati-pilot-robustness",
+   "research_id": "r-hati-pilot",
+   "statement": "Under the tested uncertainty, 35 of 42 outdoor decisions were classed ROBUST, 6 BOUNDARY and 1 UNSTABLE. A satellite-derived irradiance realization changed 1 of 42 decisions; −10 % and −20 % irradiance perturbations changed none.",
+   "uncertainty": "Robustness covers only the tested dimensions (solar forcing, plus targeted canopy geometry for two assets). It is not total uncertainty and not a validation of the modelled field.",
+   "source_ids": [
+    "s-hati-preprint"
+   ]
+  },
+  {
+   "id": "f-hati-ped-baseline",
+   "research_id": "r-hati-pedestrian",
+   "statement": "Baseline Route A − Route B mean-UTCI difference is 0.05 °C at 14:00 and 0.37 °C at 17:00.",
+   "uncertainty": "The perturbation ensemble spans zero at both times: −1.31…+0.23 °C (14:00) and −0.39…+0.38 °C (17:00).",
+   "source_ids": [
+    "s-hati-gate3b"
+   ]
+  },
+  {
+   "id": "f-hati-ped-reversal",
+   "research_id": "r-hati-pedestrian",
+   "statement": "The A−B sign reverses under the canopy perturbation (E-P2) at 14:00 and under side-of-street (E-P5) at 14:00 and 17:00.",
+   "uncertainty": null,
+   "source_ids": [
+    "s-hati-gate3b"
+   ]
+  },
+  {
+   "id": "f-hati-ped-metrics",
+   "research_id": "r-hati-pedestrian",
+   "statement": "Legitimate metrics disagree. Thermal intensity marginally favours A; exposure duration favours B (shorter route, fewer high-stress minutes).",
+   "uncertainty": null,
+   "source_ids": [
+    "s-hati-gate3b"
+   ]
+  },
+  {
+   "id": "f-hati-ped-boundary",
+   "research_id": "r-hati-pedestrian",
+   "statement": "Route point-max UTCI lies at 45.0–45.9 °C, next to the +46 °C extreme category boundary, across perturbations.",
+   "uncertainty": "Category-boundary proximity (NC6 flagged).",
+   "source_ids": [
+    "s-hati-gate3b"
+   ]
+  },
+  {
+   "id": "f-snto-trends",
+   "research_id": "r-snto-pnsg",
+   "statement": "Of 21 assets with a real time series, 6 show significant greening, 14 no trend and 1 significant decline. The dominant signal is stability or recovery.",
+   "uncertainty": null,
+   "source_ids": [
+    "s-snto-brief"
+   ]
+  },
+  {
+   "id": "f-snto-maliciosa",
+   "research_id": "r-snto-pnsg",
+   "statement": "Maliciosa-Porrones (climbing area) shows a significant NDVI decline (τ = −0.37, p ≈ 0, n = 65; change-point 2025-03), but NDMI rises significantly (τ = +0.22, p = 0.01). The signals are internally contradictory. Status: MONITOR / DATA GAP.",
+   "uncertainty": "Evidence confidence LOW–MODERATE: strong temporal signal, poor spatial fit, no attribution evidence.",
+   "source_ids": [
+    "s-snto-brief"
+   ]
+  },
+  {
+   "id": "f-snto-priority",
+   "research_id": "r-snto-pnsg",
+   "statement": "Zero units qualify for priority management review on public-use grounds. Across the 218 trails, the two-scene ΔEHS gives 165 improving and 46 worsening.",
+   "uncertainty": "Trail aggregate: MODERATE, because there is no visitor denominator and the reading is two-scene, not a time series.",
+   "source_ids": [
+    "s-snto-brief"
+   ]
+  },
+  {
+   "id": "f-net-detour",
+   "research_id": "r-network-pilot",
+   "statement": "Over 2,636 measured portals, the median detour ratio (same origin, same facility) is 1.354, and the mean is 1.538 over 2,634 pairs. The median understatement is 98.1 m.",
+   "uncertainty": "Medians across the sensitivity variants range from 1.347 to 1.922 (A4 passes in every variant). The denominator rule moves the median by 0.0008.",
+   "source_ids": [
+    "s-net-results"
+   ]
+  },
+  {
+   "id": "f-net-discordance",
+   "research_id": "r-network-pilot",
+   "statement": "For 21.05 % of measured portals (555 of 2,636), the straight-line-nearest facility is not the network-nearest.",
+   "uncertainty": "Over all 2,651 selected origins: 20.94 %.",
+   "source_ids": [
+    "s-net-results"
+   ]
+  },
+  {
+   "id": "f-net-false-inclusion",
+   "research_id": "r-network-pilot",
+   "statement": "A \"within X m\" claim made on straight-line distance fails for 35.35 % of straight-line-inside portals at 300 m (614 of 1,737) and for 19.59 % at 500 m (465 of 2,374).",
+   "uncertainty": "Single barrio, single facility category.",
+   "source_ids": [
+    "s-net-results"
+   ]
+  },
+  {
+   "id": "f-net-municipal-audit",
+   "research_id": "r-network-pilot",
+   "statement": "The follow-up audit of the municipal 500 m sports-proximity indicator concluded \"HOLD para la comparación municipal\" (2026-11-20). The indicator's executed calculation, inventory, population denominator and reference value were not located.",
+   "uncertainty": null,
+   "source_ids": [
+    "s-net-audit"
+   ]
+  }
+ ],
+ "outcomes": [
+  {
+   "id": "o-hati-pilot",
+   "research_id": "r-hati-pilot",
+   "verdict_label": "thermal representation is a substantive modelling choice in heat-adaptive tourism decision support",
+   "outcome_type": "bounded_finding",
+   "statement": "The findings indicate that thermal representation is a substantive modelling choice, and that a constraint-first architecture can expose that sensitivity while keeping uncertainty, evidence and exclusion logic explicit.",
+   "claim_ceiling": "The study evaluates decision sensitivity to the choice of thermal method, not the accuracy of either method against ground truth. Results are limited to a single Madrid pilot, without direct field validation of Tmrt/UTCI or observed tourist behaviour. The preprint is not peer-reviewed.",
+   "limitations": [
+    "Single city.",
+    "Single day.",
+    "No field validation.",
+    "No behavioural data."
+   ],
+   "decided_at": "2026-09-11",
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-hati-preprint"
+   ]
+  },
+  {
+   "id": "o-hati-abstain",
+   "research_id": "r-hati-pedestrian",
+   "verdict_label": "ABSTAIN / NO ROBUST DIFFERENCE",
+   "outcome_type": "abstain",
+   "statement": "The route-difference sign reversed under at least one justified perturbation at both tested departure times and the ensemble spanned zero.",
+   "claim_ceiling": "Neither route is established as cooler, preferred, accurate, comfortable, behaviourally superior, physiologically safer, lower-dose, or healthier; the result does not mean the routes are thermally identical.",
+   "limitations": [
+    "One OD pair, one day, two departures.",
+    "Modelled exposure only.",
+    "The verdict would change only with independent pedestrian-level Tmrt/UTCI measurement, an authoritative current canopy model, or resolved side-of-street mapping."
+   ],
+   "decided_at": "2026-09-16",
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-hati-gate3b",
+    "s-hati-status"
+   ]
+  },
+  {
+   "id": "o-snto-insufficient",
+   "research_id": "r-snto-pnsg",
+   "verdict_label": "INSUFFICIENT EVIDENCE TO PRIORITISE",
+   "outcome_type": "insufficient_evidence",
+   "statement": "Evidence is insufficient to prioritise any physical intervention, closure, quota, restoration, or budget commitment; monitoring and improved data collection are the proportionate actions.",
+   "claim_ceiling": "No asset/trail visitor volume, tourism causality, ground condition, ecological impact, monetary allocation, closure, or restriction claim is supported.",
+   "limitations": [
+    "No field validation by the author.",
+    "No causal attribution.",
+    "No visitor-use denominator.",
+    "Point and linestring footprints are a coarse proxy."
+   ],
+   "decided_at": "2026-09-14",
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-snto-brief"
+   ]
+  },
+  {
+   "id": "o-net-modify",
+   "research_id": "r-network-pilot",
+   "verdict_label": "MODIFY",
+   "outcome_type": "conditional",
+   "statement": "The experiment is defensible: all four documented criteria pass and the finding survives every valid variant. It does not license a product feature until five conditions are met: an OSM completeness audit; replication across contrasting barrios; a facility-register source gate; a qualified ODbL review; and a runtime decision.",
+   "claim_ceiling": "A single-barrio figure must never be shown as a Madrid figure. The result is a measured modelled-distance discrepancy, not an accessibility, equity or service-coverage assessment. The criteria were documented retrospectively, not pre-registered. No comparison with the municipal indicator is established (HOLD).",
+   "limitations": [
+    "One barrio.",
+    "One facility category.",
+    "OSM completeness unaudited.",
+    "The ODbL status of derived outputs is contested and unresolved by the source."
+   ],
+   "decided_at": "2026-11-16",
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-net-results",
+    "s-net-audit"
+   ]
+  },
+  {
+   "id": "o-fieldos-functional",
+   "research_id": "i-fieldos",
+   "verdict_label": "FIRST FIELD RUN: PASS — owner-attested",
+   "outcome_type": "functional_test",
+   "statement": "One owner-attested iPhone field workflow passed the executed offline capture-to-backup checks with no intended data loss reported.",
+   "claim_ceiling": "FieldOS is not thereby validated, production-ready, field-proven across conditions, independently audited, or cross-platform verified.",
+   "limitations": [],
+   "decided_at": "2026-08-31",
+   "reviewed_at": "2026-11-25",
+   "source_ids": [
+    "s-fieldos-run",
+    "s-fieldos-readme"
+   ]
+  }
+ ],
+ "outputs": [
+  {
+   "id": "out-hati-preprint",
+   "research_id": "r-hati-pilot",
+   "citation": "Karahrodi, S. (2026). Thermal representation as a decision variable in heat-adaptive tourism opportunity screening: evidence from a Madrid pilot (Version 1.0) [Preprint]. Zenodo.",
+   "date": "2026-09-11",
+   "publication_type": "preprint",
+   "editorial_status": "not_peer_reviewed",
+   "identifier": {
+    "availability": "pid",
+    "scheme": "doi",
+    "value": "10.5281/zenodo.22707470",
+    "scope": "version"
+   },
+   "url": "https://doi.org/10.5281/zenodo.22707470",
+   "license": "CC BY 4.0",
+   "source_id": "s-hati-preprint",
+   "note": "Concept DOI 10.5281/zenodo.22707469."
+  },
+  {
+   "id": "out-hati-code",
+   "research_id": "r-hati-pilot",
+   "citation": "HATI-Madrid code, GitHub release v0.1.0 (2026-09-01).",
+   "date": "2026-09-01",
+   "publication_type": "software",
+   "editorial_status": "not_peer_reviewed",
+   "identifier": {
+    "availability": "no_pid",
+    "scheme": null,
+    "value": null,
+    "scope": null
+   },
+   "url": "https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/releases/tag/v0.1.0",
+   "license": null,
+   "source_id": "s-hati-pilot-status",
+   "note": null
+  },
+  {
+   "id": "out-net-dataset",
+   "research_id": "r-network-pilot",
+   "citation": "Karahrodi, S. (2026). OpenStreetMap pedestrian-network extract for the Madrid Network Accessibility pilot (San Isidro, Madrid, 2026-11-16) (Version 1.0.0) [Data set]. Zenodo.",
+   "date": "2026-11-16",
+   "publication_type": "dataset",
+   "editorial_status": "not_peer_reviewed",
+   "identifier": {
+    "availability": "pid",
+    "scheme": "doi",
+    "value": "10.5281/zenodo.24288645",
+    "scope": "version"
+   },
+   "url": "https://doi.org/10.5281/zenodo.24288645",
+   "license": "ODbL 1.0",
+   "source_id": "s-net-dataset",
+   "note": "Concept DOI 10.5281/zenodo.24288644."
+  },
+  {
+   "id": "out-lens-release",
+   "research_id": "p-lens",
+   "citation": "Madrid Urban Evidence Lens, GitHub release v0.1.0 (2026-09-25).",
+   "date": "2026-09-25",
+   "publication_type": "software",
+   "editorial_status": "not_peer_reviewed",
+   "identifier": {
+    "availability": "no_pid",
+    "scheme": null,
+    "value": null,
+    "scope": null
+   },
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/releases/tag/v0.1.0",
+   "license": "MIT",
+   "source_id": "s-lens-release",
+   "note": null
+  },
+  {
+   "id": "out-snto-software",
+   "research_id": "p-snto",
+   "citation": "Karahrodi, S. (2026). SNTO — Smart Nature Tourism Observatory [Software]. Zenodo.",
+   "date": "2026-07-21",
+   "publication_type": "software",
+   "editorial_status": "not_peer_reviewed",
+   "identifier": {
+    "availability": "pid",
+    "scheme": "doi",
+    "value": "10.5281/zenodo.20818269",
+    "scope": "concept"
+   },
+   "url": "https://doi.org/10.5281/zenodo.20818269",
+   "license": "CC BY 4.0 (as stated by the Zenodo record; differs from the repository licence)",
+   "source_id": "s-snto-zenodo",
+   "note": "Latest version at the 2026-11-25 check: v2.0.0, issued 2026-07-21. Cited as a software output only: the record description claims causal attribution and budget prioritisation beyond the brief’s claim ceiling, and the Atlas does not use it as support for those claims."
+  }
+ ],
+ "figures": [
+  {
+   "id": "fig-hati-1",
+   "research_id": "r-hati-pilot",
+   "number": 1,
+   "file": "assets/figures/fig-hati-1.webp",
+   "width": 1600,
+   "height": 838,
+   "caption": "Study design and constraint-first screening architecture. (a) The Prado–Retiro–Atocha pilot study area (≈3.5 km²) with the 27 curated tourism assets, outdoor (14) and indoor (13); a bounded pilot, not city-wide Madrid. (b) Two thermal representations feed one ordered, constraint-first gate chain; thermal state, decision confidence, evidence confidence and exclusion reason are kept separate, with no composite score.",
+   "alt": "Two-panel figure. Left: rectangular study-area map with 14 outdoor assets as triangles and 13 indoor assets as circles, a 500 m scale bar and a north arrow. Right: flow diagram from 27 assets through a simple proxy and a physically based SOLWEIG model into a constraint-first screen ending in either surviving alternatives or no defensible alternative.",
+   "source_id": "s-hati-preprint",
+   "pinned_ref": "doi:10.5281/zenodo.22707470",
+   "license": "CC BY 4.0",
+   "rights_holder": "Soroush Karahrodi",
+   "kind": "diagram",
+   "credit": "Karahrodi, S. (2026), preprint v1.0, DOI 10.5281/zenodo.22707470, CC BY 4.0. Asset locations © OpenStreetMap contributors (ODbL 1.0). Page 24 of the deposited PDF, converted to WebP."
+  },
+  {
+   "id": "fig-hati-2",
+   "research_id": "r-hati-pilot",
+   "number": 2,
+   "file": "assets/figures/fig-hati-2.webp",
+   "width": 1600,
+   "height": 855,
+   "caption": "Thermal-method choice changes feasibility classifications, in both directions. Of 42 outdoor asset × timestamp observations, 14 (33.3 %) were reclassified — 9 more restrictive and 5 less restrictive under the physical model; 28 agree. Neither method is field-validated.",
+   "alt": "Two-panel chart. Left: agreement matrix of 14 outdoor assets by three timestamps, coloured by agreement, physical-more-restrictive or physical-less-restrictive. Right: stacked bars per timestamp showing 64.3 % changed at 12:00, 0.0 % at 15:00 and 35.7 % at 18:00.",
+   "source_id": "s-hati-preprint",
+   "pinned_ref": "doi:10.5281/zenodo.22707470",
+   "license": "CC BY 4.0",
+   "rights_holder": "Soroush Karahrodi",
+   "kind": "chart",
+   "credit": "Karahrodi, S. (2026), preprint v1.0, DOI 10.5281/zenodo.22707470, CC BY 4.0. Page 25 of the deposited PDF, converted to WebP."
+  },
+  {
+   "id": "fig-hati-3",
+   "research_id": "r-hati-pilot",
+   "number": 3,
+   "file": "assets/figures/fig-hati-3.webp",
+   "width": 1600,
+   "height": 828,
+   "caption": "Heat-aware screening changes the option set relative to a conventional nearest-open baseline across eight pre-registered scenarios: the candidate set changed in 7 of 8, the nearest-open pick was removed in 3 of 8, and S8 resolves to no defensible alternative — an architectural outcome of the locked constraints, not a ranked recommendation.",
+   "alt": "Table-like chart of eight scenarios S1 to S8 with the nearest-open baseline pick, whether it passes screening, a bar of surviving alternatives from 0 to 9, and the number removed; S8 Parque del Retiro is outlined with 0 of 26 surviving.",
+   "source_id": "s-hati-preprint",
+   "pinned_ref": "doi:10.5281/zenodo.22707470",
+   "license": "CC BY 4.0",
+   "rights_holder": "Soroush Karahrodi",
+   "kind": "chart",
+   "credit": "Karahrodi, S. (2026), preprint v1.0, DOI 10.5281/zenodo.22707470, CC BY 4.0. Page 26 of the deposited PDF, converted to WebP."
+  },
+  {
+   "id": "fig-hati-4",
+   "research_id": "r-hati-pilot",
+   "number": 4,
+   "file": "assets/figures/fig-hati-4.webp",
+   "width": 1600,
+   "height": 691,
+   "caption": "Decision robustness under tested uncertainty. A satellite-derived irradiance realization changed 1 of 42 outdoor decisions; −10 % and −20 % irradiance perturbations changed none. Decision-confidence classes: ROBUST 35, BOUNDARY 6, UNSTABLE 1. Robustness covers only the tested dimensions; it is not total uncertainty and not a validation of the modelled field.",
+   "alt": "Two bar charts. Left: decisions changed under three solar-forcing realizations — 1 of 42, 0 of 42 and 0 of 42. Right: decision-confidence distribution — 35 robust, 6 boundary, 1 unstable, with the unstable case annotated at the 46 °C boundary.",
+   "source_id": "s-hati-preprint",
+   "pinned_ref": "doi:10.5281/zenodo.22707470",
+   "license": "CC BY 4.0",
+   "rights_holder": "Soroush Karahrodi",
+   "kind": "chart",
+   "credit": "Karahrodi, S. (2026), preprint v1.0, DOI 10.5281/zenodo.22707470, CC BY 4.0. Page 27 of the deposited PDF, converted to WebP."
+  },
+  {
+   "id": "fig-net-1",
+   "research_id": "r-network-pilot",
+   "number": 1,
+   "file": "assets/figures/fig-net-1.webp",
+   "width": 1600,
+   "height": 491,
+   "caption": "Straight-line versus pedestrian-network distance to the nearest municipal basic sports facility, barrio 113 San Isidro (2,636 portals). (a) Network against straight-line distance for the same origin and facility. (b) Cumulative detour ratio under the seven extraction variants. (c) Share of straight-line-inside origins that fall outside by network at 300, 500 and 800 m. A single-barrio result, not a Madrid figure.",
+   "alt": "Three panels. Left: scatter of network distance against straight-line distance with a 1:1 reference line, all points above it. Centre: cumulative curves of detour ratio for seven variants, one strict-pedestrian variant clearly shifted right. Right: grouped bars of false-inclusion percentages at 300, 500 and 800 m thresholds for each variant.",
+   "source_id": "s-net-attribution",
+   "pinned_ref": "ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f",
+   "license": "MIT (repository); embedded attribution: Ayuntamiento de Madrid (CC BY 4.0) and © OpenStreetMap contributors (ODbL 1.0)",
+   "rights_holder": "Soroush Karahrodi",
+   "kind": "chart",
+   "credit": "madrid-tourism-intelligence-lens @ ad7ed9b, results/figure_straightline_vs_network.png (MIT). Official sources: Ayuntamiento de Madrid (CC BY 4.0). © OpenStreetMap contributors (ODbL 1.0). Downscaled from 2250 to 1600 px and converted to WebP."
+  }
+ ],
+ "sources": [
+  {
+   "id": "s-hati-gate3b",
+   "label": "HATI Gate 3B evidence-sufficiency decision",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/docs/research/pedestrian-heat/gate3b/GATE3B_DECISION.md",
+   "pinned_ref": "c69688e7827f1faaf855fdb58a8e80a497d73830",
+   "accessed_at": "2026-09-22",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-hati-status",
+   "label": "HATI canonical project status (extension)",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/PROJECT_STATUS.md",
+   "pinned_ref": "c69688e7827f1faaf855fdb58a8e80a497d73830",
+   "accessed_at": "2026-09-22",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-hati-routes",
+   "label": "HATI Gate 2 freeze manifest and route hashes",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/docs/research/pedestrian-heat/gate2/GATE2_FREEZE_MANIFEST.json",
+   "pinned_ref": "c69688e7827f1faaf855fdb58a8e80a497d73830",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-hati-preprint",
+   "label": "Thermal representation as a decision variable in heat-adaptive tourism opportunity screening (Zenodo v1.0; HATI_Madrid_Preprint_v1.0.pdf, MD5 083ed0f91105fd8fef48c7aad05766e0)",
+   "kind": "preprint",
+   "url": "https://doi.org/10.5281/zenodo.22707470",
+   "pinned_ref": "doi:10.5281/zenodo.22707470",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-hati-pilot-status",
+   "label": "HATI project status (layer A, licences)",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/97b0e40669386c29dafa8c2f5b5031f14ff71771/PROJECT_STATUS.md",
+   "pinned_ref": "97b0e40669386c29dafa8c2f5b5031f14ff71771",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-snto-brief",
+   "label": "SNTO PNSG Public-Use Decision Evidence Brief 2026/27",
+   "kind": "brief",
+   "url": "https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/docs/PNSG_DECISION_EVIDENCE_BRIEF.md",
+   "pinned_ref": "2c65fe2ac9a09662cddef4cfa68290e0cd6e1278",
+   "accessed_at": "2026-09-22",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-snto-readme",
+   "label": "SNTO repository status snapshot",
+   "kind": "repository",
+   "url": "https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/README.md",
+   "pinned_ref": "2c65fe2ac9a09662cddef4cfa68290e0cd6e1278",
+   "accessed_at": "2026-09-22",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-snto-license",
+   "label": "SNTO LICENSE (academic and research use)",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/LICENSE",
+   "pinned_ref": "2c65fe2ac9a09662cddef4cfa68290e0cd6e1278",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-snto-oapn-boundary",
+   "label": "OAPN PNSG boundary as committed in SNTO (blob 39532e02)",
+   "kind": "official_dataset",
+   "url": "https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/data/raw_assets/vector_data/oapn/oapn_limite_pn.geojson",
+   "pinned_ref": "2c65fe2ac9a09662cddef4cfa68290e0cd6e1278",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-snto-zenodo",
+   "label": "SNTO — Smart Nature Tourism Observatory (Zenodo software, concept record)",
+   "kind": "release",
+   "url": "https://doi.org/10.5281/zenodo.20818269",
+   "pinned_ref": "doi:10.5281/zenodo.20818269",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-net-readme",
+   "label": "Network Accessibility Pilot — design and sources",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f/research/network_accessibility_pilot/README.md",
+   "pinned_ref": "ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-net-results",
+   "label": "Network Accessibility Pilot — results and verdict",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f/research/network_accessibility_pilot/RESULTS.md",
+   "pinned_ref": "ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-net-attribution",
+   "label": "Network pilot results attribution and licence notice",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f/research/network_accessibility_pilot/results/ATTRIBUTION.md",
+   "pinned_ref": "ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-net-audit",
+   "label": "Municipal sports-proximity indicator audit",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/f1cd19d573d6ab3e06700b03c5189864eed23dcd/research/network_accessibility_pilot/MUNICIPAL_INDICATOR_AUDIT.md",
+   "pinned_ref": "f1cd19d573d6ab3e06700b03c5189864eed23dcd",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-net-dataset",
+   "label": "OSM pedestrian-network extract, San Isidro (Zenodo v1.0.0)",
+   "kind": "dataset_record",
+   "url": "https://doi.org/10.5281/zenodo.24288645",
+   "pinned_ref": "doi:10.5281/zenodo.24288645",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-lens-geography",
+   "label": "Canonical Madrid administrative geography and metadata (Ayuntamiento de Madrid, IDEAM)",
+   "kind": "official_dataset",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f/data/geography/madrid_admin.meta.json",
+   "pinned_ref": "ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-lens-readme",
+   "label": "Madrid Urban Evidence Lens — README",
+   "kind": "repository",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/3035323a233e5fa83b6b4babe8a2ccf3ac7e4196/README.md",
+   "pinned_ref": "3035323a233e5fa83b6b4babe8a2ccf3ac7e4196",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-lens-claims",
+   "label": "Madrid Urban Evidence Lens — claims and limitations",
+   "kind": "repository",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/3035323a233e5fa83b6b4babe8a2ccf3ac7e4196/docs/CLAIMS_AND_LIMITATIONS.md",
+   "pinned_ref": "3035323a233e5fa83b6b4babe8a2ccf3ac7e4196",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-lens-release",
+   "label": "Madrid Urban Evidence Lens GitHub release v0.1.0 (published 2026-09-25)",
+   "kind": "release",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/releases/tag/v0.1.0",
+   "pinned_ref": "v0.1.0",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-fieldos-run",
+   "label": "First FieldOS field run",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/fieldos/blob/271d3a77c58361f43459d068f4e8a100611a87fd/docs/FIRST_FIELD_RUN.md",
+   "pinned_ref": "271d3a77c58361f43459d068f4e8a100611a87fd",
+   "accessed_at": "2026-09-22",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-fieldos-readme",
+   "label": "FieldOS repository status snapshot",
+   "kind": "repository",
+   "url": "https://github.com/soroushkarahrodi79-oss/fieldos/blob/271d3a77c58361f43459d068f4e8a100611a87fd/README.md",
+   "pinned_ref": "271d3a77c58361f43459d068f4e8a100611a87fd",
+   "accessed_at": "2026-09-22",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-oapn-catalogue",
+   "label": "datos.gob.es catalogue record \"Límites de los parques nacionales españoles\" (publisher: Organismo Autónomo Parques Nacionales)",
+   "kind": "official_dataset",
+   "url": "https://datos.gob.es/es/catalogo/ea0043369-limites-de-los-parques-nacionales-espanoles",
+   "pinned_ref": "ea0043369-limites-de-los-parques-nacionales-espanoles (modified 2023-01-24)",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-miteco-legal",
+   "label": "MITECO legal notice (aviso legal), reuse conditions — unversioned page, operative text quoted in SPEC.md §12.2",
+   "kind": "publication",
+   "url": "https://www.miteco.gob.es/es/atencion-al-ciudadano/aviso-legal.html",
+   "pinned_ref": "unversioned web page; quoted in SPEC.md §12.2",
+   "accessed_at": "2026-11-25",
+   "access": "public",
+   "last_checked_at": "2026-11-25",
+   "last_http_status": 200,
+   "pin_change": null
+  }
+ ],
+ "relationships": []
 }

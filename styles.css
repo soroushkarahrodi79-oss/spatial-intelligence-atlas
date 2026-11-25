@@ -400,6 +400,8 @@ main > .notice { margin-bottom:var(--s7); }
   .dossier { display:block; }
   .rail { border:0; padding:0; margin-top:12pt; }
   .fig--wide { width:100%; }
+  .terr__plate { max-width:220px; }
+  .terr { break-inside:avoid; }
   details > * { display:block !important; }
   details > summary { display:none !important; }
   a[href^="http"]::after { content:" <" attr(href) ">"; font:400 8pt var(--font-mono); color:#444; word-break:break-all; }

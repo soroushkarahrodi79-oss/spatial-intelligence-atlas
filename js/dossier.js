@@ -72,7 +72,7 @@ function territoryBlock(db, r, cite) {
       plate ? h('div.terr__plate', plateThumb(db, plate, 'thumb-wide')) : null,
       h('p.terr__name', plate ? h('a', { href: `#/atlas/${tid}` }, `Plate ${plate.n} · ${t.label}`) : t.label),
       h('p.body-s', t.basis, citeLinks(cite(t.source_ids))),
-      plate ? h('p.micro', plate.geometry.attribution, ' · ', plate.geometry.license.split(';')[0], ' · not for measurement') : null,
+      plate ? h('p.micro', plate.geometry.attribution, plate.geometry.attribution.includes(plate.geometry.license) ? '' : ` · ${plate.geometry.license}`, ' · not for measurement') : null,
       t.territory_note ? h('p.body-s.ink-2', t.territory_note) : null);
   });
 }

@@ -192,7 +192,7 @@ export function atlasView(db, { head, notice }) {
     h('ul.plate-grid', { 'aria-label': 'Plates' }, db.plates.map((p) => h('li.plate-card',
       h('a', { href: `#/atlas/${p.territory.id}`, 'aria-label': `Plate ${p.n}: ${p.territory.label}` }, drawThumb(db, p, 320, 240)),
       h('h2.plate-title', h('a', { href: `#/atlas/${p.territory.id}` }, `Plate ${p.n} · ${p.territory.label}`)),
-      h('p.micro', `${p.geometry.publisher} · ${p.geometry.license.split(';')[0]}`),
+      h('p.micro', `${p.geometry.publisher} · ${p.geometry.license}`),
       h('p.body-s.ink-2', db.itemsIn(p.territory.id).map((r) => r.short_title).join(' · '))))),
     h('section.text-territories', { 'aria-labelledby': 'tt' },
       h('h2.band-label.label', { id: 'tt' }, 'Territories without a plate'),

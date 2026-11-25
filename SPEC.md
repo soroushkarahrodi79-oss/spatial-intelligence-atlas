@@ -45,9 +45,10 @@ prediction, ranking, repository integration or scientific validation.
 ### 1.1 Selection principle (binding)
 
 An item is included by its **class** (§4.1) and by being **publicly
-verifiable**. Every public claim rests on at least one `access: public`
-source (I11). An item is never included merely because it exists, is
-visually attractive, or belongs to the same portfolio.
+verifiable**. Every public scientific claim rests on at least one
+`access: public` source of its own (I11). One public source per item is not
+enough. An item is never included merely because it exists, is visually
+attractive, or belongs to the same portfolio.
 
 ### 1.2 Non-integration principle (binding)
 
@@ -310,7 +311,7 @@ the sources. Conceptual and technical relations MUST carry them (I13).
 | I8 | Every evidence record, finding, outcome, output and figure has exactly one parent item, and the parent link appears once. |
 | I9 | Each view's order is fully determined by dataset order (§5); no runtime sorting by any value. |
 | I10 | No field, view or computation encodes an ordinal score, maturity rank or composite of `class`, `input_kind`, `substantiation`, `outcome_type` or `editorial_status`. |
-| I11 | Every item rendered publicly has at least one `access: public` source supporting its identity, question and outcome. |
+| I11 | **Every public scientific claim cites at least one `access: public` source in its own `source_ids` or `source_id`.** A public source attached elsewhere in the same item does not count. The claims that must each satisfy this depend on the item's `class`; see the list after this table. Claims a class does not have (for example a platform's question or outcome) are not required. |
 | I12 | Every drawn geometry resolves to a `geometry` object whose `sha256` matches the committed file and whose `license` and `attribution` are non-empty. |
 | I13 | Every `conceptual` or `technical` relationship declares `class` and at least one source; `technical` requires a source documenting the dependency. |
 | I14 | Every `verdict_label` is a verbatim substring of the cited source at its `pinned_ref`; checked once at Gate 2 and recorded. |
@@ -319,8 +320,37 @@ the sources. Conceptual and technical relations MUST carry them (I13).
 | I17 | Every `figure` has `caption`, `alt`, `source_id`, `pinned_ref` and a `license` that permits reuse; the file exists. |
 | I18 | A `pinned_ref` that differs from the previously frozen value has a non-null `pin_change` with a justification. |
 
-I1–I13 and I15–I18 are checked by `tools/validate_atlas.py`. I14 is checked
-at Gate 2 against the pinned sources and recorded in the freeze.
+**I11 by class.** For each class, these claims must each cite their own
+public source:
+
+- `documented_research` and `experiment`:
+  - `research_question` and `summary` (via `research.source_ids`);
+  - `methodology.summary`;
+  - every `evidence`, `finding` and `outcome`, including the outcome's
+    `verdict_label`, `statement` and `claim_ceiling`;
+  - every `output` and `figure`;
+  - each linked `territory`, and its `geometry` source if drawn.
+- `instrument`:
+  - `summary` (via `research.source_ids`);
+  - `methodology.summary` when present;
+  - every `evidence`, `outcome`, `output` and `figure`.
+- `research_platform`:
+  - `summary` and the "what the platform documents" text (via
+    `research.source_ids`);
+  - each linked `territory` and geometry;
+  - every `output` and `figure`.
+  - A platform has no question or outcome, and none is required.
+
+**Two kinds of verification, kept separate.**
+
+| Kind | What it establishes | Invariants | Who or what checks it |
+|---|---|---|---|
+| **Mechanical validation of metadata** | Structure and linkage: ids resolve; required fields are present; each claim's own source list contains an `access: public` source; pins are present; hashes match; vocabularies are valid; there are no forbidden relations or orderings. | I1–I13, I15–I18 (the structural part of I11) | `tools/validate_atlas.py`, on every pull request |
+| **Human verification of scientific support** | Each cited public source, at its `pinned_ref`, actually supports the claim's content. That covers the fidelity of methodology and finding paraphrases, the verbatim verdict (I14), uncertainty as stated by the source, and the reading of figure and geometry licences. | I11 (support), I14, and the content of I15–I17 | the Gate 2 reviewer, recorded per item and per claim in the freeze |
+
+A passing validator means the metadata is well-formed and linked. It never
+means that a claim is scientifically supported. Only the recorded Gate 2
+review establishes that.
 
 ---
 
@@ -505,7 +535,7 @@ The v0.3.0 Atlas MUST NOT:
 | # | Criterion |
 |---|---|
 | A1 | The dataset contains exactly the seven items of §3.1 and none of §3.2. |
-| A2 | `tools/validate_atlas.py` passes I1–I13 and I15–I18 with zero errors; I14 is recorded in the Gate 2 freeze. |
+| A2 | `tools/validate_atlas.py` passes the mechanical checks (I1–I13, I15–I18, including I11 per class) with zero errors, **and** the Gate 2 freeze records human verification of scientific support for every public claim (I11 support, I14). |
 | A3 | Every documented research item shows question, sourced methodology, result, claim ceiling, findings with uncertainty where sourced, evidence, limitations, outputs, reproducibility, licences and verification, in §7 order. |
 | A4 | The HATI pilot and the HATI pedestrian extension are separate dossiers with separate results and outputs. |
 | A5 | Every output shows publication type, editorial status and identifier availability as three separate visible facts. |

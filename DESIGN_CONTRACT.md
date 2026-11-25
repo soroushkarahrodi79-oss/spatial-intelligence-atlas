@@ -616,7 +616,9 @@ ID        DOI 10.5281/zenodo.22707470 ↗   ·  version DOI
   reading column use the same numbers (superscript-free, as "[1]" in
   `micro`).
 - The pin shows 8 characters; the full value is in the accessible name.
-- `restricted` sources cannot appear (I11).
+- Every claim in the reading column cites at least one public source
+  (I11). A `restricted` source, if ever listed, appears only alongside a
+  public one, is marked "restricted", and is never a claim's sole support.
 
 ### 6.8 Table and stacked record
 
@@ -902,7 +904,7 @@ Print is a first-class output, particularly for a dossier.
 
 | Path | Purpose |
 |---|---|
-| `tools/validate_atlas.py` | Standard-library Python. Checks invariants I1–I13 and I15–I18 from `SPEC.md` §4.11 and the file budget. |
+| `tools/validate_atlas.py` | Standard-library Python. Mechanical validation of metadata only (`SPEC.md` §4.11): I1–I13 and I15–I18, including class-aware I11 linkage, plus the file budget. It does not assert scientific support; that is the recorded Gate 2 human review. |
 | `.github/workflows/validate.yml` | Runs the validator on every pull request. |
 | `.github/workflows/link-check.yml` | Scheduled weekly and run on demand. Checks every source, output and geometry-source URL, and reports changes; it never edits `data/atlas.json`. |
 

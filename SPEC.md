@@ -583,7 +583,7 @@ maintainer completes the human-verification record (§12.10) and applies
 
 | Kind (SPEC §4.11) | What was done | By whom or what | Status |
 |---|---|---|---|
-| Source check | Every claim below was compared with its pinned source on 2026-11-25. Evidence pins were preserved, and each source URL was re-checked over HTTP. DOIs were resolved through the DataCite API. | Claude Code (AI assistant), on the maintainer's instruction | Done. **This is not independent human verification.** |
+| Source check | Every claim below was compared with its pinned source on 2026-11-25. Evidence pins were preserved, and each source URL was re-checked over HTTP. DOIs were resolved through the DataCite API. **HATI pilot:** checked against the deposited PDF `HATI_Madrid_Preprint_v1.0.pdf` (MD5 `083ed0f9…66e0`, matching the Zenodo record), using its abstract, §1 research questions, §2.1 study design, the licence statement, and the Figure 1–4 captions. The text was extracted with `pdftotext`. Page images were not rendered; figure content was checked against the vector SVGs the preprint states it embeds. No other part of the full text was verified. | Claude Code (AI assistant), on the maintainer's instruction | Done. **This is AI-assisted. It is not human verification.** |
 | Mechanical validation of metadata | I1–I13 and I15–I18 over `data/atlas.json`. | `tools/validate_atlas.py` | **Not yet possible.** The validator and the schema `0.3.0` dataset are built at Gate 3. A structural self-check of this section (ids resolve, every claim cites a declared public source) was run and passed. |
 | Human verification of scientific support | I11 support and I14 verbatim, per item and per claim (§12.10). | The maintainer | **PENDING.** Required before `gate-approved`. |
 
@@ -601,7 +601,7 @@ DataCite with state `findable`.
 | `s-hati-gate3b` | closeout | HATI Gate 3B evidence-sufficiency decision | `c69688e7827f1faaf855fdb58a8e80a497d73830` | 2026-09-22 | null (original pin) |
 | `s-hati-status` | closeout | HATI canonical project status (extension) | `c69688e7827f1faaf855fdb58a8e80a497d73830` | 2026-09-22 | null (original pin) |
 | `s-hati-routes` | commit | HATI Gate 2 freeze manifest and route hashes | `c69688e7827f1faaf855fdb58a8e80a497d73830` | 2026-11-25 | null (first pin) |
-| `s-hati-preprint` | preprint | Thermal representation as a decision variable… (Zenodo v1.0) | DOI `10.5281/zenodo.22707470` | 2026-11-25 | null (first pin) |
+| `s-hati-preprint` | preprint | Thermal representation as a decision variable… (Zenodo v1.0; file `HATI_Madrid_Preprint_v1.0.pdf`, MD5 `083ed0f91105fd8fef48c7aad05766e0`) | DOI `10.5281/zenodo.22707470` | 2026-11-25 | null (first pin) |
 | `s-hati-pilot-status` | commit | HATI project status (layer A, licences) | `97b0e40669386c29dafa8c2f5b5031f14ff71771` | 2026-11-25 | null (first pin) |
 | `s-snto-brief` | brief | SNTO PNSG Public-Use Decision Evidence Brief 2026/27 | `2c65fe2ac9a09662cddef4cfa68290e0cd6e1278` | 2026-09-22 | null (original pin) |
 | `s-snto-readme` | repository | SNTO repository status snapshot | `2c65fe2ac9a09662cddef4cfa68290e0cd6e1278` | 2026-09-22 | null (original pin) |
@@ -619,6 +619,8 @@ DataCite with state `findable`.
 | `s-lens-release` | release | Madrid Urban Evidence Lens GitHub release `v0.1.0` (published 2026-09-25) | tag `v0.1.0` | 2026-11-25 | null (first pin) |
 | `s-fieldos-run` | closeout | First FieldOS field run | `271d3a77c58361f43459d068f4e8a100611a87fd` | 2026-09-22 | null (original pin) |
 | `s-fieldos-readme` | repository | FieldOS repository status snapshot | `271d3a77c58361f43459d068f4e8a100611a87fd` | 2026-09-22 | null (original pin) |
+| `s-oapn-catalogue` | official_dataset | datos.gob.es catalogue record "Límites de los parques nacionales españoles" (publisher: Organismo Autónomo Parques Nacionales) | record `ea0043369-limites-de-los-parques-nacionales-espanoles`, modified 2023-01-24 | 2026-11-25 | null (first pin) |
+| `s-miteco-legal` | publication | MITECO legal notice (aviso legal), reuse conditions | unversioned web page; the operative text is quoted in §12.2 | 2026-11-25 | null (first pin) |
 
 **URLs.** Each GitHub source resolves to its file at the stated commit:
 
@@ -636,7 +638,11 @@ The repositories and paths are:
 | `s-lens-*` | `madrid-tourism-intelligence-lens` | `data/geography/madrid_admin.meta.json`; `README.md`; `docs/CLAIMS_AND_LIMITATIONS.md` |
 | `s-fieldos-*` | `fieldos` | `docs/FIRST_FIELD_RUN.md`; `README.md` |
 
-DOI sources resolve through `https://doi.org/<DOI>`. `s-lens-release` resolves
+DOI sources resolve through `https://doi.org/<DOI>`. `s-oapn-catalogue` resolves to
+`https://datos.gob.es/es/catalogo/ea0043369-limites-de-los-parques-nacionales-espanoles`,
+and `s-miteco-legal` to `https://www.miteco.gob.es/es/atencion-al-ciudadano/aviso-legal.html`.
+These two web pages are not versioned. Their operative text is quoted in
+§12.2 so the basis survives any later change to them. `s-lens-release` resolves
 to `https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/releases/tag/v0.1.0`.
 
 **Pin decisions.** Every original evidence pin is preserved: HATI extension
@@ -660,7 +666,7 @@ New items are pinned as follows:
 
 | id | label | basis | geometry | source_ids |
 |---|---|---|---|---|
-| `t-madrid-central` | Madrid — central pilot study area | HATI-Madrid pilot screened 27 tourism assets in central Madrid on one documented extreme-heat day | null. `territory_note`: the pilot's study-area geometry exists only as repository-derived outputs with no assigned licence | `s-hati-preprint`, `s-hati-pilot-status` |
+| `t-madrid-central` | Madrid — Prado–Retiro–Atocha pilot box (≈3.5 km²) | The HATI-Madrid pilot's rectangular study area, pinned to named landmarks (preprint §2.1) | null. `territory_note`: the box is described in text only; the repository's study-area outputs carry no assigned licence. Figure 1(a) shows the area as published (§12.3). | `s-hati-preprint`, `s-hati-pilot-status` |
 | `t-madrid-atocha-alcala` | Madrid — Atocha to Puerta de Alcalá | Two frozen, hashed pedestrian routes for OD1 | `g-hati-routes` | `s-hati-routes`, `s-hati-gate3b` |
 | `t-pnsg` | Parque Nacional de la Sierra de Guadarrama | The PNSG public-use units and the 2027 planning cycle | `g-pnsg-boundary` | `s-snto-brief`, `s-snto-oapn-boundary` |
 | `t-san-isidro` | Madrid — barrio 113 San Isidro (Carabanchel) | Study area of the Network Accessibility Pilot (1.8993 km²) | `g-san-isidro` (plus `g-madrid-municipality` as context) | `s-net-results`, `s-lens-geography` |
@@ -672,8 +678,46 @@ FieldOS has no case-specific territory. No geometry is drawn for CHALUS.
 |---|---|---|---|---|---|
 | `g-san-isidro` | study_area | barrio 113 feature of `data/geography/madrid_admin.geojson` @ `ad7ed9b` (blob `244a54f5`; official EPSG:25830, served as WGS84) | Ayuntamiento de Madrid, IDEAM | **CC BY 4.0**, "(c) Ayuntamiento de Madrid" (`madrid_admin.meta.json`) | **Reusable.** Resolved. |
 | `g-madrid-municipality` | context_boundary | municipality feature of the same file | Ayuntamiento de Madrid, IDEAM | **CC BY 4.0** (municipality geometry derived from the official districts, per the metadata) | **Reusable.** Resolved. |
-| `g-pnsg-boundary` | study_area | `oapn_limite_pn.geojson` @ `2c65fe2` (blob `39532e02`, 519,559 bytes; CRS84). Downloaded by SNTO from the OAPN GeoServer WFS (`sigred.oapn.es/geoserverOAPN`, layer `view_red_oapn_limite_pn_visor`) | Organismo Autónomo Parques Nacionales | No licence identifier is published. The WFS capabilities (checked 2026-11-25) declare `Fees: NONE` and `AccessConstraints: NONE`. SNTO README §11 records "Reutilización institucional con cita"; attribution: "Cartografía oficial OAPN — Parque Nacional Sierra de Guadarrama". | **Reusable with attribution: partly resolved.** The basis is the provider's declared absence of access constraints plus Spain's general regime for reusing public-sector information **[inference]**. No explicit licence was found (§12.9, Q2). |
+| `g-pnsg-boundary` | study_area | `oapn_limite_pn.geojson` @ `2c65fe2` (blob `39532e02`, 519,559 bytes; CRS84). Downloaded by SNTO from the OAPN GeoServer WFS (`sigred.oapn.es/geoserverOAPN`, layer `view_red_oapn_limite_pn_visor`) | Organismo Autónomo Parques Nacionales (WFS `ProviderName`) | **No Creative Commons or other named licence.** The reuse terms below apply; the required attribution is **"Fuente: Organismo Autónomo Parques Nacionales"**. | **Reusable with attribution. Resolved (Q2).** See the applicability note below. |
 | `g-hati-routes` | route | `OD1_Route_A_epsg25830.geojson` (sha256 `f2f9d8b4…dc9a6`, 2,657.8 m, 42 OSM ways) and `OD1_Route_B_epsg25830.geojson` (sha256 `fedf5ed4…6c54a`, 2,365.7 m, 38 OSM ways) @ `c69688e` | Derived by HATI from OpenStreetMap ways (way ids listed in the route files) | © OpenStreetMap contributors, **ODbL 1.0**. The HATI repository assigns no licence to derived outputs. | **Reusable under ODbL 1.0 once the maintainer confirms** (§12.9, Q1). The Atlas file must carry ODbL and attribution. |
+
+**PNSG boundary — reuse terms and applicability (Q2, resolved).**
+
+The terms that apply:
+
+- `s-oapn-catalogue` (publisher OAPN) states: "Acceso público y gratuito.
+  Será necesario nombrar la fuente de procedencia de la información de la
+  siguiente manera: "Fuente: Organismo Autónomo Parques Nacionales"".
+- `s-miteco-legal`, issued under Ley 37/2007 and RD 1495/2011, states that
+  the information "puede ser utilizada en parte o en su integridad, sin
+  necesidad de autorización expresa, siempre que se cite la fuente", except
+  for content subject to third-party intellectual property.
+
+Why they apply to the pinned file. The pinned geometry is OAPN-published
+information:
+
+- it was retrieved from OAPN's own GeoServer, whose WFS `ProviderName` is
+  "ORGANISMO AUTÓNOMO PARQUES NACIONALES";
+- it comes from the layer `LimitesParquesNacionalesZPP:view_red_oapn_limite_pn`,
+  titled "Límite Parques Nacionales";
+- the WFS declares `AccessConstraints: NONE` and `Fees: NONE`;
+- the catalogue dataset covers the same subject from the same publisher.
+
+**Not verified:** vertex-level identity between the WFS extract and the
+catalogue's SHP distribution. The SHP access URL now redirects to a general
+page, and no geometry library was available to compare them. Accordingly:
+
+- the reuse terms are recorded as terms of OAPN-published information;
+- no Creative Commons licence is assigned;
+- the plate carries the required attribution.
+
+**HATI route geometry (Q1).** Only the two route LineStrings are
+authorised for the Atlas, as a separate geometry file under **ODbL 1.0**.
+The file carries its own attribution ("© OpenStreetMap contributors") and
+provenance: source commit `c69688e`, the source file hashes above, and the
+OSM way ids. No other HATI-derived output is included. Publication requires
+the maintainer's explicit approval, recorded in §12.10, before the plate
+ships.
 
 Gate 3 prepares each file offline as specified in SPEC §4.2: clip,
 simplify, record `simplification_m`, `crs` and `sha256`, and compute
@@ -686,30 +730,37 @@ simplify, record `simplification_m`, `crs` and `sha256`, and compute
 | class · lifecycle | `documented_research` · `frozen` (source status `RELEASE_LOCKED`, `s-hati-pilot-status`) |
 | title | HATI-Madrid — Heat-Adaptive Tourism Opportunity Screening (Madrid pilot) |
 | summary | Published preprint testing whether the choice of thermal representation changes heat-adaptive tourism screening decisions. |
-| research_question | Does the choice of thermal representation — a simple operational proxy versus physically based SOLWEIG/UTCI modelling — change tourism-feasibility classifications and the surviving candidate set in heat-adaptive tourism opportunity screening? (Paraphrased from `s-hati-preprint` and the repository `CITATION.cff`; the preprint has no single interrogative question.) |
+| research_question | Does physically based (SOLWEIG/UTCI) thermal modelling materially alter tourism-feasibility classifications relative to the simple air-temperature-and-tree-presence proxy, and is any difference physically interpretable? (RQ1, verbatim, `s-hati-preprint` §1. The preprint has two further questions: RQ2 on decision-support value and RQ3 on robustness and traceability.) |
 | territory | `t-madrid-central` |
 | version | DOI `10.5281/zenodo.22707470` (preprint v1.0) |
 | reproducibility | `inspectable`. The code, outputs and `REPRODUCIBILITY.md` are public. The Atlas did not re-run it. Instructions: `s-hati-pilot-status`. |
 | licence | code **MIT** (`src/`, `tests/`, `app/` only, since 2026-11-11) · data `not_stated` (third-party data keeps its licences; derived outputs "all rights reserved") · text: preprint **CC BY 4.0** (Zenodo); repository documents `not_stated` — all `s-hati-pilot-status` |
 | sources | `s-hati-preprint`, `s-hati-pilot-status` |
 
-**Methodology** (`s-hati-preprint`):
+**Methodology** (`s-hati-preprint`: abstract and §2.1):
 
-- The architecture is constraint-first and uncertainty-aware.
-- On one documented extreme-heat day in Madrid, it assessed 27 tourism
-  assets at three times of day.
-- Feasibility was assessed twice: once with an operational proxy combining
-  ambient air-temperature hazard thresholds with nearby tree-presence
-  information, and once with physically based SOLWEIG/UTCI modelling.
-- Screening was compared with a nearest-open baseline across eight decision
-  scenarios.
+- **Design:** a single-city, single-day pilot of a constraint-first,
+  uncertainty-aware screening architecture.
+- **Study area:** the Prado–Retiro–Atocha box (≈3.5 km²).
+- **Assets:** 27 tourism assets curated from OpenStreetMap (13 indoor,
+  14 outdoor). This is a purposive selection, not a representative sample.
+- **Time:** 21 August 2023, inside an extreme-heat episode designated by
+  AEMET (20–25 August 2023), at 12:00, 15:00 and 18:00 CEST.
+- **Two thermal representations:** an operational proxy (ambient
+  air-temperature hazard band plus nearby tree presence), and
+  SOLWEIG → Tmrt → UTCI.
+- **Gate chain:** both feed one ordered gate chain (open? → reachable? →
+  thermally feasible? → evidence sufficient? → meaningful improvement?).
+- **Baseline:** compared with a nearest-open baseline over eight
+  pre-registered decision scenarios.
 
-**Findings** (`s-hati-preprint`):
+**Findings** (`s-hati-preprint`: abstract and the Figure 2–4 captions):
 
 | id | statement | uncertainty |
 |---|---|---|
-| `f-hati-pilot-reclass` | Changing the thermal representation reclassified one third of outdoor asset-time observations (33.3 %, 14 of 42), in both directions. | null (none quantified in the source) |
-| `f-hati-pilot-scenarios` | Relative to the nearest-open baseline, constraint-first screening changed the feasible-alternative set in 7 of 8 scenarios. The nearest-open option failed screening in 3 of 8, and one scenario returned an explicit no-defensible-alternative outcome. | null |
+| `f-hati-pilot-reclass` | Changing the thermal representation reclassified one third of outdoor asset-time observations (33.3 %, 14 of 42), in both directions: in 9 the physical model was more restrictive, in 5 less restrictive. | Reclassification differs by hour: 64.3 % at 12:00, 0.0 % at 15:00, 35.7 % at 18:00. Neither method is field-validated, so the direction of divergence says nothing about correctness. |
+| `f-hati-pilot-scenarios` | Relative to the nearest-open baseline, constraint-first screening changed the feasible-alternative set in 7 of 8 scenarios. The nearest-open option failed screening in 3 of 8, and one scenario (S8) returned an explicit no-defensible-alternative outcome. | null |
+| `f-hati-pilot-robustness` | Under the tested uncertainty, 35 of 42 outdoor decisions were classed ROBUST, 6 BOUNDARY and 1 UNSTABLE. A satellite-derived irradiance realization changed 1 of 42 decisions; −10 % and −20 % irradiance perturbations changed none. | Robustness covers only the tested dimensions (solar forcing, plus targeted canopy geometry for two assets). It is not total uncertainty and not a validation of the modelled field. |
 
 **Evidence:**
 
@@ -720,8 +771,9 @@ simplify, record `simplification_m`, `crs` and `sha256`, and compute
 | `ev-hati-pilot-validation-gap` | `unestablished` | `not_established` | No direct field validation of Tmrt/UTCI and no observed tourist behaviour. | Neither method's accuracy against ground truth is established. | `s-hati-preprint` |
 
 Each record's basis is the corresponding sentence of the preprint
-abstract. Provenance is null: the deposited abstract does not itemise
-datasets.
+abstract and §2.1. Provenance is null per record: the datasets are
+described in preprint §2, which was not verified beyond §2.1 at this
+gate.
 
 **Outcome `o-hati-pilot`:**
 
@@ -751,18 +803,26 @@ datasets.
 Both outputs are verified by `s-hati-preprint` and `s-hati-pilot-status`
 respectively.
 
-**Figures.** These are candidates for Gate 3, each **conditional**:
+**Figures.** These are **reusable**. Each is confirmed present in the
+deposited preprint, which carries CC BY 4.0 both in the PDF ("License:
+Creative Commons Attribution 4.0 International (CC BY 4.0)") and in its
+Zenodo metadata.
 
-| Figure | Repository file | Reuse condition |
-|---|---|---|
-| FIG01 Study design | `FIG01_STUDY_DESIGN_v0.1` | Reproduce only as published in the CC BY 4.0 preprint, by format conversion from the deposited version. |
-| FIG02 Thermal method divergence | `FIG02_THERMAL_METHOD_DIVERGENCE_v0.1` | Same as FIG01. |
-| FIG03 Screening consequence | `FIG03_SCREENING_CONSEQUENCE_v0.1` | Same as FIG01. |
-| FIG04 Tested uncertainty | `FIG04_TESTED_UNCERTAINTY_v0.1` | Same as FIG01. |
+| id | Figure | Deposited preprint | Notes |
+|---|---|---|---|
+| `fig-hati-1` | Figure 1 — Study design and constraint-first screening architecture | page 24 | Panel (a) maps OpenStreetMap-curated asset locations. Its credit line must add "Asset locations © OpenStreetMap contributors (ODbL 1.0)". The figure is vector, with no embedded basemap raster. |
+| `fig-hati-2` | Figure 2 — Thermal-method choice changes feasibility classifications | page 25 | — |
+| `fig-hati-3` | Figure 3 — Heat-aware screening changes the option set | page 26 | — |
+| `fig-hati-4` | Figure 4 — Decision robustness under tested uncertainty | page 27 | — |
 
-All four files are in `outputs/publication/figures/`. The repository's own
-copies are "all rights reserved" (`s-hati-pilot-status`). Gate 3 must
-confirm that each figure appears in the deposited preprint (Q3).
+**Rules for Gate 3:**
+
+- Take each figure from the deposited PDF by format conversion only,
+  never from the repository copies, which are "all rights reserved".
+- Use the preprint's own caption text, abridged without changing its
+  meaning.
+- Credit: "Karahrodi, S. (2026), preprint v1.0, DOI
+  10.5281/zenodo.22707470, CC BY 4.0".
 
 ### 12.4 `r-hati-pedestrian` — HATI pedestrian heat extension
 
@@ -1009,7 +1069,7 @@ metadata. It is verified by `s-net-dataset`.
 | Field | Frozen value |
 |---|---|
 | class · lifecycle | `research_platform` · `active` |
-| summary | Open-source observatory turning Sentinel-2 and official OAPN cartography into environmental-change evidence for protected-area public-use management, with explicit limits on tourism attribution (`s-snto-readme`). |
+| summary | Public research observatory turning Sentinel-2 and official OAPN cartography into environmental-change evidence for protected-area public-use management, with explicit limits on tourism attribution (`s-snto-readme`). Its source code is publicly available under a custom academic-use licence. That is not an open-source licence (Q4). |
 | what it documents | Pipeline A: real Sentinel-2 indicators for the PNSG, including the 21-asset 2021–2026 trend layer and 218 OAPN trails, with official PRUG zoning. Pipeline B: a governance demonstration on 20 **synthetic** assets (`s-snto-readme` §1). |
 | claim limits | From `s-snto-readme` §9 and `s-snto-brief`: field validation (#26) has not run; the three v2.2 real-data paths (MITMA mobility, SCM zones, SVI series) are built but not ingested; the economic layer is conditional scenarios; there is no causal attribution of change to tourism. The README §10 causal rationale (trampling → compaction → spectral signal) is a design hypothesis of the platform. The Atlas does **not** repeat it as an established finding. |
 | hosted item | `r-snto-pnsg` |
@@ -1078,10 +1138,10 @@ identifier, and there are no research figures.
 | Asset | Decision |
 |---|---|
 | `g-san-isidro`, `g-madrid-municipality` | **Reuse** (CC BY 4.0) |
-| `g-pnsg-boundary` | **Reuse with attribution** (Q2) |
-| `g-hati-routes` | **Reuse under ODbL after Q1** |
+| `g-pnsg-boundary` | **Reuse** with "Fuente: Organismo Autónomo Parques Nacionales" (Q2 resolved) |
+| `g-hati-routes` | **Reuse under ODbL 1.0**, the two route LineStrings only, after the maintainer's explicit approval (Q1) |
 | `fig-net-1` | **Reuse** unaltered |
-| HATI pilot FIG01–FIG04 | **Conditional**: from the CC BY 4.0 preprint only (Q3) |
+| `fig-hati-1`…`fig-hati-4` | **Reuse** (CC BY 4.0), from the deposited PDF only; Figure 1 adds the OSM credit (Q3 resolved) |
 | SNTO `docs/figures/` (ΔEHS histogram, EHS map, SCM breakdown) | **Excluded.** The licence is unresolved (Q4). The figures show two-scene ΔEHS and a **simulated** causal attribution (SCM α-decay), not the frozen trend evidence. |
 | HATI pilot study area; HATI `outputs/maps/` | **Excluded.** These are derived outputs with no assigned licence. |
 | CHALUS (any) | **Excluded** (private repository, SPEC §3.2) |
@@ -1090,38 +1150,49 @@ identifier, and there are no research figures.
 
 | # | Matter | Blocks |
 |---|---|---|
-| Q1 | The HATI route geometry is derived from OpenStreetMap, but the HATI repository assigns no licence to derived outputs. The maintainer, as owner, must confirm release of the route geometry under ODbL 1.0 for the Atlas plate. | `g-hati-routes` plate (Gate 3) |
-| Q2 | The PNSG boundary has no explicit licence identifier. Reuse rests on the OAPN WFS `AccessConstraints: NONE` and `Fees: NONE` plus the general regime for reusing public-sector information [inference]. The maintainer accepts this basis, or the plate is dropped. | `g-pnsg-boundary` plate (Gate 3) |
-| Q3 | Gate 3 must confirm that HATI FIG01–FIG04 appear in the deposited Zenodo preprint and extract them from it. Downloading the preprint file from Zenodo was rate-limited during this review. | HATI pilot figures (Gate 3) |
-| Q4 | The SNTO code licence conflicts: the repository's `LICENSE` is custom academic use, while the Zenodo software record states CC BY 4.0. The Atlas shows both, without choosing one. | SNTO licence display; SNTO figures |
+| Q1 | **Decision recorded:** authorise only the two HATI route LineStrings under ODbL 1.0, as a separate file with their own licence, attribution and provenance (§12.2). **Explicit maintainer approval** must be recorded in §12.10 before the plate is published. | Publication of the `g-hati-routes` plate only (Gate 3 can build everything else) |
+| Q2 | **Resolved.** OAPN reuse terms apply: `s-oapn-catalogue` and `s-miteco-legal`, with the required attribution "Fuente: Organismo Autónomo Parques Nacionales". No Creative Commons licence is assigned. Vertex identity with the catalogue's SHP is not verified (§12.2). | none |
+| Q3 | **Resolved.** Figures 1–4 are present in the deposited PDF (pages 24–27), and the PDF and the Zenodo metadata both state CC BY 4.0. Figure 1(a) needs an added OSM credit. | none |
+| Q4 | The SNTO licence discrepancy is **preserved, not resolved**: the repository's `LICENSE` is custom academic use (not open source); the Zenodo software record states CC BY 4.0. The Atlas shows both and calls SNTO a "public research observatory", not "open source". | none for v0.3.0. SNTO figures stay excluded. |
 | Q5 | The SNTO Zenodo description claims causal attribution and budget prioritisation beyond the brief's L5a ceiling. Correcting the record is the owner's decision. The Atlas cites the DOI as a software output only. | none (cited with caution) |
 | Q6 | A documented technical dependency exists: Lens displays a cited slice of HATI-Madrid pilot UTCI evidence (14 points, 21 August 2023; `s-lens-claims`, "Relationship to HATI-Madrid"). SPEC I7 forbids relations in v0.3.0, so it is **not** modelled or linked. The Lens dossier states no relation. Modelling it as a `technical` relation is a v0.3.x decision. | none (deferred) |
 
 **Resolved at this gate:**
 
 - **SNTO DOI:** `10.5281/zenodo.20818269` is a findable Zenodo concept
-  record (software, latest `v2.0.0`).
+  record (software, latest `v2.0.0`), cited as a software output only (Q5).
+- **PNSG boundary reuse basis** (Q2).
+- **HATI figure presence and rights** (Q3).
 - **Network dataset licence:** ODbL 1.0 appears in the DataCite rights
   metadata.
 - **San Isidro geometry:** CC BY 4.0.
 
 ### 12.10 Human verification record (maintainer)
 
-The maintainer completes this table before applying `gate-approved`. A
-claim counts as verified when the cited public source, at its pinned ref,
-supports its content (I11). A verdict counts as verified when it appears
-verbatim in its source (I14).
+The maintainer completes this table before applying `gate-approved`.
 
-| Item | Claims to verify | I14 verdict to check | Verified by / date |
-|---|---|---|---|
-| `r-hati-pilot` | question, methodology, 2 findings, 3 evidence records, claim ceiling, 2 outputs | "thermal representation is a substantive modelling choice in heat-adaptive tourism decision support" | ☐ |
-| `r-hati-pedestrian` | methodology, 4 findings, carried-forward evidence and outcome | "ABSTAIN / NO ROBUST DIFFERENCE" | ☐ |
-| `r-snto-pnsg` | methodology, 3 findings with uncertainty, carried-forward evidence and outcome | "INSUFFICIENT EVIDENCE TO PRIORITISE" | ☐ |
-| `r-network-pilot` | question, methodology, 4 findings, 5 evidence records, claim ceiling, output, `fig-net-1` | "MODIFY" | ☐ |
-| `p-lens` | summary, what it documents, claim limits, output | — | ☐ |
-| `p-snto` | summary, what it documents, claim limits, output (with Q5 caution) | — | ☐ |
-| `i-fieldos` | methodology, carried-forward evidence and outcome | "FIRST FIELD RUN: PASS — owner-attested" | ☐ |
-| Geometry and figures | Q1, Q2 (accept or drop); Q3 deferred to Gate 3 | — | ☐ |
+- A claim counts as verified when the linked public source, at its
+  pinned ref, supports its content (I11).
+- A verdict counts as verified when it appears verbatim in that source
+  (I14).
+- AI-assisted checks (§12.0) are not entries in this table.
+
+| Item | Claims to verify | Pinned sources (direct links) | I14 verdict to check | Verified by / date |
+|---|---|---|---|---|
+| `r-hati-pilot` | RQ1, methodology, 3 findings, 3 evidence records, claim ceiling, 2 outputs, 4 figures | [Preprint PDF, DOI 10.5281/zenodo.22707470](https://doi.org/10.5281/zenodo.22707470) (abstract; §1; §2.1; p. 18 licence; p. 21 captions; pp. 24–27 figures) · [PROJECT_STATUS.md@97b0e40](https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/97b0e40669386c29dafa8c2f5b5031f14ff71771/PROJECT_STATUS.md) | "thermal representation is a substantive modelling choice in heat-adaptive tourism decision support" | ☐ |
+| `r-hati-pedestrian` | methodology, 4 findings, carried-forward evidence and outcome | [GATE3B_DECISION.md@c69688e](https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/docs/research/pedestrian-heat/gate3b/GATE3B_DECISION.md) · [PROJECT_STATUS.md@c69688e](https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/PROJECT_STATUS.md) · [GATE2_FREEZE_MANIFEST.json@c69688e](https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/docs/research/pedestrian-heat/gate2/GATE2_FREEZE_MANIFEST.json) | "ABSTAIN / NO ROBUST DIFFERENCE" | ☐ |
+| `r-snto-pnsg` | methodology, 3 findings with uncertainty, carried-forward evidence and outcome | [PNSG_DECISION_EVIDENCE_BRIEF.md@2c65fe2](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/docs/PNSG_DECISION_EVIDENCE_BRIEF.md) · [README.md@2c65fe2](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/README.md) (§9, §11) | "INSUFFICIENT EVIDENCE TO PRIORITISE" | ☐ |
+| `r-network-pilot` | question, methodology, 4 findings, 5 evidence records, claim ceiling, output, `fig-net-1` | [README.md@ad7ed9b](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f/research/network_accessibility_pilot/README.md) · [RESULTS.md@ad7ed9b](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f/research/network_accessibility_pilot/RESULTS.md) · [MUNICIPAL_INDICATOR_AUDIT.md@f1cd19d](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/f1cd19d573d6ab3e06700b03c5189864eed23dcd/research/network_accessibility_pilot/MUNICIPAL_INDICATOR_AUDIT.md) · [ATTRIBUTION.md@ad7ed9b](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f/research/network_accessibility_pilot/results/ATTRIBUTION.md) · [figure_straightline_vs_network.png@ad7ed9b](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f/research/network_accessibility_pilot/results/figure_straightline_vs_network.png) · [Dataset DOI 10.5281/zenodo.24288645](https://doi.org/10.5281/zenodo.24288645) | "MODIFY" (and "HOLD para la comparación municipal") | ☐ |
+| `p-lens` | summary, what it documents, claim limits, output | [README.md@3035323](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/3035323a233e5fa83b6b4babe8a2ccf3ac7e4196/README.md) · [CLAIMS_AND_LIMITATIONS.md@3035323](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/3035323a233e5fa83b6b4babe8a2ccf3ac7e4196/docs/CLAIMS_AND_LIMITATIONS.md) · [release v0.1.0](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/releases/tag/v0.1.0) | — | ☐ |
+| `p-snto` | summary ("public research observatory"), what it documents, claim limits, output with the Q5 caution, Q4 licence discrepancy | [README.md@2c65fe2](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/README.md) (§1, §9–§12) · [LICENSE@2c65fe2](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/LICENSE) · [Concept DOI 10.5281/zenodo.20818269](https://doi.org/10.5281/zenodo.20818269) | — | ☐ |
+| `i-fieldos` | methodology, carried-forward evidence and outcome | [FIRST_FIELD_RUN.md@271d3a7](https://github.com/soroushkarahrodi79-oss/fieldos/blob/271d3a77c58361f43459d068f4e8a100611a87fd/docs/FIRST_FIELD_RUN.md) · [README.md@271d3a7](https://github.com/soroushkarahrodi79-oss/fieldos/blob/271d3a77c58361f43459d068f4e8a100611a87fd/README.md) | "FIRST FIELD RUN: PASS — owner-attested" | ☐ |
+| Geometry | San Isidro / Madrid (CC BY 4.0); PNSG (OAPN terms); HATI routes (ODbL) | [madrid_admin.meta.json@ad7ed9b](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/ad7ed9bf10643d541d3193bb56bd4e649cdb8f3f/data/geography/madrid_admin.meta.json) · [oapn_limite_pn.geojson@2c65fe2](https://github.com/soroushkarahrodi79-oss/snto-smart-tourism-observatory/blob/2c65fe2ac9a09662cddef4cfa68290e0cd6e1278/data/raw_assets/vector_data/oapn/oapn_limite_pn.geojson) · [datos.gob.es record](https://datos.gob.es/es/catalogo/ea0043369-limites-de-los-parques-nacionales-espanoles) · [MITECO aviso legal](https://www.miteco.gob.es/es/atencion-al-ciudadano/aviso-legal.html) · [route_freeze_hashes.json@c69688e](https://github.com/soroushkarahrodi79-oss/heat-adaptive-tourism-madrid/blob/c69688e7827f1faaf855fdb58a8e80a497d73830/data/processed/pedestrian-heat/route_freeze_hashes.json) | — | ☐ |
+
+**Explicit approvals, recorded separately from verification:**
+
+| # | Approval | Maintainer / date |
+|---|---|---|
+| A-Q1 | I authorise publication of the two HATI route LineStrings (`g-hati-routes`) in the Atlas under ODbL 1.0, with "© OpenStreetMap contributors" attribution and the provenance in §12.2. | ☐ |
 
 ### 12.11 Migration map from schema 0.2.0
 

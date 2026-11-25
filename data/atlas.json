@@ -4,7 +4,7 @@
   "title": "Spatial Intelligence Atlas",
   "subtitle": "Research Explorer",
   "release": "0.3.0",
-  "release_status": "unreleased — Gate 3 implementation, in review",
+  "release_status": "unreleased — Gate 4 verification in review; deployment on hold",
   "reviewed_at": "2026-11-25",
   "notice": "Separate research items. Relations appear only when documented and typed; none exist in this release.",
   "provenance_statement": "Inputs, status, and outcomes are separate. Real input does not establish validation or decision sufficiency.",

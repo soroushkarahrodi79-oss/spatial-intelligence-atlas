@@ -1,0 +1,32 @@
+# CITATION.cff — prepared at Gate 4 (v0.3.0), not yet released.
+# Pending maintainer decisions before release (PROJECT_STATUS.md §6.1):
+#   - licence (D4): on approval add
+#       license:
+#         - MIT          # original code
+#         - CC-BY-4.0    # original data and text; third-party material excluded
+#   - date-released: add the release date when v0.3.0 is tagged.
+#   - doi: add only if a DOI is minted with authorisation.
+# The plain citation (SPEC.md §8.3) is valid without a DOI.
+cff-version: 1.2.0
+message: "If you use or cite the Atlas, please cite it as below. Third-party figures, geometry and quotations keep their own licences and credits, shown next to them in the Atlas."
+title: "Spatial Intelligence Atlas — Research Explorer"
+version: "0.3.0"
+type: software
+authors:
+  - family-names: Karahrodi
+    given-names: Soroush
+repository-code: "https://github.com/soroushkarahrodi79-oss/spatial-intelligence-atlas"
+url: "https://soroushkarahrodi79-oss.github.io/spatial-intelligence-atlas/"
+abstract: >-
+  A static, client-side research explorer for a selected set of geospatial and
+  tourism research items. For each item it shows what was asked, where the work
+  is situated, how it was done, what evidence is documented, what result was
+  reached, what it does not establish, and where the reader can verify it. It
+  renders a fixed, hand-authored, source-pinned dataset and performs no live
+  analysis, prediction, ranking or scientific validation.
+keywords:
+  - research explorer
+  - evidence
+  - geospatial research
+  - tourism research
+  - reproducibility

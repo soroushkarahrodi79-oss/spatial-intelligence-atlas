@@ -5,7 +5,7 @@
 
 import { h, ext, pin, label, section, kindMark, kindRule, CLASS_LABEL, PUB_TYPE, EDITORIAL, REPRO, SOURCE_KIND, licenseValue } from './dom.js';
 import { citations, coordLine } from './data.js';
-import { plateThumb } from './plates.js';
+import { plateThumb, attributionLine, ccUri } from './plates.js';
 
 function citeLinks(nums) {
   if (!nums.length) return null;
@@ -59,7 +59,7 @@ function figureBlock(db, r, f, cite) {
     h('figcaption',
       h('p.body-s.fig__caption', f.caption),
       h('p.micro.fig__credit', f.credit),
-      h('p.micro.fig__credit', 'Source', citeLinks(cite([f.source_id])), ' @ ', pin(f.pinned_ref), ' · Licence ', f.license, ' · © ', f.rights_holder, ' · ',
+      h('p.micro.fig__credit', 'Source', citeLinks(cite([f.source_id])), ' @ ', pin(f.pinned_ref), ' · Licence ', f.license, ccUri(f.license), ' · © ', f.rights_holder, ' · ',
         h('a.fullsize', { href: f.file }, 'Open full size'))));
 }
 
@@ -72,7 +72,7 @@ function territoryBlock(db, r, cite) {
       plate ? h('div.terr__plate', plateThumb(db, plate, 'thumb-wide')) : null,
       h('p.terr__name', plate ? h('a', { href: `#/atlas/${tid}` }, `Plate ${plate.n} · ${t.label}`) : t.label),
       h('p.body-s', t.basis, citeLinks(cite(t.source_ids))),
-      plate ? h('p.micro', plate.geometry.attribution, plate.geometry.attribution.includes(plate.geometry.license) ? '' : ` · ${plate.geometry.license}`, ' · not for measurement') : null,
+      plate ? h('p.micro', attributionLine(plate.geometry), ' · not for measurement') : null,
       t.territory_note ? h('p.body-s.ink-2', t.territory_note) : null);
   });
 }

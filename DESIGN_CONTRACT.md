@@ -1,6 +1,6 @@
 # DESIGN_CONTRACT.md — Spatial Intelligence Atlas
 
-**Target version:** 0.3.0 · **Status:** GATE 1 — IN REVIEW.
+**Target version:** 0.3.0 · **Status:** approved at Gate 1 (PR #17).
 
 The deployed `v0.2.1` stays governed by `DESIGN_CONTRACT.md` at tag
 `v0.2.1`. This document constrains v0.3.0 **form**; `SPEC.md` constrains

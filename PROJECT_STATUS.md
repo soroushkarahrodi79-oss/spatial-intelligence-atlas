@@ -174,8 +174,8 @@ maintenance under §5 and did not reopen the sequence.
 | Gate 0 — audit and direction | **APPROVED, MERGED** | PR #15 / `ea93956` (`docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md`) |
 | Gate 1 — specification and design (`SPEC.md`, `DESIGN_CONTRACT.md`) | **APPROVED, MERGED** | PR #17 / `326d98f` |
 | Gate 2 — content freeze (seven items, pins, methodology, outputs, figures, geometry) | **MERGED**; per-claim human verification by the maintainer **pending** (`SPEC.md` §12.10, all rows unchecked); approval A-Q1 (HATI route geometry) **not given** | PR #18 / `23297cd` |
-| Gate 3 — runtime and dataset implementation (`js/*.js`, schema `0.3.0` dataset, geometry, figures, validator, CI) | **IN REVIEW** | Gate 3 PR, branch `impl/v0.3-gate3`; `gate-approved` by the maintainer only |
-| Gate 4 — verification and release `v0.3.0` (licence approval, `CITATION.cff`, DOI only with authorisation) | not started | — |
+| Gate 3 — runtime and dataset implementation (`js/*.js`, schema `0.3.0` dataset, geometry, figures, validator, CI) | **Technical review GO; HELD UNMERGED** (GitHub Pages serves `main`) | PR #19, branch `impl/v0.3-gate3` |
+| Gate 4 — verification and release `v0.3.0` | **IN REVIEW**: A1–A20 checked (A2 pending §12.10); licence review and `CITATION.cff` prepared; licence **not approved**; no release, tag or DOI | Gate 4 PR, branch `release/v0.3-gate4` (based on `impl/v0.3-gate3`); `docs/gate4/` |
 
 The v0.3.0 scope is closed at seven items (`SPEC.md` §3):
 
@@ -233,7 +233,9 @@ Gate 4. The review covers:
 - reused research figures;
 - geometry derived from OpenStreetMap, which keeps ODbL on its own file.
 
-No `LICENSE` file is added before that approval.
+No `LICENSE` file is added before that approval. The Gate 4 review is in
+`docs/gate4/LICENCE_REVIEW.md`; proposed files are staged in
+`docs/gate4/proposed/`.
 
 ## 9. Publication identifiers and versioning
 

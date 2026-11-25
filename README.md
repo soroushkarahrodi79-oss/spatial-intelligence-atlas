@@ -2,15 +2,17 @@
 
 **Tourism, Risk & Decision Systems**
 
-A small, static, client-side research map. `v0.2.0` — the current deployed
-release — is a selective, evidence-informed map of three tourism and
-spatial-decision research cases and one supporting instrument, each with a
-documented result and claim ceiling.
+A small, static, client-side research map. `v0.2.1` — the current deployed
+release, a readability and accessibility maintenance release of `v0.2.0` — is
+a selective, evidence-informed map of three tourism and spatial-decision
+research cases and one supporting instrument, each with a documented result
+and claim ceiling.
 
-> **Deployed `v0.2.0`: three research cases and one supporting instrument.
+> **Deployed `v0.2.1`: three research cases and one supporting instrument.
 > Documented separately — never integrated, combined, or ranked.**
-> The prior `v0.1.1` (five conceptually related systems) and the original
-> `v0.1.0` remain preserved, immutable, at their tags.
+> `v0.2.0` (same scientific content), the prior `v0.1.1` (five conceptually
+> related systems) and the original `v0.1.0` remain preserved, immutable, at
+> their tags.
 
 ---
 
@@ -21,29 +23,40 @@ canonical release state, gate history, evidence ceiling, and licensing note.
 
 ## Current status
 
-**Deployed runtime: `v0.2.0`, released 2026-09-22. All four v0.2 gates are
-complete.**
+**Deployed runtime: `v0.2.1`, released 2026-09-25** (PR #13, commit
+`ed57ed5`). It is a maintenance release of `v0.2.0` (released 2026-09-22):
+readability, accessibility, interaction clarity and deterministic label
+layout. Scientific statements, claim ceilings, sources and relationships are
+unchanged; the only dataset change is five maintainer-approved,
+non-semantic `layout.evidence.x` coordinates. All four v0.2 gates are
+complete.
 
 | File | Role | State |
 |------|------|-------|
 | `SPEC.md` | v0.2 meaning, behaviour, and the frozen content (§12) | All gates approved |
 | `DESIGN_CONTRACT.md` | v0.2 form and limits | All gates approved |
-| `data/atlas.json` | Deployed `v0.2.0` content, schema `0.2.0` | Released |
-| `index.html` / `styles.css` / `app.js` | Deployed `v0.2.0` runtime | Released |
+| `data/atlas.json` | Deployed `v0.2.1` content, schema `0.2.0` | Released |
+| `index.html` / `styles.css` / `app.js` | Deployed `v0.2.1` runtime | Released |
 | `README.md` | Orientation (this file) | Current |
+
+> `SPEC.md` and `DESIGN_CONTRACT.md` still name `v0.2.0` in their headers.
+> Both are governed files; their wording was deliberately left byte-identical
+> in `v0.2.1` and is not changed by this documentation update. Their content
+> applies to `v0.2.1` unchanged.
 
 Any further change to the content model, design contract, or semantic payload
 requires a new, separately gated proposal (see `PROJECT_STATUS.md` §5–§6) —
 not an ad hoc edit.
 
 > The interface footer shows `schema_version: "0.2.0"` directly, matching the
-> dataset shape. (In the preserved `v0.1.1` release, the footer's
+> dataset shape. It is the dataset schema, not the release tag: the deployed
+> release is `v0.2.1`. (In the preserved `v0.1.1` release, the footer's
 > `v0.1.0` was the dataset schema, not the release tag — see that release's
 > own `PROJECT_STATUS.md` note for the distinction.)
 
 ---
 
-## What the deployed `v0.2.0` runtime is
+## What the deployed `v0.2.1` runtime is
 
 An **explanatory** artifact, not an operational one. It renders a fixed,
 hand-authored, source-pinned dataset as a typed graph, viewed through three
@@ -98,7 +111,7 @@ evidence record, and pinned source — is frozen in `SPEC.md` §12.
 
 ---
 
-## Dataset shape (`v0.2.0`)
+## Dataset shape (schema `0.2.0`, deployed in `v0.2.1`)
 
 `data/atlas.json`, schema `0.2.0`:
 

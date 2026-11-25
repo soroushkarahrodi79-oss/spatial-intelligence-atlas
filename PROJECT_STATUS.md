@@ -1,7 +1,7 @@
 # PROJECT_STATUS.md
 
 **Audit date:** 2026-09-22 · **Updated:** 2026-11-25 (records the `v0.2.1`
-maintenance release, the approved v0.3 Gate 0 and the v0.3 Gate 1 in review;
+maintenance release, the approved v0.3 Gates 0 and 1, and the v0.3 Gate 2 in review;
 no change to the deployed content)
 
 ---
@@ -166,8 +166,8 @@ maintenance under §5 and did not reopen the sequence.
 | Gate | State | Authority |
 |---|---|---|
 | Gate 0 — audit and direction | **APPROVED, MERGED** | PR #15 / `ea93956` (`docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md`) |
-| Gate 1 — specification and design (`SPEC.md`, `DESIGN_CONTRACT.md`) | **IN REVIEW** | Gate 1 PR; `gate-approved` by the maintainer only |
-| Gate 2 — content freeze (seven items, pins, methodology, outputs, figures, geometry) | not started | — |
+| Gate 1 — specification and design (`SPEC.md`, `DESIGN_CONTRACT.md`) | **APPROVED, MERGED** | PR #17 / `326d98f` |
+| Gate 2 — content freeze (seven items, pins, methodology, outputs, figures, geometry) | **IN REVIEW**; maintainer human verification pending (`SPEC.md` §12.10) | Gate 2 PR; `gate-approved` by the maintainer only |
 | Gate 3 — runtime and dataset implementation | not started | — |
 | Gate 4 — verification and release `v0.3.0` (licence approval, `CITATION.cff`, DOI only with authorisation) | not started | — |
 

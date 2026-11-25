@@ -1,17 +1,29 @@
 # PROJECT_STATUS.md
 
-**Audit date:** 2026-09-22
+**Audit date:** 2026-09-22 · **Updated:** 2026-11-25 (records the `v0.2.1`
+maintenance release; no content-model change)
 
 ---
 
 ## 1. Status
 
-**ACTIVE_BOUNDED — V0.2.0 RELEASED AND DEPLOYED**
+**ACTIVE_BOUNDED — V0.2.1 RELEASED AND DEPLOYED**
 
 The runtime deployed to GitHub Pages (served from `main`) is release
-**`v0.2.0`**, merged through PR #8 at `54128ea` and tagged on 2026-09-22. It
-supersedes v0.1.1 as the live artifact. Both `v0.1.0` and `v0.1.1` remain
-preserved, immutable, at their original tags (see §2).
+**`v0.2.1`**, merged through PR #13 at `ed57ed5` and released on 2026-09-25.
+It is a maintenance release of **`v0.2.0`** (PR #8, `54128ea`, 2026-09-22),
+which superseded v0.1.1 as the live artifact. `v0.2.0`, `v0.1.1` and
+`v0.1.0` remain preserved, immutable, at their original tags (see §2).
+
+`v0.2.1` changes readability, accessibility, interaction clarity and
+deterministic label layout only (`index.html`, `styles.css`, `app.js`).
+Its one dataset change is five non-semantic `layout.evidence.x` coordinates
+in `data/atlas.json`, approved by the maintainer as presentation-only
+(PR #13, `gate-approved`; `SPEC.md` §12.8). Scientific statements, claim
+ceilings, sources and relationships are unchanged from `v0.2.0`, and the
+dataset schema remains `0.2.0`. `SPEC.md` and `DESIGN_CONTRACT.md` were kept
+byte-identical in `v0.2.1`, so their headers still name `v0.2.0`; their
+content applies to `v0.2.1` unchanged.
 
 All four v0.2 gates are complete:
 
@@ -30,11 +42,13 @@ All four v0.2 gates are complete:
 
 | | |
 |---|---|
-| Current tag | `v0.2.0` |
-| Current commit | `54128ea9ac642a6fefe614be4b2f3631635a6847` |
-| Published | 2026-09-22 |
-| Dataset schema | `0.2.0` |
-| Prior release | `v0.1.1` — `f116b7c164ba0eda3ef88bb6ab8def46ede2d80e` — 2026-09-22 (preserved, immutable) |
+| Current tag | `v0.2.1` (maintenance release) |
+| Current commit | `ed57ed50d17aa7e8afe1f57b4222b98600f16ea9` |
+| Published | 2026-09-25 |
+| Dataset schema | `0.2.0` (unchanged) |
+| v0.2.1 maintenance | PR #13, `gate-approved`, merged as `ed57ed5` |
+| Prior release | `v0.2.0` — `54128ea9ac642a6fefe614be4b2f3631635a6847` — 2026-09-22 (preserved, immutable) |
+| Earlier release | `v0.1.1` — `f116b7c164ba0eda3ef88bb6ab8def46ede2d80e` — 2026-09-22 (preserved, immutable) |
 | Original release | `v0.1.0` — `d3f399cf7317ea3951a5ee4761b4de01f3731fa5` — 2026-09-05 (preserved, immutable) |
 | Gate 1 baseline | `9edfa5a6afda27efea53c7ace92c5d7921bdbf67` (2026-09-22) |
 | Gate 2 content freeze | `badd2a5321a998dfff5734275f26c37e317682e2` (2026-09-22), approved by maintainer 2026-09-22 |
@@ -45,9 +59,12 @@ preserved as historical, immutable content — it is **not** the current
 release. `v0.1.0` remains immutable at its original tag. PR #6 approved the
 v0.2 specification and design contract; PR #7 froze the v0.2 semantic
 content; PR #8 implemented that contract in the runtime and dataset and was
-merged with explicit maintainer confirmation, then tagged `v0.2.0`.
+merged with explicit maintainer confirmation, then tagged `v0.2.0`. PR #13
+applied the `v0.2.1` readability and accessibility maintenance under §5,
+with the maintainer's `gate-approved` decision for its five presentation
+coordinates, and was tagged `v0.2.1`.
 
-## 3. Deployed v0.2.0 content
+## 3. Deployed v0.2.x content
 
 The deployed dataset (`data/atlas.json`, schema `0.2.0`) carries a
 selective, evidence-informed content model: 4 entities (3 core cases, 1
@@ -75,8 +92,9 @@ primary v0.2 entities. See `SPEC.md` §1.1 for the selection principle.
 
 ## 4. Claim ceiling
 
-For the deployed `v0.2.0` runtime, this repository and its rendered artifact
-may **not** be used to claim, imply, or be cited as:
+For the deployed `v0.2.1` runtime (and the preserved `v0.2.0`), this
+repository and its rendered artifact may **not** be used to claim, imply, or
+be cited as:
 
 - Validation, causal attribution, operational readiness, or management
   sufficiency for HATI, SNTO, CHALUS, or FieldOS beyond what its pinned
@@ -93,11 +111,12 @@ may **not** be used to claim, imply, or be cited as:
 - Scientific support for a decision beyond the documented outcome's stated
   `claim_ceiling`.
 
-The maximum defensible framing of `v0.2.0` is: *a selective, evidence-informed
-research map of three tourism and spatial-decision research cases and one
-supporting instrument, showing what was studied, what result was documented,
-what remains unsupported, and where the reader can verify it — current as of
-the pinned source commits reviewed for Gate 2.*
+The maximum defensible framing of `v0.2.1` (identical for `v0.2.0`) is: *a
+selective, evidence-informed research map of three tourism and
+spatial-decision research cases and one supporting instrument, showing what
+was studied, what result was documented, what remains unsupported, and where
+the reader can verify it — current as of the pinned source commits reviewed
+for Gate 2.*
 
 For the preserved `v0.1.1` release, the maximum defensible framing remains:
 *an explanatory, hand-authored, evidence-labelled map of how five separate
@@ -129,8 +148,9 @@ ad hoc edit.
 | Gate 3 — runtime and dataset implementation | **APPROVED, MERGED** | PR #8 / `54128ea` |
 | Gate 4 — verification and release | **APPROVED, RELEASED** | Issue #5, tag `v0.2.0`, 2026-09-22 |
 
-All four gates are complete for `v0.2.0`. A future v0.3 (or any content-model
-change) restarts this sequence from Gate 0.
+All four gates are complete for `v0.2.0`. `v0.2.1` (PR #13) was ordinary
+maintenance under §5 and did not reopen the sequence. A future v0.3 (or any
+content-model change) restarts this sequence from Gate 0.
 
 ## 7. Open issues and pull requests
 
@@ -155,7 +175,7 @@ rendering code); it is not something this audit will guess at.
 ## 9. Publication identifiers and versioning
 
 No DOI is currently associated with this repository or its `v0.1.0`,
-`v0.1.1`, or `v0.2.0` releases (none found in `README.md`, `SPEC.md`,
+`v0.1.1`, `v0.2.0`, or `v0.2.1` releases (none found in `README.md`, `SPEC.md`,
 `DESIGN_CONTRACT.md`, the release notes, or repository metadata). If a DOI is
 minted for this or a future release, it should be recorded here alongside the
 corresponding tag, and the version/tag it was minted against must not be

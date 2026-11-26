@@ -33,8 +33,11 @@ A pull request targeting `main` fails the check when **either**:
    SPEC.md
    DESIGN_CONTRACT.md
    data/atlas.json
+   data/geometry/*
+   assets/figures/*
    index.html
-   app.js
+   app.js            (runtime up to v0.2.x)
+   js/*.js           (runtime from v0.3.0)
    styles.css
    ```
 

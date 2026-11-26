@@ -1,0 +1,27 @@
+name: Link check
+
+# Development-only (DESIGN_CONTRACT.md §14.2). Weekly and on demand, checks
+# every declared source, output and geometry-source URL in data/atlas.json and
+# reports the HTTP result. DOI links are checked at doi.org, where a redirect
+# is the expected answer. It never edits data/atlas.json: changes to
+# last_checked_at / last_http_status are made by a person in a reviewed PR.
+
+on:
+  schedule:
+    - cron: '17 6 * * 1'   # Mondays 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: Check declared URLs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate metadata and check every declared URL
+        run: python tools/validate_atlas.py --links

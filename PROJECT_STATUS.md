@@ -1,8 +1,9 @@
 # PROJECT_STATUS.md
 
 **Audit date:** 2026-09-22 · **Updated:** 2026-11-25 (records the `v0.2.1`
-maintenance release, the approved v0.3 Gates 0 and 1, and the v0.3 Gate 2 in review;
-no change to the deployed content)
+maintenance release, the approved v0.3 Gates 0 and 1, the merged Gate 2
+content freeze with its human verification still pending, and the v0.3 Gate 3
+implementation in review; no change to the deployed content)
 
 ---
 
@@ -149,6 +150,11 @@ This discipline is now enforced mechanically:
 
 Both were applied by the maintainer on 2026-11-25 (Gate 0, M3).
 
+From v0.3.0 the governed files also include the new runtime modules
+`js/*.js`, `data/geometry/*` and `assets/figures/*` (governance gate regex and
+`.github/GOVERNANCE_GATE.md`, updated at Gate 3). `app.js` stays listed for
+the v0.2.x history.
+
 ## 6. v0.2 gate sequence
 
 | Gate | State | Authority |
@@ -167,9 +173,9 @@ maintenance under §5 and did not reopen the sequence.
 |---|---|---|
 | Gate 0 — audit and direction | **APPROVED, MERGED** | PR #15 / `ea93956` (`docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md`) |
 | Gate 1 — specification and design (`SPEC.md`, `DESIGN_CONTRACT.md`) | **APPROVED, MERGED** | PR #17 / `326d98f` |
-| Gate 2 — content freeze (seven items, pins, methodology, outputs, figures, geometry) | **IN REVIEW**; maintainer human verification pending (`SPEC.md` §12.10) | Gate 2 PR; `gate-approved` by the maintainer only |
-| Gate 3 — runtime and dataset implementation | not started | — |
-| Gate 4 — verification and release `v0.3.0` (licence approval, `CITATION.cff`, DOI only with authorisation) | not started | — |
+| Gate 2 — content freeze (seven items, pins, methodology, outputs, figures, geometry) | **MERGED**; per-claim human verification by the maintainer **pending** (`SPEC.md` §12.10, all rows unchecked); approval A-Q1 (HATI route geometry) **not given** | PR #18 / `23297cd` |
+| Gate 3 — runtime and dataset implementation (`js/*.js`, schema `0.3.0` dataset, geometry, figures, validator, CI) | **Technical review GO; HELD UNMERGED** (GitHub Pages serves `main`) | PR #19, branch `impl/v0.3-gate3` |
+| Gate 4 — verification and release `v0.3.0` | **RELEASE CANDIDATE**: A1 and A3–A20 pass; **A2 pending** (§12.10); D4 licence, D4-d, A-Q1 (keep excluded), A16 exception and DOI deferral **approved by the maintainer 2026-11-26**; no merge, release, tag or DOI | PR #20, branch `release/v0.3-gate4` (into `impl/v0.3-gate3`); `docs/gate4/README.md` |
 
 The v0.3.0 scope is closed at seven items (`SPEC.md` §3):
 
@@ -177,6 +183,22 @@ The v0.3.0 scope is closed at seven items (`SPEC.md` §3):
   SNTO — PNSG, Pedestrian Network Accessibility Pilot;
 - research platforms: SNTO observatory, Madrid Urban Evidence Lens;
 - instrument: FieldOS.
+
+Gate 3 state, as implemented on `impl/v0.3-gate3`:
+
+- `tools/validate_atlas.py` passes I1–I13 and I15–I18 with zero errors. That
+  is mechanical validation of metadata only; it does not establish
+  scientific support (`SPEC.md` §4.11).
+- The scientific support of every claim (I11 support, I14) still rests on
+  the maintainer's §12.10 record, which is not yet completed. The interface
+  states this in the footer, in every dossier's verification section and in
+  About.
+- The HATI route geometry is excluded until A-Q1 is approved; the territory
+  is shown as text with the reason. No plate, file or hash for it exists.
+- Merging into `main` replaces the runtime that GitHub Pages serves from
+  `main`. The integration sequence is in `docs/gate4/README.md` §5: PR #20
+  into the Gate 3 branch, then PR #19 into `main` only with release
+  authorisation, then Pages verification, then tag and release.
 
 CHALUS is excluded because its repository is private; it stays preserved
 in the `v0.2.x` tags. MCP, Transit Graph and Isovist are deferred to v0.3.x.
@@ -190,29 +212,25 @@ release claim. They should be checked on GitHub at review time rather than
 frozen here; the audit baseline in §2 is the stable reference for this
 document.
 
-## 8. Licensing — unresolved, flagged rather than assumed
+## 8. Licensing
 
-**No `LICENSE` file exists in this repository**, for either the code
-(`index.html`, `styles.css`, `app.js`) or the data (`data/atlas.json`). No
-license is declared in `README.md`, `SPEC.md`, or `DESIGN_CONTRACT.md`. This
-audit does not assign one. Until a license is added, the default is "all
-rights reserved" under most jurisdictions — downstream reuse, including of
-the dataset's evidence claims, has no explicit grant. This is flagged as an
-open ambiguity for the maintainer to resolve deliberately (including
-separately for code vs. data, since the evidence-provenance discipline in
-§3 may warrant a different license for `data/atlas.json` than for the
-rendering code); it is not something this audit will guess at.
+**Approved at Gate 4 (D4, 2026-11-26), in effect from the merge of PR #20.**
 
-**v0.3 direction (Gate 0, D4).** The preferred licences are **MIT for
-original code** and **CC BY 4.0 for original data and text**. Both are
-subject to a compatibility review and final maintainer approval before
-Gate 4. The review covers:
+- **Original code:** MIT (`LICENSE`).
+- **Original data and text:** CC BY 4.0 (`LICENSE-CONTENT.md`).
+- **Excluded, keeping their own licences:**
+  - Ayuntamiento de Madrid geometry (CC BY 4.0);
+  - OAPN geometry (OAPN/MITECO reuse terms, with a non-endorsement notice on
+    the plate);
+  - the preprint figures (CC BY 4.0) and the network-pilot figure (MIT, with
+    embedded CC BY 4.0 and ODbL notices);
+  - verbatim quotations, which keep their sources' licensing.
 
-- third-party quotations;
-- reused research figures;
-- geometry derived from OpenStreetMap, which keeps ODbL on its own file.
+The compatibility review is `docs/gate4/LICENCE_REVIEW.md`; the decision
+record is `docs/gate4/README.md` §4.
 
-No `LICENSE` file is added before that approval.
+Releases `v0.1.0`–`v0.2.1` were published without a licence. This approval
+does not change them retroactively.
 
 ## 9. Publication identifiers and versioning
 

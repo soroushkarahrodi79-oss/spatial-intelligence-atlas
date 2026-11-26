@@ -2,7 +2,9 @@ name: Validate atlas metadata
 
 # Development-only (DESIGN_CONTRACT.md §14.2). Runs the standard-library
 # validator on every pull request: SPEC.md §4.11 invariants I1–I13 and
-# I15–I18 (including class-aware I11 linkage) plus the runtime file budget.
+# I15–I18 (including class-aware I11 linkage; I7 as amended in §13.4), the
+# relationship invariants R1–R14 (SPEC.md §13.4) and their negative tests,
+# plus the runtime file budget.
 # A pass means the metadata is well-formed and linked. It never means a claim
 # is scientifically supported; that is the human review of SPEC.md §12.10.
 # The page never loads anything from this workflow.
@@ -23,5 +25,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Run tools/validate_atlas.py
+      - name: Run tools/validate_atlas.py (atlas invariants and relationships R1–R14)
         run: python tools/validate_atlas.py
+      - name: Negative tests for the relationship validator
+        run: python -m unittest discover -s tests -v

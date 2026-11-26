@@ -7,6 +7,7 @@ import { overviewView, researchView, outputsView, timelineView, aboutView, notFo
 import { dossierView } from './dossier.js';
 import { atlasView, plateView } from './plates.js';
 import { explorerView } from './explorer.js';
+import { graphView } from './graph.js';
 
 const main = document.getElementById('main');
 const live = document.getElementById('live');
@@ -51,6 +52,7 @@ function resolve(hash) {
   if (a === 'atlas' && !b) return { section: 'atlas', view: wrap('Atlas', atlasView(db, ctx())) };
   if (a === 'atlas' && b && parts.length === 2) return { section: 'atlas', view: plateView(db, b, ctx()) };
   if (a === 'evidence' && !b) return { section: 'evidence', view: wrap('Evidence', explorerView(db, q, ctx())) };
+  if (a === 'graph' && !b) return { section: 'graph', view: graphView(db, q, ctx()) };
   if (a === 'outputs' && !b) return { section: 'outputs', view: wrap('Publications & Datasets', outputsView(db, ctx())) };
   if (a === 'timeline' && !b) return { section: 'timeline', view: wrap('Timeline', timelineView(db, ctx())) };
   if (a === 'about' && !b) return { section: 'about', view: wrap('About', aboutView(db, ctx())) };
@@ -68,6 +70,12 @@ function render() {
   const { section, view } = resolve(location.hash);
   const v = view || notFoundView();
   setNav(view ? section : null);
+  // The Knowledge Graph applies a new query to its mounted view in place, so
+  // pan, zoom and keyboard focus survive in-graph links.
+  if (v.inPlace && main.contains(v.nodes[0])) {
+    document.title = `${v.title} — ${SITE}`;
+    return;
+  }
   main.replaceChildren(...[v.nodes].flat(Infinity).filter(Boolean));
   document.title = v.title === 'Overview' ? `${SITE} — Research Explorer` : `${v.title} — ${SITE}`;
 
@@ -94,7 +102,7 @@ function footer() {
     h('p.body-s.ink-2', m.license),
     h('p.body-s', m.notice),
     h('p.body-s', m.provenance_statement),
-    h('p.body-s.ink-2', 'Human verification of the frozen scientific content (SPEC.md §12.10) is pending.'));
+    h('p.body-s.ink-2', 'Human verification of the frozen scientific content (SPEC.md §12.10 and §13.8) and of every relation (K2) is pending.'));
 }
 
 // In-page anchors (skip link, "[n]" citations) must not change the route:

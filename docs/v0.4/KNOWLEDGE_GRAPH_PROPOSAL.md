@@ -275,14 +275,14 @@ traversal. They are part of K9.
 
 | | |
 |---|---|
-| ![Ecosystem](screenshots/01-ecosystem-desktop.jpg) Ecosystem view, three items with no documented relationship in their own band | ![HATI–Lens link](screenshots/02-edge-hati-lens-desktop.jpg) Selecting a link: why it exists, pinned lines, what it does not establish |
-| ![Shared data](screenshots/03-data-lineage-shared-data-desktop.jpg) "Which items depend on the same data sources?" with extracts per item | ![Methods](screenshots/04-methods-desktop.jpg) Methods: only SOLWEIG/UTCI is shared, by a declared extension |
-| ![Territories](screenshots/05-territories-desktop.jpg) Territories studied from several perspectives; siblings not compared | ![Neighbourhood](screenshots/06-neighbourhood-lens-desktop.jpg) Neighbourhood of the Lens across all views |
-| ![Inventory](screenshots/07-development-inventory-desktop.jpg) Development inventory switched on: an analyst-defined link, marked not public | ![Hypothetical](screenshots/08-hypothetical-edge-desktop.jpg) The only hypothetical link, off by default |
-| ![Text](screenshots/09-text-alternative-desktop.jpg) Text alternative of the current view | ![Dark](screenshots/10-edge-dark-desktop.jpg) Dark theme |
-| ![Mobile](screenshots/11-edge-mobile-390.jpg) 390 px, centred on the selection | ![Mobile detail](screenshots/12-edge-detail-mobile-390.jpg) 390 px, link detail |
+| ![Ecosystem](prototype-screenshots/01-ecosystem-desktop.jpg) Ecosystem view, three items with no documented relationship in their own band | ![HATI–Lens link](prototype-screenshots/02-edge-hati-lens-desktop.jpg) Selecting a link: why it exists, pinned lines, what it does not establish |
+| ![Shared data](prototype-screenshots/03-data-lineage-shared-data-desktop.jpg) "Which items depend on the same data sources?" with extracts per item | ![Methods](prototype-screenshots/04-methods-desktop.jpg) Methods: only SOLWEIG/UTCI is shared, by a declared extension |
+| ![Territories](prototype-screenshots/05-territories-desktop.jpg) Territories studied from several perspectives; siblings not compared | ![Neighbourhood](prototype-screenshots/06-neighbourhood-lens-desktop.jpg) Neighbourhood of the Lens across all views |
+| ![Inventory](prototype-screenshots/07-development-inventory-desktop.jpg) Development inventory switched on: an analyst-defined link, marked not public | ![Hypothetical](prototype-screenshots/08-hypothetical-edge-desktop.jpg) The only hypothetical link, off by default |
+| ![Text](prototype-screenshots/09-text-alternative-desktop.jpg) Text alternative of the current view | ![Dark](prototype-screenshots/10-edge-dark-desktop.jpg) Dark theme |
+| ![Mobile](prototype-screenshots/11-edge-mobile-390.jpg) 390 px, centred on the selection | ![Mobile detail](prototype-screenshots/12-edge-detail-mobile-390.jpg) 390 px, link detail |
 
-Also: `13-neighbourhood-mobile-390.jpg`, `14-text-alternative-mobile-390.jpg`.
+Also: `prototype-screenshots/13-neighbourhood-mobile-390.jpg`, `prototype-screenshots/14-text-alternative-mobile-390.jpg`. The production screenshots of the merged implementation (PR #23) are in `screenshots/`.
 
 ## 8. Scientific governance for v0.4
 

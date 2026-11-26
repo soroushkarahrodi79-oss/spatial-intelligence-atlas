@@ -6,6 +6,7 @@
 import { h, ext, pin, label, section, kindMark, kindRule, CLASS_LABEL, PUB_TYPE, EDITORIAL, REPRO, SOURCE_KIND, licenseValue } from './dom.js';
 import { citations, coordLine } from './data.js';
 import { plateThumb, attributionLine, ccUri } from './plates.js';
+import { relationsOf } from './graph.js';
 
 function citeLinks(nums) {
   if (!nums.length) return null;
@@ -96,6 +97,24 @@ function methodology(m, cite) {
   return [h('ol.steps.body', items.map((t) => h('li', t))), h('p.body-s.ink-2.method-src', 'Paraphrased from the source; not an evaluation of the method.', citeLinks(cite(m.source_ids)))];
 }
 
+// Documented relations of this item (SPEC.md §13.6): each links to the
+// relation in the Knowledge Graph, where its sources, versions and limits are
+// shown. Absence is stated, never filled in.
+function relationsBlock(db, r) {
+  const R = relationsOf(db, r.id);
+  const graph = (q) => `#/graph?view=focus&focus=${encodeURIComponent(r.id)}${q}`;
+  return [
+    R.rels.length
+      ? h('ul.relations', R.rels.map((e) => h('li',
+        h('span.label.class-line', R.cls(e)),
+        h('a', { href: graph(`&edge=${encodeURIComponent(e.id)}`) }, R.label(e)))))
+      : h('p.body-s', 'No documented relation in the reviewed sources. This does not prove that none exists.'),
+    R.non.length ? [h('h3.sub-head.label', 'Documented non-relations'), h('ul.limits.body-s', R.non.map((x) => h('li', x.statement, h('span.ink-2', ` ${x.interpretation}`))))] : null,
+    h('p.body-s.ink-2', 'A relation records documented provenance, not agreement or validation. Its sources, versions and limits, and its verification state (AI-assisted source check; human verification pending), are shown in the Knowledge Graph.'),
+    h('p.ui', h('a.textlink', { href: graph(`&node=${encodeURIComponent(r.id)}`) }, 'Open this item in the Knowledge Graph')),
+  ];
+}
+
 // ---- the dossier
 
 export function dossierView(db, rid, { notice }) {
@@ -128,6 +147,7 @@ export function dossierView(db, rid, { notice }) {
     add('Evidence', evidenceBlock());
     if (outcome.limitations?.length) add('Limitations', h('ul.limits.body', outcome.limitations.map((l) => h('li', l))), h('p.body-s.ink-2', 'As stated for the result', citeLinks(cite(outcome.source_ids))));
     add('Outputs', outputsBlock());
+    add('Documented relations', relationsBlock(db, r));
     add('Reproducibility and licences', reproducibility(r, cite), licences(r, cite));
   } else if (cls === 'instrument') {
     add('Role', h('p.body', r.summary, citeLinks(cite(r.source_ids))));
@@ -138,14 +158,17 @@ export function dossierView(db, rid, { notice }) {
     add('Evidence', evidenceBlock());
     if (outcome.limitations?.length) add('Limitations', h('ul.limits.body', outcome.limitations.map((l) => h('li', l))));
     add('Outputs', outputsBlock());
+    add('Documented relations', relationsBlock(db, r));
     add('Reproducibility and licences', reproducibility(r, cite), licences(r, cite));
   } else {
     add('Role', h('p.body', r.summary, citeLinks(cite(r.source_ids))));
     add('Territory', territoryBlock(db, r, cite));
     add('What the platform documents', h('p.body', r.documents, citeLinks(cite(r.source_ids))));
     add('Claim and interpretation limits', h('div.ceiling.body', r.claim_limits, citeLinks(cite(r.source_ids))));
-    if (r.hosts?.length) add('Items in this Atlas that the platform hosts', h('ul.hosted', r.hosts.map((id) => h('li', h('a.textlink', { href: `#/research/${id}` }, db.R.get(id).title)))),
-      r.hosts_note ? h('p.body-s.ink-2', r.hosts_note) : null, h('p.body-s.ink-2', 'Hosting is stated as text only; it is not a technical relation between items.'));
+    const hosted = [...new Set([...(r.hosts || []), ...relationsOf(db, r.id).rels.filter((e) => e.predicate === 'hosts' && e.source === r.id).map((e) => e.target)])];
+    if (hosted.length) add('Items in this Atlas that the platform hosts', h('ul.hosted', hosted.map((id) => h('li', h('a.textlink', { href: `#/research/${id}` }, db.R.get(id).title)))),
+      r.hosts_note ? h('p.body-s.ink-2', r.hosts_note) : null, h('p.body-s.ink-2', 'Hosting is co-location of files, not integration: it does not mean that the platform reads or displays the hosted item.'));
+    add('Documented relations', relationsBlock(db, r));
     add('Licences', licences(r, cite));
   }
 

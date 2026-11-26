@@ -35,23 +35,23 @@ complete.
 |------|------|-------|
 | `SPEC.md` | **v0.3.0:** meaning, content model (schema `0.3.0`), views, dossier contract; §12 content freeze | Gate 1 approved; Gate 2 freeze merged (PR #18); human verification (§12.10) pending |
 | `DESIGN_CONTRACT.md` | **v0.3.0:** visual identity, layout, tokens, components, plates, figures, print | Gate 1 approved |
-| `data/atlas.json` | v0.3.0 dataset, schema `0.3.0` (seven items) | Gate 3, in review |
-| `data/geometry/*.json` | Offline-prepared plate geometry (EPSG:25830, hashed) | Gate 3, in review |
-| `assets/figures/*.webp` | Research figures, format conversion only | Gate 3, in review |
-| `index.html` · `styles.css` · `js/*.js` | v0.3.0 runtime (seven native ES modules, no build step) | Gate 3, in review |
-| `tools/validate_atlas.py` | Development-only metadata validator (I1–I13, I15–I18, file budget) | Gate 3, in review |
-| `.github/workflows/validate.yml`, `link-check.yml` | Development-only CI: validator on every PR; weekly link check | Gate 3, in review |
+| `data/atlas.json` | v0.3.0 dataset, schema `0.3.0` (seven items) | Merged (PR #19); deployed |
+| `data/geometry/*.json` | Offline-prepared plate geometry (EPSG:25830, hashed) | Merged (PR #19); deployed |
+| `assets/figures/*.webp` | Research figures, format conversion only | Merged (PR #19); deployed |
+| `index.html` · `styles.css` · `js/*.js` | v0.3.0 runtime (seven native ES modules, no build step) | Merged (PR #19); deployed |
+| `tools/validate_atlas.py` | Development-only metadata validator (I1–I13, I15–I18, file budget) | Merged (PR #19); deployed |
+| `.github/workflows/validate.yml`, `link-check.yml` | Development-only CI: validator on every PR; weekly link check | Merged (PR #19); deployed |
 | `docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md` | Approved v0.3 direction (Gate 0, PR #15) | Approved |
 
-> **The deployed site is still `v0.2.1`.** It is governed by `SPEC.md` and
-> `DESIGN_CONTRACT.md` **at tag `v0.2.1`**, and its runtime (`app.js`,
-> schema `0.2.0`) is preserved at that tag. The files above describe the
-> unreleased v0.3.0 release candidate (Gates 3 and 4 in review). Nothing of
-> v0.3 is released and no DOI exists. Licence (approved at Gate 4): MIT for
+> **The deployed site is v0.3.0.** The previous release `v0.2.1` is governed
+> by `SPEC.md` and `DESIGN_CONTRACT.md` **at tag `v0.2.1`**, and its runtime
+> (`app.js`, schema `0.2.0`) is preserved at that tag. The files above describe
+> v0.3.0, deployed from `main` since 2026-11-26 and released as `v0.3.0` (the
+> tag points at the merge commit of the release PR). No DOI exists. Licence (approved at Gate 4): MIT for
 > original code (`LICENSE`), CC BY 4.0 for original data and text, with
 > third-party material excluded (`LICENSE-CONTENT.md`).
 
-### v0.3.0 Research Explorer (release candidate)
+### v0.3.0 Research Explorer (released 2026-11-26)
 
 A document-first research explorer over seven items:
 

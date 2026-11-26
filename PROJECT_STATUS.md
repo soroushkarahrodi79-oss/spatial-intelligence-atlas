@@ -1,34 +1,32 @@
 # PROJECT_STATUS.md
 
-**Audit date:** 2026-09-22 · **Updated:** 2026-11-25 (records the `v0.2.1`
-maintenance release, the approved v0.3 Gates 0 and 1, the merged Gate 2
-content freeze with its human verification still pending, and the v0.3 Gate 3
-implementation in review; no change to the deployed content)
+**Audit date:** 2026-09-22 · **Updated:** 2026-11-26 (records the merge of
+v0.3.0 Gates 3 and 4 into `main`, its deployment on GitHub Pages, the
+production smoke test and the preparation of the `v0.3.0` release; the
+§12.10 human verification is still pending)
 
 ---
 
 ## 1. Status
 
-**ACTIVE_BOUNDED — V0.2.1 RELEASED AND DEPLOYED**
+**ACTIVE_BOUNDED — V0.3.0 DEPLOYED FROM `main`; RELEASE TAG PENDING AUTHORISATION**
 
-The runtime deployed to GitHub Pages (served from `main`) is release
-**`v0.2.1`**, merged through PR #13 at `ed57ed5` and released on 2026-09-25.
-It is a maintenance release of **`v0.2.0`** (PR #8, `54128ea`, 2026-09-22),
-which superseded v0.1.1 as the live artifact. `v0.2.0`, `v0.1.1` and
-`v0.1.0` remain preserved, immutable, at their original tags (see §2).
+GitHub Pages serves `main`. Since 2026-11-26 it serves the **v0.3.0 Research
+Explorer** (merge commit `8d07bf3`, PR #19, which includes Gate 4, PR #20 /
+`5bf7cb4`). The Pages build of `8d07bf3` completed, and the production smoke
+test passed (§6.1).
 
-`v0.2.1` changes readability, accessibility, interaction clarity and
-deterministic label layout only (`index.html`, `styles.css`, `app.js`).
-Its one dataset change is five non-semantic `layout.evidence.x` coordinates
-in `data/atlas.json`, approved by the maintainer as presentation-only
-(PR #13, `gate-approved`; `SPEC.md` §12.8 at tag `v0.2.1`). Scientific statements, claim
-ceilings, sources and relationships are unchanged from `v0.2.0`, and the
-dataset schema remains `0.2.0`. The specification and design contract of
-the deployed `v0.2.1` are `SPEC.md` and `DESIGN_CONTRACT.md` **at tag
-`v0.2.1`**. On `main`, those two files now describe the v0.3.0 target
-(§6.1), which is not deployed.
+The `v0.3.0` tag and GitHub release have **not** been created. They follow
+the release commit (PR "Release v0.3.0") and need the maintainer's explicit
+authorisation. The last released tag is **`v0.2.1`**. It and `v0.2.0`,
+`v0.1.1` and `v0.1.0` remain preserved, immutable, at their tags (§2);
+`SPEC.md` and `DESIGN_CONTRACT.md` at tag `v0.2.1` still govern that release.
 
-All four v0.2 gates are complete:
+**Scientific human verification (`SPEC.md` §12.10) is pending.** All rows of
+the maintainer's record are unchecked; acceptance criterion A2 is therefore
+pending, and the Atlas says so on every view.
+
+For the v0.2 history: All four v0.2 gates are complete:
 
 1. **Gate 1 — specification and design contract** — approved and merged
    through PR #6.
@@ -45,7 +43,8 @@ All four v0.2 gates are complete:
 
 | | |
 |---|---|
-| Current tag | `v0.2.1` (maintenance release) |
+| v0.3.0 | Deployed from `main` at `8d07bf3` (2026-11-26). Tag `v0.3.0` and GitHub release: **pending authorisation**; release date 2026-11-26 in `CITATION.cff` |
+| Last released tag | `v0.2.1` (maintenance release) |
 | Current commit | `ed57ed50d17aa7e8afe1f57b4222b98600f16ea9` |
 | Published | 2026-09-25 |
 | Dataset schema | `0.2.0` (unchanged) |
@@ -67,7 +66,7 @@ applied the `v0.2.1` readability and accessibility maintenance under §5,
 with the maintainer's `gate-approved` decision for its five presentation
 coordinates, and was tagged `v0.2.1`.
 
-## 3. Deployed v0.2.x content
+## 3. v0.2.x content (preserved at its tags; no longer deployed)
 
 The deployed dataset (`data/atlas.json`, schema `0.2.0`) carries a
 selective, evidence-informed content model: 4 entities (3 core cases, 1
@@ -174,8 +173,8 @@ maintenance under §5 and did not reopen the sequence.
 | Gate 0 — audit and direction | **APPROVED, MERGED** | PR #15 / `ea93956` (`docs/gate0/V0.3_RESEARCH_EXPLORER_GATE0.md`) |
 | Gate 1 — specification and design (`SPEC.md`, `DESIGN_CONTRACT.md`) | **APPROVED, MERGED** | PR #17 / `326d98f` |
 | Gate 2 — content freeze (seven items, pins, methodology, outputs, figures, geometry) | **MERGED**; per-claim human verification by the maintainer **pending** (`SPEC.md` §12.10, all rows unchecked); approval A-Q1 (HATI route geometry) **not given** | PR #18 / `23297cd` |
-| Gate 3 — runtime and dataset implementation (`js/*.js`, schema `0.3.0` dataset, geometry, figures, validator, CI) | **Technical review GO; HELD UNMERGED** (GitHub Pages serves `main`) | PR #19, branch `impl/v0.3-gate3` |
-| Gate 4 — verification and release `v0.3.0` | **RELEASE CANDIDATE**: A1 and A3–A20 pass; **A2 pending** (§12.10); D4 licence, D4-d, A-Q1 (keep excluded), A16 exception and DOI deferral **approved by the maintainer 2026-11-26**; no merge, release, tag or DOI | PR #20, branch `release/v0.3-gate4` (into `impl/v0.3-gate3`); `docs/gate4/README.md` |
+| Gate 3 — runtime and dataset implementation (`js/*.js`, schema `0.3.0` dataset, geometry, figures, validator, CI) | **MERGED** into `main` | PR #19 / `8d07bf3` |
+| Gate 4 — verification and release `v0.3.0` | **MERGED AND DEPLOYED**: A1 and A3–A20 pass; **A2 pending** (§12.10); D4 licence, D4-d, A-Q1 (keep excluded), A16 exception and DOI deferral approved by the maintainer 2026-11-26; Pages smoke test passed 2026-11-26. **Tag and release pending authorisation; DOI deferred** | PR #20 / `5bf7cb4` into the Gate 3 branch, then PR #19; `docs/gate4/README.md` |
 
 The v0.3.0 scope is closed at seven items (`SPEC.md` §3):
 
@@ -184,25 +183,36 @@ The v0.3.0 scope is closed at seven items (`SPEC.md` §3):
 - research platforms: SNTO observatory, Madrid Urban Evidence Lens;
 - instrument: FieldOS.
 
-Gate 3 state, as implemented on `impl/v0.3-gate3`:
+v0.3.0 state on `main` (`8d07bf3`):
 
 - `tools/validate_atlas.py` passes I1–I13 and I15–I18 with zero errors. That
   is mechanical validation of metadata only; it does not establish
   scientific support (`SPEC.md` §4.11).
 - The scientific support of every claim (I11 support, I14) still rests on
-  the maintainer's §12.10 record, which is not yet completed. The interface
-  states this in the footer, in every dossier's verification section and in
-  About.
-- The HATI route geometry is excluded until A-Q1 is approved; the territory
-  is shown as text with the reason. No plate, file or hash for it exists.
-- Merging into `main` replaces the runtime that GitHub Pages serves from
-  `main`. The integration sequence is in `docs/gate4/README.md` §5: PR #20
-  into the Gate 3 branch, then PR #19 into `main` only with release
-  authorisation, then Pages verification, then tag and release.
+  the maintainer's §12.10 record, which is not yet completed.
+- The HATI route geometry stays excluded (A-Q1); no plate, file or hash exists.
+- **Production smoke test, 2026-11-26** (live Pages site, headless Edge,
+  1440 px and 390 px):
+  - all 19 routes render, including the 7 dossiers and the not-found state;
+  - all 3 plates draw, and the 3 geometry files served match their declared
+    SHA-256;
+  - all 5 figures load;
+  - the licence files and `CITATION.cff` are served;
+  - the footer shows the approved licences on every route;
+  - no horizontal overflow on mobile;
+  - every request goes to the site's own origin, with no failed requests
+    and no console errors.
+
+  One defect was found: the footer still read "unreleased … deployment on
+  hold". The release commit corrects it.
+- Remaining sequence (`docs/gate4/README.md` §5): merge the release commit,
+  then create the `v0.3.0` tag and GitHub release on that merge commit, only
+  with the maintainer's authorisation. A DOI only after that, and only if
+  authorised.
 
 CHALUS is excluded because its repository is private; it stays preserved
 in the `v0.2.x` tags. MCP, Transit Graph and Isovist are deferred to v0.3.x.
-Until `v0.3.0` is released, the deployed `v0.2.1` keeps two CHALUS source
+The v0.2.x releases, which are no longer deployed, keep two CHALUS source
 links that return 404 to the public.
 
 ## 7. Open issues and pull requests

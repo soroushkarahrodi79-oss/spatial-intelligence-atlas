@@ -1,11 +1,8 @@
 # CITATION.cff — prepared at Gate 4 (v0.3.0), not yet released.
-# Pending maintainer decisions before release (PROJECT_STATUS.md §6.1):
-#   - licence (D4): on approval add
-#       license:
-#         - MIT          # original code
-#         - CC-BY-4.0    # original data and text; third-party material excluded
-#   - date-released: add the release date when v0.3.0 is tagged.
-#   - doi: add only if a DOI is minted with authorisation.
+# Licence approved at Gate 4 (D4, 2026-11-26): MIT for original code, CC BY 4.0
+# for original data and text; third-party material excluded (LICENSE-CONTENT.md).
+# Still to add at release: date-released (when v0.3.0 is tagged).
+# DOI deferred until the final deployment is verified; add only with authorisation.
 # The plain citation (SPEC.md §8.3) is valid without a DOI.
 cff-version: 1.2.0
 message: "If you use or cite the Atlas, please cite it as below. Third-party figures, geometry and quotations keep their own licences and credits, shown next to them in the Atlas."
@@ -15,6 +12,9 @@ type: software
 authors:
   - family-names: Karahrodi
     given-names: Soroush
+license:
+  - MIT
+  - CC-BY-4.0
 repository-code: "https://github.com/soroushkarahrodi79-oss/spatial-intelligence-atlas"
 url: "https://soroushkarahrodi79-oss.github.io/spatial-intelligence-atlas/"
 abstract: >-

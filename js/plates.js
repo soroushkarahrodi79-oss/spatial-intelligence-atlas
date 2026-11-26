@@ -167,7 +167,7 @@ export function captionBlock(db, plate) {
     h('dt', 'Key'), h('dd', key(fc)),
     h('dt', 'Source'), h('dd', ext(src.url, src.label), h('span.micro', ' @ ', pin(src.pinned_ref))),
     h('dt', 'Publisher'), h('dd', gm.publisher),
-    h('dt', 'Licence'), h('dd', gm.license, ccUri(gm.license), h('br'), h('span.ink-2', gm.attribution)),
+    h('dt', 'Licence'), h('dd', gm.license, ccUri(gm.license), h('br'), h('span.ink-2', gm.attribution), gm.reuse_note ? [h('br'), h('span.ink-2', gm.reuse_note)] : null),
     h('dt', 'Changes'), h('dd', `Feature(s) extracted from the source file, reprojected to ${gm.display.crs} and simplified at ${gm.simplification_m} m tolerance. No other edit.`),
     h('dt', 'CRS'), h('dd', `Displayed in ${gm.display.crs} (grid north) · original ${gm.crs.replace(/;.*$/, '')}`),
     h('dt', 'Simplified'), h('dd', h('span.micro', `${gm.simplification_m} m tolerance · sha256 `, h('span', gm.sha256.slice(0, 12)), h('span.sr-only', gm.sha256.slice(12)), '…')),

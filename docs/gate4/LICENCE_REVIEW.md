@@ -1,9 +1,9 @@
 # Licence compatibility review — v0.3.0 (Gate 4, D4)
 
-**Status:** prepared for the maintainer's decision. **Not approved.** Until the
-maintainer approves, the Atlas keeps stating "Licence pending maintainer
-approval" (`DESIGN_CONTRACT.md` §15), and no `LICENSE` file is placed at the
-repository root. The proposed files are staged in `docs/gate4/proposed/`.
+**Status:** **approved by the maintainer on 2026-11-26** (D4-a to D4-d,
+`docs/gate4/README.md` §4). `LICENSE` and `LICENSE-CONTENT.md` are at the
+repository root; the dataset's `meta.license`, the footer and About show the
+approved licences; `CITATION.cff` carries `MIT` and `CC-BY-4.0`.
 
 This review checks what the repository contains, who holds rights in it,
 and whether the preferred direction (MIT for original code, CC BY 4.0 for
@@ -53,16 +53,11 @@ non-commercial material is included.
 
 | # | Decision | Recommendation |
 |---|---|---|
-| D4-a | Approve MIT for original code | Approve |
-| D4-b | Approve CC BY 4.0 for original data and text, with the §3 exclusions | Approve |
-| D4-c | Own-source quotations: exclude (option a) or license (option b) | Option a |
-| D4-d | Optional precaution for L2: add "OAPN does not participate in, sponsor or support this reuse" to the PNSG caption | Optional; not required by the terms as read |
+| D4-a | MIT for original code | Approved |
+| D4-b | CC BY 4.0 for original data and text, with the §3 exclusions | Approved |
+| D4-c | Verbatim quotations keep their sources' licensing (option a) | Approved |
+| D4-d | Non-endorsement notice on the PNSG plate caption | Approved; implemented |
 
-**On approval (mechanical steps):**
-
-- move `docs/gate4/proposed/LICENSE` and `LICENSE-CONTENT.md` to the
-  repository root;
-- set `meta.license` in `data/atlas.json` to "Code: MIT. Original data and
-  text: CC BY 4.0. Third-party material keeps its own licence (see
-  LICENSE-CONTENT.md).";
-- add the `license` block to `CITATION.cff`.
+**Applied on approval:** the licence files were moved to the root;
+`meta.license` was updated; `CITATION.cff` gained the `license` list; the PNSG
+caption shows the non-endorsement notice.

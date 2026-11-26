@@ -46,10 +46,12 @@ complete.
 > **The deployed site is still `v0.2.1`.** It is governed by `SPEC.md` and
 > `DESIGN_CONTRACT.md` **at tag `v0.2.1`**, and its runtime (`app.js`,
 > schema `0.2.0`) is preserved at that tag. The files above describe the
-> unreleased v0.3.0 implementation under review at Gate 3. Nothing of v0.3 is
-> released, and no DOI or licence has been issued for it.
+> unreleased v0.3.0 release candidate (Gates 3 and 4 in review). Nothing of
+> v0.3 is released and no DOI exists. Licence (approved at Gate 4): MIT for
+> original code (`LICENSE`), CC BY 4.0 for original data and text, with
+> third-party material excluded (`LICENSE-CONTENT.md`).
 
-### v0.3.0 Research Explorer (Gate 3, in review)
+### v0.3.0 Research Explorer (release candidate)
 
 A document-first research explorer over seven items:
 

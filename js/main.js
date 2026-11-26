@@ -92,6 +92,7 @@ function footer() {
     h('p.micro', `v${m.release} (${m.release_status}) · schema ${db.schema} · reviewed ${m.reviewed_at}`),
     h('p.ui', h('a', { href: '#/about' }, 'How to cite'), ' · ', h('a', { href: '#/about' }, 'Licences'), ' · ', ext(m.repository, 'Repository')),
     h('p.body-s.ink-2', m.license),
+    h('p.body-s', m.notice),
     h('p.body-s', m.provenance_statement),
     h('p.body-s.ink-2', 'Human verification of the frozen scientific content (SPEC.md §12.10) is pending.'));
 }

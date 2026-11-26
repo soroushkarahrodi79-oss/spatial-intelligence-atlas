@@ -138,6 +138,17 @@ export function describePlate(plate, fc) {
     + `centred near ${lat.toFixed(2)}° N, ${Math.abs(lon).toFixed(2)}° W, displayed in ${gm.display.crs} with graticule ticks, a metric scale bar and a grid-north mark. Not for measurement.`;
 }
 
+// CC BY 4.0 requires the licence URI; it is given as plain text so that the
+// only outbound links remain declared sources (SPEC I6).
+export function ccUri(licence) {
+  return /CC BY 4\.0/.test(licence || '') ? h('span.micro', ' · creativecommons.org/licenses/by/4.0/') : null;
+}
+
+// Required attribution, verbatim, plus the licence when the attribution does not already state it.
+export function attributionLine(gm) {
+  return gm.attribution.includes(gm.license) ? gm.attribution : `${gm.attribution} · ${gm.license}`;
+}
+
 // Plate key: names the drawn layers with their mark.
 function key(fc) {
   const { study, context } = layers(fc);
@@ -156,7 +167,8 @@ export function captionBlock(db, plate) {
     h('dt', 'Key'), h('dd', key(fc)),
     h('dt', 'Source'), h('dd', ext(src.url, src.label), h('span.micro', ' @ ', pin(src.pinned_ref))),
     h('dt', 'Publisher'), h('dd', gm.publisher),
-    h('dt', 'Licence'), h('dd', gm.license, h('br'), h('span.ink-2', gm.attribution)),
+    h('dt', 'Licence'), h('dd', gm.license, ccUri(gm.license), h('br'), h('span.ink-2', gm.attribution), gm.reuse_note ? [h('br'), h('span.ink-2', gm.reuse_note)] : null),
+    h('dt', 'Changes'), h('dd', `Feature(s) extracted from the source file, reprojected to ${gm.display.crs} and simplified at ${gm.simplification_m} m tolerance. No other edit.`),
     h('dt', 'CRS'), h('dd', `Displayed in ${gm.display.crs} (grid north) · original ${gm.crs.replace(/;.*$/, '')}`),
     h('dt', 'Simplified'), h('dd', h('span.micro', `${gm.simplification_m} m tolerance · sha256 `, h('span', gm.sha256.slice(0, 12)), h('span.sr-only', gm.sha256.slice(12)), '…')),
     h('dd.nfm', h('strong', 'Not for measurement.'), ' Geometry illustrates the study area documented by the source; it is not validated territory data.'));
@@ -192,7 +204,7 @@ export function atlasView(db, { head, notice }) {
     h('ul.plate-grid', { 'aria-label': 'Plates' }, db.plates.map((p) => h('li.plate-card',
       h('a', { href: `#/atlas/${p.territory.id}`, 'aria-label': `Plate ${p.n}: ${p.territory.label}` }, drawThumb(db, p, 320, 240)),
       h('h2.plate-title', h('a', { href: `#/atlas/${p.territory.id}` }, `Plate ${p.n} · ${p.territory.label}`)),
-      h('p.micro', `${p.geometry.publisher} · ${p.geometry.license}`),
+      h('p.micro', attributionLine(p.geometry)),
       h('p.body-s.ink-2', db.itemsIn(p.territory.id).map((r) => r.short_title).join(' · '))))),
     h('section.text-territories', { 'aria-labelledby': 'tt' },
       h('h2.band-label.label', { id: 'tt' }, 'Territories without a plate'),

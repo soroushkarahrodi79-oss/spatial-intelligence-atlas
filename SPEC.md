@@ -4,8 +4,10 @@
 
 **Target version:** 0.3.0 (schema `0.3.0`)
 
-**Document state:** GATE 2 — IN REVIEW (content freeze, §12). Gate 0 was
-approved through PR #15 (`ea93956`) and Gate 1 through PR #17 (`326d98f`).
+**Document state:** Gate 0 approved (PR #15, `ea93956`); Gate 1 approved
+(PR #17, `326d98f`); Gate 2 content freeze merged (PR #18, `23297cd`) with the
+§12.10 human verification still pending; Gate 3 reviewed GO and held
+unmerged (PR #19); Gate 4 in review. Current state: `PROJECT_STATUS.md` §6.1.
 
 **Deployed release:** `v0.2.1` (schema `0.2.0`). It remains governed by
 `SPEC.md` at tag `v0.2.1`, which is preserved and unchanged. This document

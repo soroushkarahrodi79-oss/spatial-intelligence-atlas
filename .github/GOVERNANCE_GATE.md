@@ -33,12 +33,16 @@ A pull request targeting `main` fails the check when **either**:
    SPEC.md
    DESIGN_CONTRACT.md
    data/atlas.json
+   data/relationships.json   (relationship dataset, from v0.4)
    data/geometry/*
    assets/figures/*
    index.html
    app.js            (runtime up to v0.2.x)
    js/*.js           (runtime from v0.3.0)
    styles.css
+   tools/**          (validators, from v0.4)
+   tests/**          (validator tests, from v0.4)
+   .github/workflows/**  (the CI that runs them, including this gate)
    ```
 
    and the **`gate-approved`** label is absent.

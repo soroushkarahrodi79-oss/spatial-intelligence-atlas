@@ -21,6 +21,13 @@ canonical release state, gate history, evidence ceiling, and licensing note.
 
 ---
 
+
+> **v0.4 (unreleased, under review).** Adds four admitted items and a
+> Knowledge Graph (`#/graph`) of relations documented by pinned public
+> sources, with a separate validated dataset (`data/relationships.json`).
+> Specification: `SPEC.md` §13 and `DESIGN_CONTRACT.md` §17. Human
+> verification of the new content and of every relation is pending.
+
 ## Current status
 
 **Deployed runtime: `v0.2.1`, released 2026-09-25** (PR #13, commit

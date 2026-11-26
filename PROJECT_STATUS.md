@@ -1,6 +1,6 @@
 # PROJECT_STATUS.md
 
-**Audit date:** 2026-09-22 · **Updated:** 2026-11-26 (records the merge of
+**Audit date:** 2026-09-22 · **Updated:** 2026-11-26 (v0.4 Knowledge Graph decisions and implementation, §6.2; earlier: records the merge of
 v0.3.0 Gates 3 and 4 into `main`, its deployment on GitHub Pages, the
 production smoke test and the preparation of the `v0.3.0` release; the
 §12.10 human verification is still pending)
@@ -214,6 +214,20 @@ CHALUS is excluded because its repository is private; it stays preserved
 in the `v0.2.x` tags. MCP, Transit Graph and Isovist are deferred to v0.3.x.
 The v0.2.x releases, which are no longer deployed, keep two CHALUS source
 links that return 404 to the public.
+
+### 6.2 v0.4 (Knowledge Graph)
+
+| Stage | State | Authority |
+|---|---|---|
+| Audit, ontology and prototype | Draft PR #22 (`8d69a7d`), **not merged**; its prototype is never merged or deployed (E4) | `docs/v0.4/KNOWLEDGE_GRAPH_PROPOSAL.md` on that branch |
+| Decisions E1–E5 | **Approved by the maintainer, 2026-11-26** | `SPEC.md` §13.0 |
+| Specification and content freeze | `SPEC.md` §13, `DESIGN_CONTRACT.md` §17; four items admitted (MCP, PNOA-LiDAR pilot, Transit Graph, Isovist Demo); SNTO Alpine and SK Lab deferred | implementation PR, pending `gate-approved` |
+| Implementation | `#/graph` view, `data/relationships.json` (45 relations, 3 non-relations), R1–R14 validator, negative tests, CI and governance extended | same PR |
+| Human verification | **Pending**: the four new items and every relation (K2, `SPEC.md` §13.8); v0.3 A2 (§12.10) also still pending | maintainer |
+
+Hypothetical and analyst-defined relations are excluded from production
+(E5) and kept in `docs/v0.4/DEVELOPMENT_RECORD.md`. No tag, release or DOI
+exists for v0.4.
 
 ## 7. Open issues and pull requests
 

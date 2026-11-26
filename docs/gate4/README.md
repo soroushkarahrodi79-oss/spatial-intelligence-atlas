@@ -1,8 +1,9 @@
 # Gate 4 — verification and release record (v0.3.0)
 
-**State:** release candidate in review (PR #20, stacked on PR #19). Not
-released: no tag, GitHub release or DOI exists for v0.3.0. The deployed site
-is still `v0.2.1`.
+**State (2026-11-26):** PR #20 and PR #19 merged; `main` at `8d07bf3` is
+deployed on GitHub Pages and passed the production smoke test
+(`PROJECT_STATUS.md` §6.1). The `v0.3.0` tag and GitHub release await the
+maintainer's authorisation; no DOI exists (deferred).
 
 **A2 is pending.** The maintainer's per-claim human verification of
 scientific support (`SPEC.md` §12.10) has not been recorded. Nothing in this
@@ -91,10 +92,20 @@ Nobody else merges, labels, tags or publishes.
    authorisation. Then add `date-released` to `CITATION.cff`. A DOI, if any,
    follows only after step 4 and with authorisation.
 
+### Progress (2026-11-26)
+
+| Step | State |
+|---|---|
+| 1. PR #20 into `impl/v0.3-gate3` | **Done** by the maintainer (`5bf7cb4`) |
+| 2. Combined PR #19 CI against `main` | **Done**: mechanical validation passed; the governance gate passed once `gate-approved` was applied |
+| 3. PR #19 into `main` | **Done** by the maintainer (`8d07bf3`) |
+| 4. GitHub Pages | **Verified**: build of `8d07bf3` complete; smoke test passed; footer status corrected by the release commit |
+| 5. Tag and release | **Pending authorisation**. Merge the release PR first; the tag goes on its merge commit. `CITATION.cff` `date-released` is 2026-11-26; change it if the tag is created on another date. |
+
 ## 6. Genuine remaining blockers
 
 - **A2**: the maintainer's §12.10 human verification.
-- **Release authorisation** for steps 1, 3 and 5 (with `gate-approved`).
+- **Release authorisation** for step 5: merge the release PR (`gate-approved`), then tag and release.
 - After step 5: `date-released` in `CITATION.cff`; a DOI only if then
   authorised.
 

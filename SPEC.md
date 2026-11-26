@@ -6,10 +6,11 @@
 
 **Document state:** Gate 0 approved (PR #15, `ea93956`); Gate 1 approved
 (PR #17, `326d98f`); Gate 2 content freeze merged (PR #18, `23297cd`) with the
-§12.10 human verification still pending; Gate 3 reviewed GO and held
-unmerged (PR #19); Gate 4 in review. Current state: `PROJECT_STATUS.md` §6.1.
+§12.10 human verification still pending; Gates 3 and 4 merged (PR #19
+`8d07bf3`, PR #20 `5bf7cb4`) and deployed from `main` on 2026-11-26. Current
+state: `PROJECT_STATUS.md` §6.1.
 
-**Deployed release:** `v0.2.1` (schema `0.2.0`). It remains governed by
+**Previous release:** `v0.2.1` (schema `0.2.0`). It remains governed by
 `SPEC.md` at tag `v0.2.1`, which is preserved and unchanged. This document
 governs the v0.3.0 target only. Releases `v0.1.0`, `v0.1.1`, `v0.2.0` and
 `v0.2.1` remain immutable.

@@ -4,7 +4,7 @@
   "title": "Spatial Intelligence Atlas",
   "subtitle": "Research Explorer",
   "release": "0.3.0",
-  "release_status": "unreleased — Gate 4 verification in review; deployment on hold",
+  "release_status": "released 2026-11-26",
   "reviewed_at": "2026-11-25",
   "notice": "Separate research items. Relations appear only when documented and typed; none exist in this release.",
   "provenance_statement": "Inputs, status, and outcomes are separate. Real input does not establish validation or decision sufficiency.",
@@ -122,8 +122,8 @@
   "versions": [
    {
     "tag": "v0.3.0",
-    "date": null,
-    "note": "Research Explorer (this implementation; unreleased)."
+    "date": "2026-11-26",
+    "note": "Research Explorer: seven separately documented items, dossiers, cartographic plates, figures and an Evidence Explorer."
    },
    {
     "tag": "v0.2.1",

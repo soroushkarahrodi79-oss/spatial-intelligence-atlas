@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Prototype for a proposed v0.4 of the Spatial Intelligence Atlas: a typed, source-pinned graph of documented relationships between research items. Not part of the released Atlas.">
+  <title>Research Relationships — prototype</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="kg.css">
+  <script type="module" src="kg.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="proto-banner" role="note">
+    <div class="proto-banner__inner">
+      <span class="label">Prototype · not part of the released Atlas</span>
+      <span class="ui">A proposal for a v0.4 gate. Relationships were checked against pinned sources by an AI assistant; human verification is pending.</span>
+    </div>
+  </div>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="wordmark" href="../../#/" aria-label="Spatial Intelligence Atlas — Overview">
+        <svg class="wordmark__mark" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+          <rect x="0.5" y="0.5" width="15" height="15" fill="none" stroke="currentColor"/>
+          <path d="M5.5 .5v15M10.5 .5v15M.5 5.5h15M.5 10.5h15" fill="none" stroke="currentColor"/>
+        </svg>
+        <span class="wordmark__text">
+          <span class="wordmark__title">Spatial Intelligence Atlas</span>
+          <span class="wordmark__sub">Research Relationships · v0.4 prototype</span>
+        </span>
+      </a>
+      <nav class="primary-nav" aria-label="Primary">
+        <ul>
+          <li><a href="../../#/research">Research</a></li>
+          <li><a href="../../#/atlas">Atlas</a></li>
+          <li><a href="../../#/evidence">Evidence</a></li>
+          <li><a href="./" aria-current="page">Relationships</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page" tabindex="-1">
+    <header class="view-head">
+      <p class="label muted">Relationships</p>
+      <h1 class="display">How are these research items connected, and on what evidence?</h1>
+      <p class="notice ui">Relations appear only where a pinned source documents them. A shared dataset, method or territory is shown through that dataset, method or territory node, never as a direct link between items. Hosting is not integration.</p>
+    </header>
+
+    <div class="kg" id="kg" aria-busy="true">
+      <div class="kg__controls" role="group" aria-label="Graph controls">
+        <div class="tabs" role="tablist" aria-label="View" id="kg-views"></div>
+        <form class="search" id="kg-search" role="search">
+          <label class="label" for="kg-q">Find</label>
+          <input id="kg-q" class="ui" type="search" list="kg-names" autocomplete="off" placeholder="Item, dataset, method, territory">
+          <datalist id="kg-names"></datalist>
+          <button class="btn" type="submit">Go</button>
+        </form>
+        <fieldset class="filters" id="kg-filters">
+          <legend class="label">Relationship classes</legend>
+        </fieldset>
+      </div>
+
+      <div class="kg__body">
+        <section class="plate-wrap" aria-labelledby="kg-plate-title">
+          <div class="plate" id="kg-plate">
+            <svg id="kg-svg" role="group" aria-labelledby="kg-plate-title" aria-describedby="kg-caption-text">
+              <defs id="kg-defs"></defs>
+              <g id="kg-world"><g id="kg-bands" aria-hidden="true"></g><g id="kg-edges" aria-hidden="true"></g><g id="kg-nodes"></g></g>
+            </svg>
+            <div class="zoom" role="group" aria-label="Zoom">
+              <button class="btn btn--icon" type="button" data-zoom="in" aria-label="Zoom in">+</button>
+              <button class="btn btn--icon" type="button" data-zoom="out" aria-label="Zoom out">−</button>
+              <button class="btn" type="button" data-zoom="fit">Fit</button>
+            </div>
+          </div>
+          <div class="caption">
+            <p class="label" id="kg-plate-title">Plate</p>
+            <p class="body-s" id="kg-caption-text"></p>
+          </div>
+          <div class="legend" id="kg-legend"></div>
+        </section>
+
+        <aside class="rail" id="kg-rail" aria-labelledby="kg-rail-title" tabindex="-1">
+          <h2 class="sr-only" id="kg-rail-title">Details</h2>
+          <div id="kg-detail"></div>
+        </aside>
+      </div>
+
+      <p class="sr-only" aria-live="polite" id="kg-live"></p>
+
+      <section class="block" aria-labelledby="kg-text-title">
+        <h2 class="secnum" id="kg-text-title"><span class="micro">01</span><span class="label">Relationships in this view, as text</span></h2>
+        <p class="body-s muted prose">The same relationships as the plate, in reading order. Select a row to inspect why the connection exists.</p>
+        <div id="kg-table"></div>
+      </section>
+
+      <section class="block" aria-labelledby="kg-non-title">
+        <h2 class="secnum" id="kg-non-title"><span class="micro">02</span><span class="label">Documented non-relationships</span></h2>
+        <p class="body-s muted prose">Sources that state two items are not connected. They are recorded so that proximity is not read as a link.</p>
+        <ul id="kg-non" class="records"></ul>
+      </section>
+
+      <section class="block" aria-labelledby="kg-onto-title">
+        <h2 class="secnum" id="kg-onto-title"><span class="micro">03</span><span class="label">Relationship vocabulary</span></h2>
+        <div id="kg-onto"></div>
+      </section>
+
+      <section class="block" aria-labelledby="kg-dev-title">
+        <h2 class="secnum" id="kg-dev-title"><span class="micro">04</span><span class="label">Development candidate inventory</span></h2>
+        <p class="body-s muted prose">Unresolved, deferred and rejected readings. They are excluded from the public graph and listed here only for review. Turn on “Development inventory” above to draw them.</p>
+        <ul id="kg-dev" class="records"></ul>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p class="micro" id="kg-footer"></p>
+      <p class="body-s muted">Inputs, status, and outcomes are separate. A documented relationship does not establish validation, agreement or decision sufficiency for either item.</p>
+    </div>
+  </footer>
+</body>
+</html>

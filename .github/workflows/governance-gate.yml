@@ -78,8 +78,10 @@ jobs:
           # These are the runtime (app.js up to v0.2.x; js/*.js from v0.3.0), the
           # dataset with its geometry and figures, and the frozen contracts named
           # in PROJECT_STATUS.md sections 4-6. Any change to them is a gated
-          # change, not ordinary maintenance.
-          governed_regex='^(SPEC\.md|DESIGN_CONTRACT\.md|data/atlas\.json|data/geometry/[^/]+|assets/figures/[^/]+|index\.html|app\.js|js/[^/]+\.js|styles\.css)$'
+          # change, not ordinary maintenance. From v0.4 this also covers the
+          # relationship dataset, the validators and their tests, and the CI
+          # workflows that run them (including this gate).
+          governed_regex='^(SPEC\.md|DESIGN_CONTRACT\.md|data/atlas\.json|data/relationships\.json|data/geometry/[^/]+|assets/figures/[^/]+|index\.html|app\.js|js/[^/]+\.js|styles\.css|tools/.+|tests/.+|\.github/workflows/.+)$'
 
           # Make sure the base branch tip is available for the diff, then use
           # the merge-base (...) so only the PR's own changes are considered.

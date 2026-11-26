@@ -1,19 +1,24 @@
-// Loads the single same-origin dataset and the declared geometry files, and
-// indexes them. Order is always dataset order (SPEC I9): nothing here ranks
+// Loads the same-origin datasets (data/atlas.json and, from v0.4, the
+// relationship dataset data/relationships.json) and the declared geometry
+// files, and indexes them. Order is always dataset order (SPEC I9): nothing here ranks
 // or scores items, evidence or outcomes.
 
 const DATA_URL = 'data/atlas.json';
+const REL_URL = 'data/relationships.json';
 
 export async function loadAtlas() {
   const res = await fetch(DATA_URL, { cache: 'no-cache' });
   if (!res.ok) throw new Error(`${DATA_URL}: HTTP ${res.status}`);
   const atlas = await res.json();
+  const rres = await fetch(REL_URL, { cache: 'no-cache' });
+  if (!rres.ok) throw new Error(`${REL_URL}: HTTP ${rres.status}`);
+  const rel = await rres.json();
   const geo = await Promise.all(atlas.geometries.map(async (g) => {
     const r = await fetch(g.file, { cache: 'no-cache' });
     if (!r.ok) throw new Error(`${g.file}: HTTP ${r.status}`);
     return [g.id, await r.json()];
   }));
-  return index(atlas, new Map(geo));
+  return index(atlas, new Map(geo), rel);
 }
 
 function byId(list) {
@@ -28,8 +33,9 @@ function children(list, rid) {
 // instruments); within a band, dataset order.
 const BANDS = ['documented_research', 'experiment', 'research_platform', 'instrument'];
 
-function index(a, features) {
+function index(a, features, rel) {
   const db = {
+    rel,
     meta: a.meta,
     schema: a.schema_version,
     research: a.research,

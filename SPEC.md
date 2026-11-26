@@ -2,13 +2,19 @@
 
 **Artifact:** Spatial Intelligence Atlas — Research Explorer
 
-**Target version:** 0.3.0 (schema `0.3.0`)
+**Target version:** 0.4.0 (schema `0.4.0`; §1–§12 describe 0.3.0, amended by §13)
 
 **Document state:** Gate 0 approved (PR #15, `ea93956`); Gate 1 approved
 (PR #17, `326d98f`); Gate 2 content freeze merged (PR #18, `23297cd`) with the
 §12.10 human verification still pending; Gates 3 and 4 merged (PR #19
 `8d07bf3`, PR #20 `5bf7cb4`) and deployed from `main` on 2026-11-26. Current
 state: `PROJECT_STATUS.md` §6.1.
+
+**v0.4 amendment:** §13 adds four items, a separate relationship dataset,
+the Knowledge Graph view and invariants R1–R14. It states exactly which v0.3
+rules it supersedes; every other rule of §1–§12 still applies. Maintainer
+decisions E1–E5 are recorded in §13.0. Human verification of v0.3 (§12.10,
+A2) and of v0.4 (§13.8, K2) is pending.
 
 **Previous release:** `v0.2.1` (schema `0.2.0`). It remains governed by
 `SPEC.md` at tag `v0.2.1`, which is preserved and unchanged. This document
@@ -64,7 +70,8 @@ shared runtime, data exchange, common validation or product suite.
   itself. Conceptual similarity never creates a technical relation.
 - **v0.3.0 contains zero relations between research items.** The vocabulary
   is specified so that a later gate can use it; no such relation is used in
-  v0.3.0.
+  v0.3.0. *(v0.4: superseded by §13.3–§13.4. Relations live only in
+  `data/relationships.json`, each documented by a pinned public source.)*
 - No layout, ordering, arrow or connector may imply flow between items.
 
 ### 1.3 Evidence and result discipline (binding)
@@ -310,7 +317,7 @@ the sources. Conceptual and technical relations MUST carry them (I13).
 | I4 | Every evidence record, finding, outcome, output and figure resolves to at least one source. |
 | I5 | Every source has a non-empty `pinned_ref`; a URL pointing to a branch head is not a pin. |
 | I6 | Every outbound URL rendered anywhere equals the `url` of a declared source, output or geometry source. |
-| I7 | There are zero `technical` or `conceptual` relationships in v0.3.0. |
+| I7 | There are zero `technical` or `conceptual` relationships in v0.3.0. *(v0.4: amended by §13.4 — `atlas.json` carries no relationships; relations are governed by R1–R14.)* |
 | I8 | Every evidence record, finding, outcome, output and figure has exactly one parent item, and the parent link appears once. |
 | I9 | Each view's order is fully determined by dataset order (§5); no runtime sorting by any value. |
 | I10 | No field, view or computation encodes an ordinal score, maturity rank or composite of `class`, `input_kind`, `substantiation`, `outcome_type` or `editorial_status`. |
@@ -376,7 +383,8 @@ so every view and dossier has a stable, citable URL.
 
 An unknown route renders a not-found state with a link to the Overview.
 Views deferred to later releases (`#/methods`, `#/relations`) are **not**
-rendered in v0.3.0, and no placeholder link to them appears.
+rendered in v0.3.0, and no placeholder link to them appears. *(v0.4: the
+Knowledge Graph is added as `#/graph`, §13.5.)*
 
 ---
 
@@ -397,6 +405,9 @@ The inventory is closed: exactly these interactions exist.
 
 - search, sorting, ranking, comparison views, multi-select, drag;
 - pan or zoom on plates; tooltips on chrome; modal dialogs;
+- *(v0.4: inside `#/graph` only, §13.5 adds node search, pan and zoom,
+  class and node-type filters and an expanded view. Sorting, ranking,
+  comparison, plate pan/zoom and persistence stay excluded.)*
 - persistence (including `localStorage` and cookies);
 - source previews, prefetching, auto-navigation, analytics.
 
@@ -537,14 +548,14 @@ The v0.3.0 Atlas MUST NOT:
 
 | # | Criterion |
 |---|---|
-| A1 | The dataset contains exactly the seven items of §3.1 and none of §3.2. |
+| A1 | The dataset contains exactly the seven items of §3.1 and none of §3.2. *(v0.4: superseded by §13.1 and K1: the seven records are unchanged and four items are added.)* |
 | A2 | `tools/validate_atlas.py` passes the mechanical checks (I1–I13, I15–I18, including I11 per class) with zero errors, **and** the Gate 2 freeze records human verification of scientific support for every public claim (I11 support, I14). |
 | A3 | Every documented research item shows question, sourced methodology, result, claim ceiling, findings with uncertainty where sourced, evidence, limitations, outputs, reproducibility, licences and verification, in §7 order. |
 | A4 | The HATI pilot and the HATI pedestrian extension are separate dossiers with separate results and outputs. |
 | A5 | Every output shows publication type, editorial status and identifier availability as three separate visible facts. |
 | A6 | Every plate shows source, licence/attribution, CRS, simplification tolerance and "Not for measurement". |
 | A7 | Every figure shows caption, source with pin, licence and alt text. |
-| A8 | No relation between research items exists; no connector or flow graphic exists. |
+| A8 | No relation between research items exists; no connector or flow graphic exists. *(v0.4: superseded inside `#/graph` by §13.5–§13.7; elsewhere unchanged.)* |
 | A9 | No view sorts, ranks or scores items or evidence; the Evidence Explorer filters without reordering. |
 | A10 | Every outbound link resolves to a declared object and opens only on explicit activation. |
 | A11 | Zero third-party network requests; all runtime requests are same-origin. |
@@ -1212,3 +1223,220 @@ The maintainer completes this table before applying `gate-approved`.
 | `source` | `source` (+ `access`, `last_checked_at`, `last_http_status`, `pin_change`) |
 | `relationship` | `relationship` (+ `class`); the three v0.2 types become `structural` |
 | CHALUS records | not migrated (§3.2); preserved at `v0.2.x` tags |
+
+---
+
+## 13. v0.4 amendment — Knowledge Graph and four admitted items
+
+### 13.0 Authority and decisions
+
+The ecosystem audit, ontology and prototype are the evidence of PR #22
+(`proposal/v0.4-knowledge-graph`, head `8d69a7d`, not merged). On 2026-11-26
+the maintainer answered “Approve all as written” to the five decisions below,
+recorded here verbatim from the brief:
+
+| # | Decision (approved by the maintainer, 2026-11-26) |
+|---|---|
+| E1 | Public repositories without a licence may be referenced as nodes, but no unlicensed content or code may be copied or redistributed. |
+| E2 | Admit Madrid Evidence MCP, PNOA-LiDAR pilot, Madrid Transit Graph and Madrid Isovist Demo, subject to their bounded content freezes. Defer SNTO Alpine and SK Lab as separate items. |
+| E3 | Preserve and display both exact Lens version pins. Never silently substitute one version for another. |
+| E4 | Do not merge or deploy the isolated prototype. |
+| E5 | Exclude hypothetical and conceptual relationships from the production graph. Preserve them only in the development record. |
+
+This amendment is itself a governed change: it takes effect only when the
+maintainer applies `gate-approved` to its pull request.
+
+### 13.1 Scope of v0.4
+
+The seven v0.3 records (§3.1) are unchanged, byte for byte. Four items are
+added after them:
+
+| Atlas id | Class | Item | Verdict (verbatim) | Version |
+|---|---|---|---|---|
+| `e-transit-graph` | experiment | Madrid Transit Graph | “FREEZE” | `a9ff926` |
+| `e-isovist` | experiment | Madrid Isovist Demo | “MIXTO” | `932cd61` |
+| `e-pnoa-lidar` | experiment | PNOA-LiDAR pilot | “NO-GO for the production viewer at this time” | `313b8bf` |
+| `i-madrid-mcp` | instrument | Madrid Evidence MCP | “MODIFY (provisional)” | `3e4959b` |
+
+Deferred (development record only): SNTO Alpine Edition, SK Spatial
+Intelligence Lab, Tourism Intelligence Desk, Spatial Investigation Studio.
+Excluded: every private repository (CHALUS, the rooftop PV observatory,
+Shade Gate Madrid, MVA isovist research). The MCP repository has no licence:
+under E1 it is referenced, and nothing from it is copied.
+
+Three territories are added as text, without geometry: `t-metro-madrid` (a
+network extent, explicitly not contained in the municipality),
+`t-lavapies-isovist` and `t-embajadores` (kept separate; overlap not
+computed). One output is added: `out-transit-release`.
+
+### 13.2 Sources
+
+New `atlas.json` sources, frozen at their first pin (I18 applies to them):
+
+| id | kind | label | pinned_ref | accessed_at | pin_change |
+|---|---|---|---|---|---|
+| `s-transit-readme` | commit | Madrid Transit Graph — README (status, definitions, provenance, limitations, licences) | `a9ff926006c0c155fe7272baf5fd2d9b326d3706` | 2026-11-26 | null (original pin) |
+| `s-transit-prereg` | commit | Madrid Transit Graph — v0.5 pre-registration | `a9ff926006c0c155fe7272baf5fd2d9b326d3706` | 2026-11-26 | null (original pin) |
+| `s-transit-memo` | closeout | Madrid Transit Graph — decision memo (FREEZE, 2026-11-21) | `a9ff926006c0c155fe7272baf5fd2d9b326d3706` | 2026-11-26 | null (original pin) |
+| `s-transit-release` | release | Madrid Transit Graph Explorer GitHub release v0.1.0 (published 2026-11-19) | tag v0.1.0 | 2026-11-26 | null (original pin) |
+| `s-iso-readme` | commit | Madrid Isovist Demo — README (Step 0 result, scope, data and licences) | `932cd6195f3c1087090c2dda4952ad1bb323304d` | 2026-11-26 | null (original pin) |
+| `s-iso-limits` | closeout | Madrid Isovist Demo — limits, pilot status and computational fidelity | `932cd6195f3c1087090c2dda4952ad1bb323304d` | 2026-11-26 | null (original pin) |
+| `s-pnoa-readme` | commit | PNOA-LiDAR Madrid pilot — README (question, area, status, isolation) | `313b8bf0ca3d3cd8d559c0eb18752970205d9a7c` | 2026-11-26 | null (original pin) |
+| `s-pnoa-results` | closeout | PNOA-LiDAR Madrid pilot — results (Embajadores, 3rd coverage v1) | `313b8bf0ca3d3cd8d559c0eb18752970205d9a7c` | 2026-11-26 | null (original pin) |
+| `s-pnoa-assessment` | closeout | PNOA-LiDAR Madrid pilot — integration assessment and verdict | `313b8bf0ca3d3cd8d559c0eb18752970205d9a7c` | 2026-11-26 | null (original pin) |
+| `s-pnoa-attribution` | commit | PNOA-LiDAR Madrid pilot — attribution of IGN-derived results (CC BY 4.0) | `313b8bf0ca3d3cd8d559c0eb18752970205d9a7c` | 2026-11-26 | null (original pin) |
+| `s-lens-license-v04` | commit | Madrid Urban Evidence Lens — LICENSE (MIT) at the PNOA-pilot pin | `313b8bf0ca3d3cd8d559c0eb18752970205d9a7c` | 2026-11-26 | null (original pin) |
+| `s-mcp-readme` | commit | Madrid Evidence MCP — README (tools, pinned Lens checkout, tests, limits) | `3e4959bed16a9e960803bc803877115c0784568a` | 2026-11-26 | null (original pin) |
+| `s-mcp-stage2` | closeout | Madrid Evidence MCP — Stage 2 evaluation report (exploratory, provisional) | `3e4959bed16a9e960803bc803877115c0784568a` | 2026-11-26 | null (original pin) |
+| `s-mcp-lens-pin` | commit | Madrid Evidence MCP — lens-pin.json (Lens commit f67cd47) | `3e4959bed16a9e960803bc803877115c0784568a` | 2026-11-26 | null (original pin) |
+| `s-lab-status` | repository | SK Spatial Intelligence Lab — README status table | `3e4959bed16a9e960803bc803877115c0784568a` | 2026-11-26 | null (original pin) |
+| `s-lab-tree` | repository | SK Spatial Intelligence Lab — repository tree (no licence file at this commit) | `3e4959bed16a9e960803bc803877115c0784568a` | 2026-11-26 | null (original pin) |
+
+Relationship-only sources in `data/relationships.json` (R4 requires a full
+commit SHA contained in the URL):
+
+| id | label | pinned_ref |
+|---|---|---|
+| `rs-lens-readme-313` | Madrid Urban Evidence Lens — README | `313b8bf0ca3d3cd8d559c0eb18752970205d9a7c` |
+| `rs-lens-dataprov-313` | Madrid Urban Evidence Lens — DATA_PROVENANCE | `313b8bf0ca3d3cd8d559c0eb18752970205d9a7c` |
+| `rs-lens-hatiprov-313` | Madrid Urban Evidence Lens — data/hati_provenance.json | `313b8bf0ca3d3cd8d559c0eb18752970205d9a7c` |
+| `rs-lens-netpilot-313` | Network Accessibility Pilot — README (isolation) | `313b8bf0ca3d3cd8d559c0eb18752970205d9a7c` |
+| `rs-hati-readme-97b` | HATI-Madrid — README | `97b0e40669386c29dafa8c2f5b5031f14ff71771` |
+| `rs-hati-protocol-97b` | HATI pedestrian heat extension — RESEARCH_PROTOCOL_V0.1 | `97b0e40669386c29dafa8c2f5b5031f14ff71771` |
+| `rs-hati-gate1-97b` | HATI pedestrian heat extension — GATE1_FEASIBILITY_DOSSIER | `97b0e40669386c29dafa8c2f5b5031f14ff71771` |
+| `rs-hati-pnoa-97b` | HATI-Madrid — data/raw/pnoa_lidar/README | `97b0e40669386c29dafa8c2f5b5031f14ff71771` |
+| `rs-fieldos-contract` | FieldOS — PRODUCT_CONTRACT | `b3fdad3dc1b468a96d51ecfc36f49483b7bf21f5` |
+
+### 13.3 Content model additions
+
+- `atlas.json` moves to schema `0.4.0`. Its record shapes are unchanged; its
+  `relationships` collection stays empty.
+- `data/relationships.json` (schema `0.4.0`) holds the production graph:
+  `classes` (technical, structural, methodological, territorial), `predicates`
+  (each with definition, domain, range, direction, required evidence, limits
+  and inference rules), `methods`, `datasets`, relationship-only `sources`,
+  `relationships` and `non_relationships`.
+- A relationship has `id`, `predicate`, `class`, `source`, `target`,
+  `explanation`, `evidence[]` (`source_id`, `lines` or null, `summary`),
+  `limits[]`, and where applicable `extract` (dataset links), `versions[]`
+  (technical links: `node`, `ref`, `role`, `note`) and `derived_from` (links
+  that mirror a v0.3 field: `research.hosts`, `research.territory_ids`,
+  `outputs.research_id`). An optional `verification` object records
+  `human_verified` with `verified_by` and `verified_at`; its absence means
+  AI-assisted source check only.
+- A non-relationship records a documented statement that two items are not
+  integrated, with its source and an interpretation limit.
+- Hypothetical and analyst-defined (conceptual) readings are not part of the
+  model (E5). They are kept in `docs/v0.4/DEVELOPMENT_RECORD.md`.
+
+### 13.4 Invariants
+
+I7 is amended: `atlas.json` carries no relationships. Every other v0.3
+invariant applies unchanged to all eleven items. The relationship dataset
+adds R1–R14, checked by `tools/validate_relationships.py` on every pull
+request and exercised by the negative tests in `tests/`:
+
+| # | Invariant |
+|---|---|
+| R1 | Schema `0.4.0`; ids unique and distinct from every `atlas.json` id. |
+| R2 | Both ends resolve to admitted nodes of the kinds the predicate allows. |
+| R3 | Class equals the predicate's class and is one of the four production classes (E5); explanation and limits are present. |
+| R4 | Every relation cites at least one public, pinned source; relationship-only sources carry a full commit SHA in their URL; technical relations give line locators; no two sources share a URL. |
+| R5 | A technical relation is documented in the dependent item's own repository. |
+| R6 | A dataset relation names the extract, product or vintage it used. |
+| R7 | A technical relation states the version of both ends; a version different from the dossier's carries a note and is never substituted (E3). |
+| R8 | Relations derived from v0.3 fields mirror those fields exactly, both ways; `situated_in` and `has_output` are always derived. |
+| R9 | No duplicate relation and no self-loop. |
+| R10 | Non-relationships resolve, cite a public source, state an interpretation limit and contradict no technical relation. |
+| R11 | No score, rank, weight, confidence, strength, importance or centrality field (I10 carried forward). |
+| R12 | Verification is never claimed as human without `verified_by` and `verified_at`; the file states an AI-assisted check with human verification pending. |
+| R13 | The dataset notice states that hosting is not integration and that absence of a documented relation does not prove that none exists. |
+| R14 | No `prototype/` directory exists in the deployed tree (E4). |
+
+The governance gate covers `data/relationships.json`, `tools/`, `tests/` and
+`.github/workflows/` in addition to the v0.3 governed files.
+
+### 13.5 The Knowledge Graph view (`#/graph`)
+
+- Views: Ecosystem (technical, hosting and extension links between items),
+  Methods, Data & outputs, Territories, and a Neighbourhood view for any
+  node (incoming relations on the left, outgoing on the right).
+- Layout: deterministic layered layout; column widths measured from the
+  label text; virtual waypoints so long links pass through reserved gaps.
+  Positions are not geographic and are not a ranking.
+- Interactions (inside `#/graph` only): select a node or a line; search a
+  node; filter by relation class and node type; pan, wheel, pinch and button
+  zoom; Fit; an expanded view (Escape closes it); keyboard roving focus with
+  arrow keys, Enter to select, `+`, `-`, `0` and `F`; computed research
+  questions whose answers highlight the relations they use.
+- State is the route query (`view`, `focus`, `node` or `edge` or `q`,
+  `cls`, `hide`); every state is a deep link and survives reload. In-graph
+  changes replace the current history entry.
+- Every view shows, as text, the relations it draws, the documented
+  non-relations and the relation vocabulary. Items without a documented
+  relation in a view are listed in a labelled band.
+- A selected relation shows: class, direction, explanation, extract,
+  versions, every source with its pin and line locator, what it does not
+  establish (record limits, predicate limits and inference rules), and its
+  verification state.
+
+### 13.6 Dossiers
+
+Every dossier gains a “Documented relations” section: after Outputs for
+documented research, experiments and instruments, and after the hosted
+items for platforms (§7 order otherwise unchanged). It lists the item's
+relations and non-relations with deep links into the graph, and states when
+none is documented. A platform's hosted items include hosting documented in
+`data/relationships.json`.
+
+### 13.7 Interpretation rules (binding, shown in the view)
+
+- Hosting is co-location of files, not integration.
+- A shared dataset family does not make observations comparable.
+- Versions stay distinguishable; none stands in for another (E3).
+- Absence of a documented relation does not prove that none exists.
+- Connectivity in the graph says nothing about scientific agreement or
+  validity, and nothing is ranked, scored or weighted.
+
+### 13.8 Human verification record (maintainer)
+
+AI-assisted source checks (PR #22 and this freeze) are not entries in this
+table. The maintainer completes it; until then K2 and the items' claims are
+pending, as is v0.3 A2 (§12.10).
+
+| Item | Claims to verify | Pinned sources | I14 verdict to check | Verified by / date |
+|---|---|---|---|---|
+| `e-transit-graph` | question or role, methodology, 3 evidence, 2 findings, result, claim ceiling, territory, licences | [s-transit-readme](https://github.com/soroushkarahrodi79-oss/madrid-transit-graph/blob/a9ff926006c0c155fe7272baf5fd2d9b326d3706/README.md) · [s-transit-prereg](https://github.com/soroushkarahrodi79-oss/madrid-transit-graph/blob/a9ff926006c0c155fe7272baf5fd2d9b326d3706/research/time_weighted_v05/PRE_REGISTRATION.md) · [s-transit-memo](https://github.com/soroushkarahrodi79-oss/madrid-transit-graph/blob/a9ff926006c0c155fe7272baf5fd2d9b326d3706/research/time_weighted_v05/DECISION_MEMO.md) | “FREEZE” | ☐ |
+| `e-isovist` | question or role, methodology, 2 evidence, 2 findings, result, claim ceiling, territory, licences | [s-iso-readme](https://github.com/soroushkarahrodi79-oss/madrid-isovist-demo/blob/932cd6195f3c1087090c2dda4952ad1bb323304d/README.md) · [s-iso-limits](https://github.com/soroushkarahrodi79-oss/madrid-isovist-demo/blob/932cd6195f3c1087090c2dda4952ad1bb323304d/docs/LIMITES_Y_FIDELIDAD.md) | “MIXTO” | ☐ |
+| `e-pnoa-lidar` | question or role, methodology, 2 evidence, 1 findings, result, claim ceiling, territory, licences | [s-pnoa-readme](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/313b8bf0ca3d3cd8d559c0eb18752970205d9a7c/research/pnoa_lidar_madrid_pilot/README.md) · [s-pnoa-results](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/313b8bf0ca3d3cd8d559c0eb18752970205d9a7c/research/pnoa_lidar_madrid_pilot/RESULTS.md) · [s-pnoa-assessment](https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/313b8bf0ca3d3cd8d559c0eb18752970205d9a7c/research/pnoa_lidar_madrid_pilot/INTEGRATION_ASSESSMENT.md) | “NO-GO for the production viewer at this time” | ☐ |
+| `i-madrid-mcp` | question or role, methodology, 2 evidence, 1 findings, result, claim ceiling, territory, licences | [s-mcp-readme](https://github.com/soroushkarahrodi79-oss/sk-spatial-intelligence-lab/blob/3e4959bed16a9e960803bc803877115c0784568a/mcp/madrid-evidence/README.md) · [s-mcp-stage2](https://github.com/soroushkarahrodi79-oss/sk-spatial-intelligence-lab/blob/3e4959bed16a9e960803bc803877115c0784568a/mcp/madrid-evidence/eval/results-stage2/informe-stage2.es.md) · [s-lab-status](https://github.com/soroushkarahrodi79-oss/sk-spatial-intelligence-lab/blob/3e4959bed16a9e960803bc803877115c0784568a/README.md) | “MODIFY (provisional)” | ☐ |
+
+| Relation class | Count | Relations | Verified by / date |
+|---|---|---|---|
+| technical | 2 | `rel-lens-reads-hati-pilot`, `rel-mcp-depends-lens` | ☐ |
+| structural | 9 | `rel-lens-hosts-netpilot`, `rel-snto-hosts-pnsg`, `rel-lens-hosts-pnoa`, `rel-out-hati-preprint`, `rel-out-hati-code`, `rel-out-net-dataset`, `rel-out-lens-release`, `rel-out-snto-software`, `rel-out-transit-release` | ☐ |
+| methodological | 20 | `rel-hatix-extends-hatip`, `rel-hatip-solweig`, `rel-hatix-solweig`, `rel-net-network`, `rel-snto-mk`, `rel-isovist-method`, `rel-transit-method`, `rel-hatip-osm`, `rel-hatip-pnoa1`, `rel-hatix-osm`, `rel-net-osm`, `rel-transit-osm`, `rel-isovist-osm`, `rel-snto-s2`, `rel-snto-oapn`, `rel-psnto-s2`, `rel-lens-admin`, `rel-lens-pnoa-hist`, `rel-pnoa-pnoa3`, `rel-pnoa-admin` | ☐ |
+| territorial | 14 | `rel-hatip-terr`, `rel-hatix-terr`, `rel-snto-terr`, `rel-net-terr`, `rel-lens-terr`, `rel-psnto-terr`, `rel-transit-terr`, `rel-isovist-terr`, `rel-pnoa-terr`, `rel-within-central`, `rel-within-atocha`, `rel-within-sanisidro`, `rel-within-embajadores`, `rel-within-lavapies` | ☐ |
+
+### 13.9 Acceptance criteria for v0.4
+
+| # | Criterion |
+|---|---|
+| K1 | The seven v0.3 records are unchanged; every v0.3 invariant except the amended I7 passes. |
+| K2 | Every public relationship has a recorded human verification (§13.8). |
+| K3 | R1–R14 pass with zero errors in CI, and the negative tests pass. |
+| K4 | No hypothetical or conceptual relation and no deferred item is in the production graph. |
+| K5 | Every relation shows explanation, pinned source with locator, limits, versions where relevant and verification state; every item links to its dossier. |
+| K6 | Items without a documented relation are shown as such in each view. |
+| K7 | Layout and order are deterministic; nothing is ranked or scored. |
+| K8 | Every graph state is deep-linkable and survives reload; a text alternative lists the same relations. |
+| K9 | axe-core reports 0 violations at 360–1440 px in light, dark and forced colours; full keyboard operation; 200 % zoom; reduced motion respected; no horizontal page scroll. |
+| K10 | Zero third-party requests; static GitHub Pages deployment unchanged. |
+| K11 | Each new item has its own content freeze (§13.1–§13.2) before any relation to it is published. |
+| K12 | v0.3 A2 is reported as pending; nothing implies that it passed. |
+
+### 13.10 Development record
+
+Hypothetical and analyst-defined readings, deferred items and their reasons
+are kept in `docs/v0.4/DEVELOPMENT_RECORD.md` and in PR #22. They are never
+loaded by the page.

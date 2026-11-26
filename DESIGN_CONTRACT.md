@@ -1,6 +1,6 @@
 # DESIGN_CONTRACT.md — Spatial Intelligence Atlas
 
-**Target version:** 0.3.0 · **Status:** approved at Gate 1 (PR #17).
+**Target version:** 0.4.0 · **Status:** approved at Gate 1 (PR #17) for 0.3.0; §17 adds the v0.4 Knowledge Graph and takes effect with the `gate-approved` label on its pull request.
 
 The deployed `v0.2.1` stays governed by `DESIGN_CONTRACT.md` at tag
 `v0.2.1`. This document constrains v0.3.0 **form**; `SPEC.md` constrains
@@ -49,7 +49,9 @@ Each element carries information. None of them is decoration.
 ### 1.2 Governing rules
 
 - **Colour carries meaning.** Chromatic colour is reserved for the six
-  evidence `input_kind`s (§3.4). Everything else, including chrome, plates,
+  evidence `input_kind`s (§3.4) and, inside the Knowledge Graph only, for
+  the restrained node-type and relation-class palette of §17.3, which always
+  repeats a shape, a line pattern and a text label. Everything else, including chrome, plates,
   outcomes, classes, links and focus, is achromatic. Research figures keep
   their original colours (§9).
 - **Hairline over fill.** Structure is drawn with 1 px rules. Fills are
@@ -945,3 +947,91 @@ A reviewer can verify the finished artifact against this list alone.
 - [ ] axe-core reports 0 violations; keyboard-only pass; 200 % zoom; forced colours
 - [ ] Runtime file budget and same-origin-only requests (§14.1); validator and link check pass (§14.2)
 - [ ] Licence presentation matches D4 status (§15)
+
+---
+
+## 17. Knowledge Graph (v0.4)
+
+The graph is a plate: a framed, achromatic surface with a caption block
+underneath. It is an exploration instrument for documented relations, not a
+dashboard, and it follows every rule of §1 except where this section says
+otherwise.
+
+### 17.1 Layout
+
+- Wide (≥ 1100 px): plate and provenance rail side by side; the plate takes
+  the remaining width, the rail is 360 px, sticky, and scrolls on its own.
+  The plate height is `clamp(480px, 72vh, 820px)`.
+- Medium and compact: one column, rail after the plate; compact plate height
+  62vh (min 360 px). Under the plate, a selection bar states the selected
+  node or relation and links to its details.
+- An expanded view fills the window with the plate and the rail; Escape and
+  the same button close it. It is not a modal: nothing is trapped.
+- The layout is layered and deterministic. Column widths come from the
+  measured label text; links leave a node at the end of its label and enter
+  at its glyph, so they never cross their own label. Links spanning several
+  columns run through reserved gaps. Same-column links arc on the left.
+- Items with no documented relation in a view sit in a labelled band below
+  the graph, with the sentence “Absence in the reviewed sources does not
+  prove that no relation exists.”
+
+### 17.2 Glyphs and labels
+
+| Node | Glyph |
+|---|---|
+| Documented research | filled circle |
+| Experiment | open circle with a centre dot |
+| Research platform | filled square |
+| Instrument | filled diamond |
+| Method | open triangle |
+| Dataset family | open table |
+| Territory | open hexagon (text, not geometry) |
+| Output | document |
+
+Every node shows its short title (sans, 14.5 px, ink, haloed against the
+plate) and its role in mono capitals underneath. Relation labels appear only
+for the selection, and are nudged apart so that none overlap.
+
+### 17.3 Colour and line pattern
+
+Research items stay in ink. The other node types and the relation classes
+use a restrained palette, defined as tokens in light and dark (`--g-method`,
+`--g-dataset`, `--g-territory`, `--g-output`, `--g-structural`), each with at
+least 3:1 contrast against the plate. Colour never works alone:
+
+| Class | Line | Weight | Colour |
+|---|---|---|---|
+| Technical dependency | solid, arrowhead | 2.5 px | ink |
+| Structural | solid, arrowhead | 1.5 px | structural grey |
+| Methodological | dash 7 4, arrowhead | 1.5 px | method |
+| Territorial | dash-dot 14 4 2 4, arrowhead | 1.5 px | territory |
+
+Forced colours: every glyph and line becomes CanvasText, selection becomes
+Highlight, and classes remain distinct by pattern and weight.
+
+### 17.4 Selection hierarchy
+
+A selected node or relation keeps full ink with a ring or a heavier line;
+its direct neighbours stay at full opacity; everything else recedes (nodes
+22 %, lines 10 %). Hover and keyboard focus preview the same hierarchy.
+Nothing is ranked by size, colour or position.
+
+### 17.5 Motion
+
+Only the reader's own actions move the graph: zoom, fit and centring on a
+search result animate over 220 ms with ease-out, and opacity changes take
+180 ms. Under `prefers-reduced-motion: reduce` every change is immediate.
+There are no particles, no force simulation, no 3D and no autoplay.
+
+### 17.6 Controls and targets
+
+View tabs, class and node-type checkboxes, search, and the zoom group
+(+, −, Fit, Expand) are 44 px targets. Every link-like button in the rail
+has at least a 24 px target. The graph has one tab stop; arrow keys move
+between nodes spatially; Enter selects; `+`, `-`, `0` and `F` zoom, fit and
+expand.
+
+### 17.7 Print
+
+Controls, zoom and the selection bar are hidden; the plate prints at its
+current state, and the text alternative and vocabulary print in full.

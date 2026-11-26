@@ -110,7 +110,7 @@ export const CLASS_LABEL = {
   instrument: 'Instrument', proposal: 'Proposal', archived_artifact: 'Archived artifact',
 };
 export const CLASS_BAND = {
-  documented_research: 'Documented research', research_platform: 'Research platforms', instrument: 'Instruments',
+  documented_research: 'Documented research', experiment: 'Experiments', research_platform: 'Research platforms', instrument: 'Instruments',
 };
 export const PUB_TYPE = {
   journal_article: 'Journal article', conference_paper: 'Conference paper', preprint: 'Preprint', thesis: 'Thesis',

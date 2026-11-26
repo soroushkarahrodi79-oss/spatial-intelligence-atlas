@@ -1,16 +1,16 @@
 {
- "schema_version": "0.3.0",
+ "schema_version": "0.4.0",
  "meta": {
   "title": "Spatial Intelligence Atlas",
   "subtitle": "Research Explorer",
-  "release": "0.3.0",
-  "release_status": "released 2026-11-26",
-  "reviewed_at": "2026-11-25",
-  "notice": "Separate research items. Relations appear only when documented and typed; none exist in this release.",
+  "release": "0.4.0",
+  "release_status": "unreleased — implementation under review",
+  "reviewed_at": "2026-11-26",
+  "notice": "Separate research items. A relation appears only where a pinned source documents it; hosting is not integration, and a shared dataset, method or territory is not agreement.",
   "provenance_statement": "Inputs, status, and outcomes are separate. Real input does not establish validation or decision sufficiency.",
-  "citation": "Karahrodi, S. (2026). Spatial Intelligence Atlas — Research Explorer (Version 0.3.0) [Software and dataset]. GitHub. https://github.com/soroushkarahrodi79-oss/spatial-intelligence-atlas/tree/v0.3.0",
+  "citation": "Karahrodi, S. (2026). Spatial Intelligence Atlas — Research Explorer (Version 0.4.0, unreleased) [Software and dataset]. GitHub. https://github.com/soroushkarahrodi79-oss/spatial-intelligence-atlas",
   "license": "Code: MIT. Original data and text: CC BY 4.0. Third-party figures, geometry and verbatim quotations keep their own licences (LICENSE-CONTENT.md).",
-  "verification": "Content frozen at Gate 2 (SPEC.md §12, PR #18) with an AI-assisted source check and maintainer approval of the freeze. Per-claim human verification is recorded in SPEC.md §12.10; it is not claimed here beyond what that record shows.",
+  "verification": "Content frozen at Gate 2 (SPEC.md §12, PR #18) and, for the four items admitted in v0.4, in SPEC.md §13, each with an AI-assisted source check. Per-claim human verification is recorded in SPEC.md §12.10 and §13.8; it is pending and is not claimed here beyond what those records show.",
   "repository": "https://github.com/soroushkarahrodi79-oss/spatial-intelligence-atlas",
   "input_kinds": [
    {
@@ -120,6 +120,11 @@
    }
   ],
   "versions": [
+   {
+    "tag": "v0.4.0",
+    "date": null,
+    "note": "Unreleased: four admitted items (Madrid Transit Graph, Madrid Isovist Demo, PNOA-LiDAR pilot, Madrid Evidence MCP) and a Knowledge Graph of source-documented relationships."
+   },
    {
     "tag": "v0.3.0",
     "date": "2026-11-26",
@@ -589,6 +594,257 @@
    ],
    "output_ids": [],
    "figure_ids": []
+  },
+  {
+   "id": "e-transit-graph",
+   "code": "TRANSIT",
+   "class": "experiment",
+   "title": "Madrid Transit Graph — Metro de Madrid topology and disruption studies",
+   "short_title": "Madrid Transit Graph",
+   "summary": "Reproducible topological graph of the Metro de Madrid network from OpenStreetMap, with pre-registered structural disruption studies that remain NEEDS_VALIDATION.",
+   "research_question": "Which stations, when (a) their interchange function is disabled or (b) the station is closed, produce the largest increase in planned (scheduled) shortest travel time over all ordered station pairs, by time band? Is that ranking explained by simple structural metrics (degree, line count, betweenness)?",
+   "research_question_note": "Verbatim from the v0.5 pre-registration §1 (the source's bold emphasis removed). Earlier studies (v0.2–v0.4) asked related structural questions on the same frozen v0.1.0 graph.",
+   "lifecycle_status": "frozen",
+   "lifecycle_note": "CONGELADO (FREEZE) desde 2026-11-21, by owner decision.",
+   "territory_ids": [
+    "t-metro-madrid"
+   ],
+   "territory_note": null,
+   "methodology": {
+    "summary": [
+     "Graph: Metro de Madrid lines L1–L12 and Ramal built with City2Graph 1.1.0 from an OpenStreetMap Overpass snapshot (OSM state 2026-11-19T18:17:06Z); node = aggregated station, edge = undirected pair of consecutive stations on at least one line.",
+     "Station merging is derived, not an OSM fact: stops with the same normalised name within 300 m are merged, then audited against CRTM open data (interchanges only).",
+     "v0.4: fragmentation under complete station removal. v0.5: planned travel times (segment length ÷ a speed per line, Line 3 imputed, waits and transfers assumed) under station closure or disabled interchange, by time band, against degree, line count and betweenness, with a pre-registration committed before the run.",
+     "The v0.1.0 snapshot is frozen and hash-checked; it cannot be re-derived exactly because the raw Overpass responses were not kept."
+    ],
+    "source_ids": [
+     "s-transit-readme",
+     "s-transit-prereg",
+     "s-transit-memo"
+    ]
+   },
+   "version": {
+    "ref": "a9ff926006c0c155fe7272baf5fd2d9b326d3706",
+    "kind": "commit",
+    "label": "commit a9ff926"
+   },
+   "license": {
+    "code": {
+     "value": "MIT",
+     "source_id": "s-transit-readme",
+     "note": null
+    },
+    "data": {
+     "value": "ODbL-1.0",
+     "source_id": "s-transit-readme",
+     "note": "OpenStreetMap data in data/; CRTM-derived timing data are not distributed."
+    },
+    "text": {
+     "value": "not_stated",
+     "source_id": "s-transit-readme",
+     "note": null
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-transit-readme",
+    "note": "The frozen snapshot, pipeline, pre-registration and CI are public; regenerating is not reproducing the snapshot. The Atlas did not re-run it."
+   },
+   "verification_note": null,
+   "reviewed_at": "2026-11-26",
+   "source_ids": [
+    "s-transit-readme",
+    "s-transit-memo"
+   ],
+   "output_ids": [
+    "out-transit-release"
+   ],
+   "figure_ids": []
+  },
+  {
+   "id": "e-isovist",
+   "code": "ISOVIST",
+   "class": "experiment",
+   "title": "Madrid Isovist Demo — 2D isovists in Lavapiés and the Step 0 redundancy screen",
+   "short_title": "Madrid Isovist Demo",
+   "summary": "Closed exploratory pilot that computes 2D isovists from building footprints in Lavapiés and tested, with a pre-hashed stopping rule, whether they add anything to built density and the street network.",
+   "research_question": "¿una isovista 2D de huellas añade algo a la densidad edificada y a la red de calles?",
+   "research_question_note": "Verbatim from the README (Step 0). English translation by the Atlas: does a 2D footprint isovist add anything to built density and the street network?",
+   "lifecycle_status": "closed",
+   "lifecycle_note": "Pilot closed after Step 0 (2026-11-08).",
+   "territory_ids": [
+    "t-lavapies-isovist"
+   ],
+   "territory_note": null,
+   "methodology": {
+    "summary": [
+     "Isovist: 360 rays plus one ray per vertex, obstacles = roof footprints, 100 m maximum radius by default; recomputed in the browser and checked against the Python implementation.",
+     "Step 0: 250 points every 20 m on the EMT pedestrian axes of the central 400 m, spatial block cross-validation with 100 m blocks.",
+     "Controls: built density, distance to footprint, street width, network position, and OpenStreetMap points of interest and stops (ODbL).",
+     "Stopping rule fixed and recorded with a hash before computing: an isovist measure is redundant when the controls reach validated R² ≥ 0.85."
+    ],
+    "source_ids": [
+     "s-iso-readme",
+     "s-iso-limits"
+    ]
+   },
+   "version": {
+    "ref": "932cd6195f3c1087090c2dda4952ad1bb323304d",
+    "kind": "commit",
+    "label": "commit 932cd61"
+   },
+   "license": {
+    "code": {
+     "value": "MIT",
+     "source_id": "s-iso-readme",
+     "note": null
+    },
+    "data": {
+     "value": "custom",
+     "source_id": "s-iso-readme",
+     "note": "Ayuntamiento de Madrid footprints under its general reuse conditions; OpenStreetMap under ODbL."
+    },
+    "text": {
+     "value": "not_stated",
+     "source_id": "s-iso-readme",
+     "note": null
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-iso-readme",
+    "note": "Code, tests and data notes are public; the Atlas did not re-run them."
+   },
+   "verification_note": "Spanish-language sources. Quotations are verbatim; translations are the Atlas's and are marked as such.",
+   "reviewed_at": "2026-11-26",
+   "source_ids": [
+    "s-iso-readme",
+    "s-iso-limits"
+   ],
+   "output_ids": [],
+   "figure_ids": []
+  },
+  {
+   "id": "e-pnoa-lidar",
+   "code": "PNOA-L",
+   "class": "experiment",
+   "title": "PNOA-LiDAR Madrid pilot — urban morphology in Embajadores (3rd coverage)",
+   "short_title": "PNOA-LiDAR pilot",
+   "summary": "Isolated research package, hosted in the Lens repository, testing what PNOA-LiDAR 3rd-coverage surface and terrain models add about urban morphology in one Madrid barrio.",
+   "research_question": "What territorial evidence does PNOA-LiDAR (3rd coverage) add about urban morphology in Madrid, beyond what Madrid Urban Evidence Lens already uses?",
+   "research_question_note": "Verbatim from the pilot README.",
+   "lifecycle_status": "paused",
+   "lifecycle_note": "Research line kept (MODIFY); revisit when IGN v2 or normalised building models are published (forecast 1H 2027) and an independent check exists.",
+   "territory_ids": [
+    "t-embajadores"
+   ],
+   "territory_note": null,
+   "methodology": {
+    "summary": [
+     "One MTN sheet (0559-4-5), MDS and MDT at 0.5 m from the PNOA-LiDAR 3rd coverage v1, downloaded by a person from the CNIG and identified by SHA-256.",
+     "Area of interest: the official polygon of barrio 012 Embajadores (1.034 km²).",
+     "Five acceptance criteria stated before the run (CRS, grid identity, valid cells, plausible terrain, negative differences), then MDS − MDT statistics inside the area.",
+     "A second run produced a byte-identical report and figure from the same inputs."
+    ],
+    "source_ids": [
+     "s-pnoa-readme",
+     "s-pnoa-results"
+    ]
+   },
+   "version": {
+    "ref": "313b8bf0ca3d3cd8d559c0eb18752970205d9a7c",
+    "kind": "commit",
+    "label": "commit 313b8bf"
+   },
+   "license": {
+    "code": {
+     "value": "MIT",
+     "source_id": "s-lens-license-v04",
+     "note": "Licence of the host repository."
+    },
+    "data": {
+     "value": "CC BY 4.0",
+     "source_id": "s-pnoa-attribution",
+     "note": "Results are derived works of IGN MDS/MDT 50 cm 3rd coverage; the rasters are not committed."
+    },
+    "text": {
+     "value": "MIT",
+     "source_id": "s-lens-license-v04",
+     "note": "Repository licence."
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-pnoa-readme",
+    "note": "Pipeline and tests are public; the inputs need a manual CNIG download (reCAPTCHA). The Atlas did not re-run it."
+   },
+   "verification_note": null,
+   "reviewed_at": "2026-11-26",
+   "source_ids": [
+    "s-pnoa-readme",
+    "s-pnoa-assessment"
+   ],
+   "output_ids": [],
+   "figure_ids": []
+  },
+  {
+   "id": "i-madrid-mcp",
+   "code": "MCP",
+   "class": "instrument",
+   "title": "Madrid Evidence MCP",
+   "short_title": "Madrid Evidence MCP",
+   "summary": "Local, read-only stdio MCP server that forwards a fixed set of query shapes to the Lens registry over pinned, hash-verified Lens files. It integrates no LLM and is not hosted.",
+   "research_question": null,
+   "research_question_note": null,
+   "lifecycle_status": "active",
+   "lifecycle_note": "Engineering prototype, not independently validated, not hosted.",
+   "territory_ids": [],
+   "territory_note": "No case-specific territory: it answers point and circle queries over the Lens's Madrid data.",
+   "methodology": {
+    "summary": [
+     "Stage 2 evaluation: 6 new adversarial cases × 2 repetitions on the unchanged MCP v0.4, single arm, pre-registered at commit 61a74d6 before any run.",
+     "Runs were packaged blind and read by a language-model reader, not a human (readerIsHuman: false).",
+     "Pre-registered rule: 0 critical errors and 0 unsupported local claims → GO; E5/E6 or unsupported claims → MODIFY; E1/E2/E9 or technical failure → HOLD."
+    ],
+    "source_ids": [
+     "s-mcp-stage2"
+    ]
+   },
+   "version": {
+    "ref": "3e4959bed16a9e960803bc803877115c0784568a",
+    "kind": "commit",
+    "label": "commit 3e4959b"
+   },
+   "license": {
+    "code": {
+     "value": "none",
+     "source_id": "s-lab-tree",
+     "note": "No licence file in the repository. Referenced only; no code or content is copied (decision E1)."
+    },
+    "data": {
+     "value": "none",
+     "source_id": "s-lab-tree",
+     "note": "Answers are the Lens's committed artifacts and carry the Lens's licences."
+    },
+    "text": {
+     "value": "none",
+     "source_id": "s-lab-tree",
+     "note": null
+    }
+   },
+   "reproducibility": {
+    "level": "inspectable",
+    "instructions_source_id": "s-mcp-readme",
+    "note": "Server, tests and evaluation traces are public; running them needs a Lens checkout at commit f67cd47. The Atlas did not run them."
+   },
+   "verification_note": "The evaluation report is in Spanish; quotations are verbatim and translations are the Atlas's.",
+   "reviewed_at": "2026-11-26",
+   "source_ids": [
+    "s-mcp-readme",
+    "s-lab-status"
+   ],
+   "output_ids": [],
+   "figure_ids": []
   }
  ],
  "territories": [
@@ -645,6 +901,38 @@
    "source_ids": [
     "s-lens-readme",
     "s-lens-geography"
+   ]
+  },
+  {
+   "id": "t-metro-madrid",
+   "label": "Metro de Madrid network (lines L1–L12 and Ramal)",
+   "basis": "The Metro de Madrid network as a topological graph of 242 aggregated stations and 277 undirected connections, from OpenStreetMap.",
+   "geometry_id": null,
+   "territory_note": "Text only. A network extent, not an area: it is not the municipality of Madrid, and no containment in Madrid is asserted. The network is not drawn.",
+   "source_ids": [
+    "s-transit-readme"
+   ]
+  },
+  {
+   "id": "t-lavapies-isovist",
+   "label": "Madrid — Lavapiés (isovist demo area)",
+   "basis": "Building footprints in Lavapiés: the official central area of 700 × 700 m (Ayuntamiento de Madrid roof footprints), with OpenStreetMap footprints around it up to 2 × 2 km.",
+   "geometry_id": null,
+   "territory_note": "Text only. The demo does not state its area as barrio 012 Embajadores; the two areas are kept separate and their overlap is not computed.",
+   "source_ids": [
+    "s-iso-readme",
+    "s-iso-limits"
+   ]
+  },
+  {
+   "id": "t-embajadores",
+   "label": "Madrid — barrio 012 Embajadores (Lavapiés)",
+   "basis": "The official polygon of barrio 012 Embajadores (1.034 km²), the area known as Lavapiés, as used by the PNOA-LiDAR pilot.",
+   "geometry_id": null,
+   "territory_note": "Text only: no plate in this release.",
+   "source_ids": [
+    "s-pnoa-readme",
+    "s-pnoa-results"
    ]
   }
  ],
@@ -1059,6 +1347,158 @@
    "source_ids": [
     "s-fieldos-readme"
    ]
+  },
+  {
+   "id": "ev-transit-topology",
+   "research_id": "e-transit-graph",
+   "label": "Frozen v0.1.0 topology",
+   "input_kind": "derived",
+   "substantiation": "source_stated",
+   "statement": "The frozen snapshot has 242 aggregated stations, 277 undirected connections and one connected component.",
+   "basis": "Estaciones agregadas (nodos) 242 · Conexiones (aristas) 277 (3 compartidas por varias líneas) · Componentes conexos 1",
+   "limitation": "One connected component shows topological connectivity after station merging, not operation on a given date.",
+   "provenance": {
+    "publisher": "OpenStreetMap contributors via Overpass",
+    "dataset_ref": "OSM state 2026-11-19T18:17:06Z",
+    "license": "ODbL 1.0",
+    "retrieved_at": "2026-11-19",
+    "checksum": "SHA-256 per file in data/manifest.json (not reproduced here)"
+   },
+   "source_ids": [
+    "s-transit-readme"
+   ]
+  },
+  {
+   "id": "ev-transit-crtm",
+   "research_id": "e-transit-graph",
+   "label": "Interchange audit against CRTM",
+   "input_kind": "derived",
+   "substantiation": "source_stated",
+   "statement": "All 291 station-line records matched; 38 inferred interchanges confirmed, none false, one unverified and two official transfers between differently named stations absent.",
+   "basis": "Confirmadas 38 · Falsas 0 · No verificada 1 · Ausentes en el grafo 2",
+   "limitation": "The audit checks interchanges only; stop order and adjacency were not checked against CRTM, and the audit results file is not distributed.",
+   "provenance": {
+    "publisher": "Consorcio Regional de Transportes de Madrid (open data)",
+    "dataset_ref": "Elementos de la Red de Metro (records 2026-05-29)",
+    "license": "CRTM licence of use",
+    "retrieved_at": null,
+    "checksum": null
+   },
+   "source_ids": [
+    "s-transit-readme"
+   ]
+  },
+  {
+   "id": "ev-transit-v05",
+   "research_id": "e-transit-graph",
+   "label": "v0.5 planned-time disruption ranking",
+   "input_kind": "simulated",
+   "substantiation": "source_stated",
+   "statement": "The pre-registered rule gave ADDED_VALUE, but the effect size ignores disconnected pairs; among the 158 non-fragmenting closures the ranking follows betweenness (ρ ≈ 0.91).",
+   "basis": "The pre-registered rule says ADDED_VALUE (rho_max 0.52), but the effect size ignores disconnected pairs. Among the 158 non-fragmenting closures rho with betweenness is about 0.91.",
+   "limitation": "Planned times are segment length ÷ a speed per line; the GTFS is expired, Line 3 is imputed, waits and transfers are assumed. No external validation was possible.",
+   "provenance": null,
+   "source_ids": [
+    "s-transit-memo"
+   ]
+  },
+  {
+   "id": "ev-iso-footprints",
+   "research_id": "e-isovist",
+   "label": "Official roof footprints (central area)",
+   "input_kind": "acquired",
+   "substantiation": "source_stated",
+   "statement": "The central 700 × 700 m area uses the Ayuntamiento de Madrid roof footprints; the pilot, Step 0 and the walk use only these.",
+   "basis": "El área central de 700 × 700 m usa las huellas de tejado del Ayuntamiento.",
+   "limitation": "Footprints (2026) and the orthophoto used to check the nine observers (2025) are not contemporary; there are no heights, facades, trees or street furniture.",
+   "provenance": {
+    "publisher": "Ayuntamiento de Madrid",
+    "dataset_ref": "building roof footprints",
+    "license": "Ayuntamiento de Madrid general reuse conditions",
+    "retrieved_at": null,
+    "checksum": null
+   },
+   "source_ids": [
+    "s-iso-limits"
+   ]
+  },
+  {
+   "id": "ev-iso-step0",
+   "research_id": "e-isovist",
+   "label": "Step 0 redundancy screen",
+   "input_kind": "derived",
+   "substantiation": "source_stated",
+   "statement": "Controls explain validated R² 0.937 of mean radius (threshold reached) and 0.833 of openness (threshold not reached); verdict MIXTO, stable over 30 repeated partitions.",
+   "basis": "Radio medio 0,937 (IC 95 %: 0,904–0,951) · Apertura 0,833 (IC 95 %: 0,762–0,874) · Veredicto MIXTO · estable en 30 particiones repetidas",
+   "limitation": "Controls and isovists come from the same footprints, which favours a redundant result; no pedestrian outcome was tested.",
+   "provenance": null,
+   "source_ids": [
+    "s-iso-readme",
+    "s-iso-limits"
+   ]
+  },
+  {
+   "id": "ev-pnoa-inputs",
+   "research_id": "e-pnoa-lidar",
+   "label": "PNOA-LiDAR 3rd-coverage rasters",
+   "input_kind": "acquired",
+   "substantiation": "source_stated",
+   "statement": "One MDS and one MDT sheet (0559-4-5) at 0.5 m, identified by SHA-256, cell-for-cell on the same grid.",
+   "basis": "Both sheets are cell-for-cell on the same grid.",
+   "limitation": "One sheet and one barrio; provisional v1 classification; month-level epoch only.",
+   "provenance": {
+    "publisher": "IGN / CNIG",
+    "dataset_ref": "MDS50cm-cob3 and MDT50cm-cob3, sheet 0559-4-5",
+    "license": "CC BY 4.0",
+    "retrieved_at": "2026-11-24",
+    "checksum": "SHA-256 recorded in RESULTS.md and pilot_report.json"
+   },
+   "source_ids": [
+    "s-pnoa-results",
+    "s-pnoa-attribution"
+   ]
+  },
+  {
+   "id": "ev-pnoa-criteria",
+   "research_id": "e-pnoa-lidar",
+   "label": "Acceptance criteria",
+   "input_kind": "derived",
+   "substantiation": "source_stated",
+   "statement": "All five pre-stated acceptance criteria pass, with 100 % valid cells in the area of interest.",
+   "basis": "Acceptance criteria — all PASS",
+   "limitation": "The criteria establish technical usability only; no independent reference (cadastral storeys, surveyed heights) was compared.",
+   "provenance": null,
+   "source_ids": [
+    "s-pnoa-results"
+   ]
+  },
+  {
+   "id": "ev-mcp-pinning",
+   "research_id": "i-madrid-mcp",
+   "label": "Pinned, hash-verified Lens loading",
+   "input_kind": "reported",
+   "substantiation": "source_stated",
+   "statement": "The server refuses to start unless the Lens checkout is at the pinned commit and each of the eleven files it reads matches its pinned SHA-256.",
+   "basis": "It refuses to start if `git` reports another commit or if any of the eleven files it reads (…) differs from the pinned SHA-256.",
+   "limitation": "Shows that code and data match the pinned files; it does not show that the Lens results are correct. The Atlas did not run the tests.",
+   "provenance": null,
+   "source_ids": [
+    "s-mcp-readme"
+   ]
+  },
+  {
+   "id": "ev-mcp-stage2",
+   "research_id": "i-madrid-mcp",
+   "label": "Stage 2 exploratory evaluation",
+   "input_kind": "observed",
+   "substantiation": "source_stated",
+   "statement": "12 runs on the unchanged v0.4 server: 0 critical errors and 1 unsupported local claim, read by a language model, not a human.",
+   "basis": "Errores críticos: 0/12, intervalo de Wilson 95 % [0 %, 24,25 %].",
+   "limitation": "Single arm, one model, adversarial prompts, small sample; behaviour is not attributed to the MCP, and zero failures in 12 does not demonstrate safety.",
+   "provenance": null,
+   "source_ids": [
+    "s-mcp-stage2"
+   ]
   }
  ],
  "findings": [
@@ -1187,6 +1627,62 @@
    "source_ids": [
     "s-net-audit"
    ]
+  },
+  {
+   "id": "f-transit-fragment",
+   "research_id": "e-transit-graph",
+   "statement": "In v0.4, 84 of 242 complete station closures fragment the network; the public explorer layer reproduces this count exactly.",
+   "uncertainty": null,
+   "source_ids": [
+    "s-transit-memo",
+    "s-transit-readme"
+   ]
+  },
+  {
+   "id": "f-transit-planned",
+   "research_id": "e-transit-graph",
+   "statement": "Planned times rank closures almost as hop counts do (ρ 0.956), and time bands change nothing (ρ ≥ 0.999).",
+   "uncertainty": "The pre-registered verdict depends on a metric that ignores disconnected pairs (source's own post-hoc check).",
+   "source_ids": [
+    "s-transit-memo"
+   ]
+  },
+  {
+   "id": "f-iso-radius",
+   "research_id": "e-isovist",
+   "statement": "Built-form controls explain the mean isovist radius above the stopping threshold (validated R² 0.937) but not openness (0.833 against 0.85).",
+   "uncertainty": "95 % intervals 0.904–0.951 (radius) and 0.762–0.874 (openness); over 30 repeated partitions openness never reached 0.85 (maximum 0.83) and radius always exceeded it.",
+   "source_ids": [
+    "s-iso-readme",
+    "s-iso-limits"
+   ]
+  },
+  {
+   "id": "f-iso-fidelity",
+   "research_id": "e-isovist",
+   "statement": "The browser computation matches the Python implementation to within 0.5 % of area and 0.07 m of mean radius at the nine observers.",
+   "uncertainty": "The browser obstacle margin is an approximation, differing by up to 4.0 percentage points of area at +1.0 m.",
+   "source_ids": [
+    "s-iso-limits"
+   ]
+  },
+  {
+   "id": "f-pnoa-surface",
+   "research_id": "e-pnoa-lidar",
+   "statement": "Inside the barrio, the surface height above interpolated ground (MDS − MDT) has median 15.56 m and mean 13.65 m; 63.7 % of cells are at or above 12 m.",
+   "uncertainty": "Not building height: trees, vehicles, awnings and v1 misclassification are included.",
+   "source_ids": [
+    "s-pnoa-results"
+   ]
+  },
+  {
+   "id": "f-mcp-sensitivity",
+   "research_id": "i-madrid-mcp",
+   "statement": "Under the adopted reading of error E1 the pre-registered rule gives MODIFY; under the alternative reading two runs become critical errors and the rule gives HOLD.",
+   "uncertainty": "Unsupported local claims 1/12, Wilson 95 % interval 1.49 %–35.39 %; critical errors 0/12, interval 0 %–24.25 %.",
+   "source_ids": [
+    "s-mcp-stage2"
+   ]
   }
  ],
  "outcomes": [
@@ -1281,6 +1777,85 @@
     "s-fieldos-run",
     "s-fieldos-readme"
    ]
+  },
+  {
+   "id": "o-transit-freeze",
+   "research_id": "e-transit-graph",
+   "verdict_label": "FREEZE",
+   "outcome_type": "hold",
+   "statement": "The owner froze the research claim on 2026-11-21 and kept the repository as a documented demonstrator. Studies v0.2–v0.5 remain NEEDS_VALIDATION; no new analyses will be added unless an external validation source or a new, pre-registered question appears.",
+   "claim_ceiling": "No vulnerability or resilience result is claimed. Topological connectivity is not effective accessibility, operation, demand or observed resilience, and the simulation is not real time or demand. Closing a station is not closing a line section.",
+   "limitations": [
+    "An OSM relation does not prove an operating service on a given date.",
+    "Straight edges; no accessibility or transfer width.",
+    "Two official transfers absent; Noviciado unverified; station merging is an inference.",
+    "Metro de Madrid only (no Metro Ligero, Cercanías or bus).",
+    "Planned v0.5 times are not measured; CRTM-derived timing data are not distributed."
+   ],
+   "decided_at": "2026-11-21",
+   "reviewed_at": "2026-11-26",
+   "source_ids": [
+    "s-transit-memo",
+    "s-transit-readme"
+   ]
+  },
+  {
+   "id": "o-iso-mixto",
+   "research_id": "e-isovist",
+   "verdict_label": "MIXTO",
+   "outcome_type": "mixed",
+   "statement": "Under the fixed rule the pilot does not proceed to the pedestrian-counter phase: with 2D footprints the isovist adds little beyond what the footprints already say. The source states that this does not mean visibility has no value.",
+   "claim_ceiling": "A geometric description, not field-validated visibility and not a walkability index. No population inference (the nine observers were placed by hand) and no pedestrian outcome was tested. Results outside the official central area are not comparable.",
+   "limitations": [
+    "No heights, facades, trees or street furniture: real street visibility is lower.",
+    "Controls and isovists derive from the same footprints.",
+    "Residuals show spatial clustering (Moran's I 0.24 to 0.38)."
+   ],
+   "decided_at": "2026-11-08",
+   "reviewed_at": "2026-11-26",
+   "source_ids": [
+    "s-iso-readme",
+    "s-iso-limits"
+   ]
+  },
+  {
+   "id": "o-pnoa-nogo",
+   "research_id": "e-pnoa-lidar",
+   "verdict_label": "NO-GO for the production viewer at this time",
+   "outcome_type": "no_go",
+   "statement": "The real-data run shows the rasters are technically usable (full coverage, aligned, plausible, byte-identical on rerun), which settles feasibility only. Integration into the Lens viewer is NO-GO; the research line is kept (MODIFY), to be revisited when IGN v2 or normalised building models are published and an independent check validates a height indicator.",
+   "claim_ceiling": "A feasibility demonstration, not a scientific validation; it must not be quoted as validated. MDS − MDT is not building height. No Lens question is answered by surface height.",
+   "limitations": [
+    "One sheet and one barrio.",
+    "Provisional v1 models; building and vegetation not separated.",
+    "Month-level epoch (March–May 2024), spring phenology.",
+    "No independent reference compared."
+   ],
+   "decided_at": "2026-11-24",
+   "reviewed_at": "2026-11-26",
+   "source_ids": [
+    "s-pnoa-assessment",
+    "s-pnoa-readme"
+   ]
+  },
+  {
+   "id": "o-mcp-modify",
+   "research_id": "i-madrid-mcp",
+   "verdict_label": "MODIFY (provisional)",
+   "outcome_type": "conditional",
+   "statement": "The exploratory Stage 2 evaluation of agent behaviour over the unchanged MCP v0.4 recorded 0 critical errors and 1 unsupported local claim in 12 runs, which the pre-registered rule maps to MODIFY under the adopted interpretation. The result is provisional.",
+   "claim_ceiling": "Not scientific validation, not a safety claim and not evidence of improvement over earlier versions. Behaviour is not attributed to the MCP (single arm), and the adjudication was made by a language model, not an independent human.",
+   "limitations": [
+    "Six cases × two repetitions, adversarial prompts; repetitions are not independent.",
+    "Classifications of three runs and the E1 sensitivity were made after seeing the results.",
+    "Stage 1 results cited elsewhere do not exist in the repository and were not verified."
+   ],
+   "decided_at": "2026-11-13",
+   "reviewed_at": "2026-11-26",
+   "source_ids": [
+    "s-mcp-stage2",
+    "s-lab-status"
+   ]
   }
  ],
  "outputs": [
@@ -1373,6 +1948,24 @@
    "license": "CC BY 4.0 (as stated by the Zenodo record; differs from the repository licence)",
    "source_id": "s-snto-zenodo",
    "note": "Latest version at the 2026-11-25 check: v2.0.0, issued 2026-07-21. Cited as a software output only: the record description claims causal attribution and budget prioritisation beyond the brief’s claim ceiling, and the Atlas does not use it as support for those claims."
+  },
+  {
+   "id": "out-transit-release",
+   "research_id": "e-transit-graph",
+   "citation": "Madrid Transit Graph Explorer, GitHub release v0.1.0 (2026-11-19).",
+   "date": "2026-11-19",
+   "publication_type": "software",
+   "editorial_status": "not_peer_reviewed",
+   "identifier": {
+    "availability": "no_pid",
+    "scheme": null,
+    "value": null,
+    "scope": null
+   },
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-transit-graph/releases/tag/v0.1.0",
+   "license": "MIT",
+   "source_id": "s-transit-release",
+   "note": "The release carries the frozen v0.1.0 topology snapshot."
   }
  ],
  "figures": [
@@ -1732,6 +2325,198 @@
    "access": "public",
    "last_checked_at": "2026-11-25",
    "last_http_status": 200,
+   "pin_change": null
+  },
+  {
+   "id": "s-transit-readme",
+   "label": "Madrid Transit Graph — README (status, definitions, provenance, limitations, licences)",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-transit-graph/blob/a9ff926006c0c155fe7272baf5fd2d9b326d3706/README.md",
+   "pinned_ref": "a9ff926006c0c155fe7272baf5fd2d9b326d3706",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-transit-prereg",
+   "label": "Madrid Transit Graph — v0.5 pre-registration",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-transit-graph/blob/a9ff926006c0c155fe7272baf5fd2d9b326d3706/research/time_weighted_v05/PRE_REGISTRATION.md",
+   "pinned_ref": "a9ff926006c0c155fe7272baf5fd2d9b326d3706",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-transit-memo",
+   "label": "Madrid Transit Graph — decision memo (FREEZE, 2026-11-21)",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-transit-graph/blob/a9ff926006c0c155fe7272baf5fd2d9b326d3706/research/time_weighted_v05/DECISION_MEMO.md",
+   "pinned_ref": "a9ff926006c0c155fe7272baf5fd2d9b326d3706",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-transit-release",
+   "label": "Madrid Transit Graph Explorer GitHub release v0.1.0 (published 2026-11-19)",
+   "kind": "release",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-transit-graph/releases/tag/v0.1.0",
+   "pinned_ref": "tag v0.1.0",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-iso-readme",
+   "label": "Madrid Isovist Demo — README (Step 0 result, scope, data and licences)",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-isovist-demo/blob/932cd6195f3c1087090c2dda4952ad1bb323304d/README.md",
+   "pinned_ref": "932cd6195f3c1087090c2dda4952ad1bb323304d",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-iso-limits",
+   "label": "Madrid Isovist Demo — limits, pilot status and computational fidelity",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-isovist-demo/blob/932cd6195f3c1087090c2dda4952ad1bb323304d/docs/LIMITES_Y_FIDELIDAD.md",
+   "pinned_ref": "932cd6195f3c1087090c2dda4952ad1bb323304d",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-pnoa-readme",
+   "label": "PNOA-LiDAR Madrid pilot — README (question, area, status, isolation)",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/313b8bf0ca3d3cd8d559c0eb18752970205d9a7c/research/pnoa_lidar_madrid_pilot/README.md",
+   "pinned_ref": "313b8bf0ca3d3cd8d559c0eb18752970205d9a7c",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-pnoa-results",
+   "label": "PNOA-LiDAR Madrid pilot — results (Embajadores, 3rd coverage v1)",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/313b8bf0ca3d3cd8d559c0eb18752970205d9a7c/research/pnoa_lidar_madrid_pilot/RESULTS.md",
+   "pinned_ref": "313b8bf0ca3d3cd8d559c0eb18752970205d9a7c",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-pnoa-assessment",
+   "label": "PNOA-LiDAR Madrid pilot — integration assessment and verdict",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/313b8bf0ca3d3cd8d559c0eb18752970205d9a7c/research/pnoa_lidar_madrid_pilot/INTEGRATION_ASSESSMENT.md",
+   "pinned_ref": "313b8bf0ca3d3cd8d559c0eb18752970205d9a7c",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-pnoa-attribution",
+   "label": "PNOA-LiDAR Madrid pilot — attribution of IGN-derived results (CC BY 4.0)",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/313b8bf0ca3d3cd8d559c0eb18752970205d9a7c/research/pnoa_lidar_madrid_pilot/results/ATTRIBUTION.md",
+   "pinned_ref": "313b8bf0ca3d3cd8d559c0eb18752970205d9a7c",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-lens-license-v04",
+   "label": "Madrid Urban Evidence Lens — LICENSE (MIT) at the PNOA-pilot pin",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/madrid-tourism-intelligence-lens/blob/313b8bf0ca3d3cd8d559c0eb18752970205d9a7c/LICENSE",
+   "pinned_ref": "313b8bf0ca3d3cd8d559c0eb18752970205d9a7c",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-mcp-readme",
+   "label": "Madrid Evidence MCP — README (tools, pinned Lens checkout, tests, limits)",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/sk-spatial-intelligence-lab/blob/3e4959bed16a9e960803bc803877115c0784568a/mcp/madrid-evidence/README.md",
+   "pinned_ref": "3e4959bed16a9e960803bc803877115c0784568a",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-mcp-stage2",
+   "label": "Madrid Evidence MCP — Stage 2 evaluation report (exploratory, provisional)",
+   "kind": "closeout",
+   "url": "https://github.com/soroushkarahrodi79-oss/sk-spatial-intelligence-lab/blob/3e4959bed16a9e960803bc803877115c0784568a/mcp/madrid-evidence/eval/results-stage2/informe-stage2.es.md",
+   "pinned_ref": "3e4959bed16a9e960803bc803877115c0784568a",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-mcp-lens-pin",
+   "label": "Madrid Evidence MCP — lens-pin.json (Lens commit f67cd47)",
+   "kind": "commit",
+   "url": "https://github.com/soroushkarahrodi79-oss/sk-spatial-intelligence-lab/blob/3e4959bed16a9e960803bc803877115c0784568a/mcp/madrid-evidence/lens-pin.json",
+   "pinned_ref": "3e4959bed16a9e960803bc803877115c0784568a",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-lab-status",
+   "label": "SK Spatial Intelligence Lab — README status table",
+   "kind": "repository",
+   "url": "https://github.com/soroushkarahrodi79-oss/sk-spatial-intelligence-lab/blob/3e4959bed16a9e960803bc803877115c0784568a/README.md",
+   "pinned_ref": "3e4959bed16a9e960803bc803877115c0784568a",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
+   "pin_change": null
+  },
+  {
+   "id": "s-lab-tree",
+   "label": "SK Spatial Intelligence Lab — repository tree (no licence file at this commit)",
+   "kind": "repository",
+   "url": "https://github.com/soroushkarahrodi79-oss/sk-spatial-intelligence-lab/tree/3e4959bed16a9e960803bc803877115c0784568a",
+   "pinned_ref": "3e4959bed16a9e960803bc803877115c0784568a",
+   "accessed_at": "2026-11-26",
+   "access": "public",
+   "last_checked_at": null,
+   "last_http_status": null,
    "pin_change": null
   }
  ],

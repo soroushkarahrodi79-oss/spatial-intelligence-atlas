@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Mechanical metadata validator for the Spatial Intelligence Atlas (schema 0.3.0).
+"""Mechanical metadata validator for the Spatial Intelligence Atlas (schema 0.4.0).
 
 Development-only (DESIGN_CONTRACT.md §14.2). Standard library only. The page
 never loads this file.
 
-It checks invariants I1–I13 and I15–I18 of SPEC.md §4.11 plus the runtime file
-budget. It establishes that the metadata is well-formed and linked. It does
+It checks invariants I1–I13 and I15–I18 of SPEC.md §4.11 (with I7 superseded by
+SPEC.md §13.4) plus the runtime file budget, and runs the relationship
+invariants R1–R14 of tools/validate_relationships.py. It establishes that the metadata is well-formed and linked. It does
 NOT establish that any claim is scientifically supported: that is the recorded
 human review of SPEC.md §12.10 (and I14, checked at Gate 2).
 
@@ -22,6 +23,9 @@ import sys
 import urllib.error
 import urllib.request
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import validate_relationships  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ERRORS, WARNINGS = [], []
 
@@ -35,7 +39,6 @@ EDITORIAL = {'peer_reviewed', 'editorially_reviewed', 'under_review', 'not_peer_
 SCHEMES = {'doi', 'handle', 'isbn', 'issn', 'arxiv'}
 SOURCE_KINDS = {'repository', 'commit', 'release', 'closeout', 'brief', 'preprint', 'dataset_record', 'publication', 'official_dataset'}
 REPRO = {'rerunnable', 'inspectable', 'documented_only', 'none'}
-REL_CLASSES = {'structural', 'conceptual', 'technical'}
 REUSE_FORBIDDEN = re.compile(r'all rights reserved|not_stated|^none$|^unknown', re.I)
 SCORE_FIELD = re.compile(r'(score|rank|maturity|rating|weight)', re.I)
 BUDGET = {'js_files_max': 8, 'geometry_bytes_max': 150_000, 'figure_bytes_max_each': 300_000,
@@ -61,9 +64,11 @@ def frozen_pins():
         spec = open(os.path.join(ROOT, 'SPEC.md'), encoding='utf-8').read()
     except OSError:
         return {}
-    m = re.search(r'### 12\.1 Sources(.*?)### 12\.2', spec, re.S)
     pins = {}
-    if m:
+    for sec in (r'### 12\.1 Sources(.*?)### 12\.2', r'### 13\.2 Sources(.*?)### 13\.3'):
+        m = re.search(sec, spec, re.S)
+        if not m:
+            continue
         for sid, ref in re.findall(r'^\| `(s-[a-z0-9-]+)` \|[^|]*\|[^|]*\| ([^|]+) \|', m.group(1), re.M):
             ref = ref.replace('`', '').strip()
             ref = re.sub(r'^DOI ', 'doi:', ref)
@@ -73,8 +78,8 @@ def frozen_pins():
 
 def main():
     a = json.load(open(os.path.join(ROOT, 'data', 'atlas.json'), encoding='utf-8'))
-    if a.get('schema_version') != '0.3.0':
-        err('SCHEMA', 'schema_version must be 0.3.0')
+    if a.get('schema_version') != '0.4.0':
+        err('SCHEMA', 'schema_version must be 0.4.0')
 
     names = ('research', 'territories', 'geometries', 'evidence', 'findings', 'outcomes', 'outputs', 'figures', 'sources', 'relationships')
     cols = {k: a.get(k, []) for k in names}
@@ -262,14 +267,16 @@ def main():
             if fn not in declared:
                 err('I12', f'data/geometry/{fn} is not a declared geometry object')
 
+    # I7 as amended in v0.4 (SPEC.md §13.4): relations live only in
+    # data/relationships.json, under invariants R1–R14; atlas.json carries none.
     for rel in cols['relationships']:
-        c = rel.get('class')
-        if c not in REL_CLASSES:
-            err('I13', f"{rel['id']}: class required")
-        if c in ('conceptual', 'technical'):
-            err('I7', f"{rel['id']}: no {c} relationship is allowed in v0.3.0")
-            if not rel.get('source_ids'):
-                err('I13', f"{rel['id']}: source_ids required")
+        err('I7', f"{rel['id']}: relations belong in data/relationships.json, not atlas.json")
+    rp = os.path.join(ROOT, 'data', 'relationships.json')
+    if not os.path.isfile(rp):
+        err('R1', 'data/relationships.json missing')
+    else:
+        for e in validate_relationships.validate(a, json.load(open(rp, encoding='utf-8')), ROOT):
+            ERRORS.append(e)
 
     def walk(o, path):
         if isinstance(o, dict):
@@ -323,9 +330,9 @@ def main():
         for e in ERRORS:
             print('  ' + e)
         return 1
-    print(f"OK — schema 0.3.0; {len(cols['research'])} items, {len(cols['evidence'])} evidence, {len(cols['findings'])} findings, "
+    print(f"OK — schema 0.4.0; {len(cols['research'])} items, {len(cols['evidence'])} evidence, {len(cols['findings'])} findings, "
           f"{len(cols['outcomes'])} outcomes, {len(cols['outputs'])} outputs, {len(cols['figures'])} figures, {len(cols['sources'])} sources. "
-          'I1–I13 and I15–I18 pass: metadata only. Scientific support is the SPEC.md §12.10 human review.')
+          'I1–I13, I15–I18 (I7 as amended) and R1–R14 pass: metadata only. Scientific support is the human review of SPEC.md §12.10 and §13.8, which is pending.')
     return 0
 
 
